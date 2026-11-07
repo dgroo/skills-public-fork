@@ -44,6 +44,7 @@ Gather state and print a summary before asking anything:
   - Existing `## Project conventions` section in `CLAUDE.md` — this is the shared memory across `/groot-project`, `/project-setup`, and gstack. If present, **read it and respect it** before suggesting changes.
 - Is there a terminal background color recorded for this project? (`~/.claude/skills/terminal-setup/terminal-setup.py <basename> --list-colors` shows the existing-background banner if so.)
 - Is the directory under `~/code/`? (Affects alias suggestion in iTerm phase.)
+- **Remotes** (drive Phases 9 / 9B and the `status` lines): does `git remote get-url origin` answer (GitHub remote in place)? Is it mirrored — `git remote get-url peer` answers **and** the repo path is a line in `~/.config/design-sync/repos`? Or has it opted out (`git config designsync.optout` is `true`)? Local reads only; nothing here ssh-es.
 - Is there a `.groot-project.toml` at the repo root? (`~/.claude/skills/terminal-setup/terminal-setup.py --groot-toml-read` — empty output means none; otherwise prints `[terminal]` as `KEY=VALUE` lines, transparently translating legacy `[iterm]` files.) This is the in-repo persistence file used to reproduce per-project workstation setup on a fresh clone. Phase 7 reads it to apply recorded settings; if absent, Phase 7 offers to write it from the just-applied settings.
 - Does `.claude/settings.json` exist with a `spinnerVerbs` block? Read the count + mode for the pre-flight summary; Phase 8 uses this to decide skip vs ask.
 
