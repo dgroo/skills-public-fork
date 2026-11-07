@@ -214,7 +214,7 @@ priority: medium # high | medium | low
 
 # Story Title
 
-_Authored by <model> with Derek · Last updated <YYYY-MM-DD>._
+_Authored by <model> with Derek · Last updated <YYYY-MM-DD HH:MM>._
 
 ## Executive summary
 

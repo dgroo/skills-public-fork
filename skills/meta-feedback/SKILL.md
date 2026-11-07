@@ -104,7 +104,7 @@ The report follows the global document-ordering rule: what Derek has to decide c
 ```markdown
 # Meta-feedback — <topic> · <YYYY-MM-DD>
 
-*Authored by <model> with Derek · Last updated <YYYY-MM-DD>.*
+*Authored by <model> with Derek · Last updated <YYYY-MM-DD HH:MM>.*
 
 ## Proposals
 
