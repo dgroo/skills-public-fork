@@ -1,6 +1,6 @@
 ---
 name: groot-project
-description: Bootstrap a project the Derek way — git, design/ subtree (incl. stories/ with readiness-by-directory: drafts/ ready/ done/), CLAUDE.md skeleton with a shared-memory conventions block, Makefile, terminal background color (via /terminal-setup), themed spinner verbs, optional GitHub remote. Coexists with /project-setup and gstack; detects collisions and never clobbers. Re-runnable.
+description: Bootstrap a project the Derek way — git, design/ subtree (incl. stories/ with readiness-by-directory: drafts/ ready/ done/), CLAUDE.md skeleton with a shared-memory conventions block, Makefile, terminal background color (via /terminal-setup), themed spinner verbs, GitHub remote + mirror on both fleet hosts by default. Coexists with /project-setup and gstack; detects collisions and never clobbers. Re-runnable.
 argument-hint: [status|--auto|--public]
 ---
 
@@ -15,11 +15,13 @@ Independent of `/project-setup` (which is Joe Walnes's upstream skill that retro
 ```
 /groot-project              # interactive walkthrough at cwd
 /groot-project status       # read-only audit; report what's in place vs missing
-/groot-project --auto       # skip prompts; sensible defaults; external integrations skipped
+/groot-project --auto       # skip prompts; sensible defaults (GitHub remote + mirror still run)
 /groot-project --public     # if a GitHub remote is created, make it public (default: private)
+/groot-project --no-github  # no GitHub remote: the repo lives only on the two fleet hosts (peer-only, the grove pattern)
+/groot-project --no-mirror  # don't mirror onto the other fleet host (sets designsync.optout)
 ```
 
-`--auto` and `--public` can combine. `status` is standalone.
+**Default (Derek, 2026-11-07): every repo is mirrored on both fleet hosts and has a private GitHub remote, unless explicitly decided otherwise** — the two opt-out flags are how "otherwise" gets decided. `--auto`, `--public`, `--no-github` and `--no-mirror` can combine. `status` is standalone.
 
 **Light migration inside `design/` is default.** When `design/` exists but has misplaced files at its root (e.g., a stray `*-plan.md` sitting beside `DESIGN.md`), Phase 2 _asks_ about migrating them into the canonical subdirs (see Phase 2 → "Migrate misplaced files at `design/` root"). This is on by default — the user generally wants the cleanup — but is always a prompt, never silent.
 
@@ -45,7 +47,7 @@ Gather state and print a summary before asking anything:
 - Is there a `.groot-project.toml` at the repo root? (`~/.claude/skills/terminal-setup/terminal-setup.py --groot-toml-read` — empty output means none; otherwise prints `[terminal]` as `KEY=VALUE` lines, transparently translating legacy `[iterm]` files.) This is the in-repo persistence file used to reproduce per-project workstation setup on a fresh clone. Phase 7 reads it to apply recorded settings; if absent, Phase 7 offers to write it from the just-applied settings.
 - Does `.claude/settings.json` exist with a `spinnerVerbs` block? Read the count + mode for the pre-flight summary; Phase 8 uses this to decide skip vs ask.
 
-**Three steps need the sandbox off** (each failed once with a bare `Operation not permitted` on plumage, 2026-10-09): `make hooks-install` writes `.git/hooks/`, `/terminal-setup`'s alias step writes `~/.shrc`, and `gh repo create` needs the network. Run those three `dangerouslyDisableSandbox` on the first attempt, not after a retry.
+**Four steps need the sandbox off** (the first three each failed once with a bare `Operation not permitted` on plumage, 2026-10-09): `make hooks-install` writes `.git/hooks/`, `/terminal-setup`'s alias step writes `~/.shrc`, `gh repo create` needs the network, and Phase 9B's `design-sync-setup` ssh-es to the other host. Run those four `dangerouslyDisableSandbox` on the first attempt, not after a retry.
 
 Print a "found / will create / will skip / collision-detected" summary so the user sees the scope before any phase fires. The collision-detected line surfaces any Joe-style or gstack artifacts that change how subsequent phases behave (see "Coexistence" below).
 
@@ -68,7 +70,8 @@ Each phase has one of three modes: **auto-default-Y** (skill announces and proce
 | 7   | Terminal background             | always-interactive          | Invoke `/terminal-setup` (delegates fully).                                                                         |
 | 7B  | Port allocation                 | auto-default-Y              | Invoke `~/bin/pick-a-port --write` to claim a dev port in `[ports]`. Skip with `--no-port` if not a server project. |
 | 8   | Spinner verbs                   | always-asks                 | Themed `.claude/settings.json` spinner pool. Skip if already set.                                                   |
-| 9   | GitHub remote                   | always-asks                 | Ask y/skip; default `--private`.                                                                                    |
+| 9   | GitHub remote                   | auto-default-Y              | Private `gh repo create` + push; skip with `--no-github` or when `origin` already exists.                           |
+| 9B  | Mirror on both hosts            | auto-default-Y              | `design-sync-setup` clones onto the other fleet host and wires live `design/` sync; skip with `--no-mirror`.        |
 | 10  | Final summary                   | —                           | Print done / skipped / next-steps table.                                                                            |
 
 ### Phase 1: Git init
@@ -827,8 +830,9 @@ In `--auto` mode this phase is **skipped** — themed verbs are a creative call 
 
 ### Phase 9: GitHub remote
 
-Ask: _"Create a GitHub remote? (y/skip)"_. If y:
+**Default-Y** (Derek, 2026-11-07: every repo gets a GitHub remote unless explicitly decided otherwise). Print one line — _"Creating private GitHub remote dgroo/<basename> (say skip to keep it fleet-only)…"_ — and proceed unless the user objects.
 
+- **Skip, with one line, when:** `--no-github` was passed (_"GitHub remote: skipped (--no-github) — fleet-only; Phase 9B's peer remote is the other copy."_), or `git remote get-url origin` already answers (_"GitHub remote: origin already set — skipped."_).
 - Default visibility is `--private`. (Switching private→public is easy via GitHub Settings → Danger Zone → Change visibility.)
 - If `--public` flag was passed at invocation, use `--public` instead.
 - If the working tree has no commits yet, run `git add . && git commit -m "Initial commit"` first.
@@ -836,6 +840,17 @@ Ask: _"Create a GitHub remote? (y/skip)"_. If y:
 - Print the resulting remote URL.
 
 If `gh` isn't installed, print: _"`gh` not found. Install via `brew install gh` and re-run /groot-project to add the remote."_ Don't fail the rest of the skill.
+
+### Phase 9B: Mirror on both hosts
+
+**Default-Y**, same rule: the repo exists on both fleet hosts (`rocinante26` ↔ `titan26`) with live `design/` sync. Runs after Phase 9 so the other host clones from GitHub when there is a remote.
+
+- **Skip when** `--no-mirror` was passed: run `git config designsync.optout true` (silences the "never wired" SessionStart banner) and print _"Mirror: skipped (--no-mirror) — this repo stays on <host>."_
+- **Presence check (re-runs):** `git remote get-url peer` answers **and** this repo's path is a line in `~/.config/design-sync/repos` → print _"Mirror: already wired to <peer>."_ and skip.
+- **Needs at least one commit** (the other host clones a branch). If there are none, make the `Initial commit` exactly as Phase 9 would.
+- Run `design-sync-setup <repo-root>` (sandbox off). It clones the missing checkout onto the other host — from `origin` if set, else from this checkout over the tailnet with no `origin` on the copy — then wires the `peer` remote, `updateInstead` on both sides, and both hosts' watcher rosters. Relay its output lines.
+- **Other host unreachable** (`ssh -o BatchMode=yes -o ConnectTimeout=5 <peer> true` fails, or the setup exits non-zero): don't fail the skill. Write `design/helping-hands/<YYYY-MM-DD>-mirror-<basename>.md` with the one command to run once the host answers (`design-sync-setup <repo-root>`), and list it under Skipped in the summary.
+- **Exit codes from the other host are not trustworthy** — Tailscale SSH on macOS returns 0 for every remote command (2026-11-07). `design-sync-setup` checks a printed sentinel instead; any ad-hoc remote check this phase adds must do the same (`ssh <peer> '<test> && echo OK'`), never `ssh <peer> <test> || …`.
 
 ### Phase 10: Final summary
 
@@ -867,7 +882,7 @@ Collision-detected:
 
 Skipped:
   - Spinner verbs (you said skip)
-  - GitHub remote (you said skip)
+  - GitHub remote (--no-github)
 
 Next:
   - Run `uv init` to initialize the Python project
@@ -887,11 +902,11 @@ Collision-detected lines only appear if collisions were actually found. The poin
 - **Port allocation**: invoke `~/bin/pick-a-port --write` (no prompts, scans `~/code` + `lsof`, picks the lowest free port at or above 3000). Skip if invoked with `--no-port`.
 - **Project goals block (3B)**: SKIPPED — both the interview and the draft-first review need Derek. A missing block is surfaced under Drift in the end-of-run summary.
 - **Spinner verbs**: SKIPPED. Creative call that needs human input on theme.
-- **GitHub remote**: SKIPPED. Creating an external resource without explicit consent is too consequential for `--auto`.
+- **GitHub remote (9) and mirror (9B)**: RUN, as in interactive mode. Derek's 2026-11-07 default (every repo private on GitHub and mirrored on both hosts) is the standing consent; `--no-github` / `--no-mirror` are the opt-outs. Before then this was skipped as too consequential without consent.
 - **Office-hours import**: still imports if a doc is found (low risk, just file content).
 - All `auto-default-Y` phases just happen.
 
-End-of-run summary calls out skipped external integrations: _"Re-run without `--auto` to handle spinner verbs and GitHub remote."_
+End-of-run summary calls out what `--auto` skipped: _"Re-run without `--auto` to handle spinner verbs."_
 
 ## `status` mode
 
@@ -913,9 +928,10 @@ Project audit for myproject:
   [✓] .groot-project.toml ([terminal].background, [ports].dev=3004 recorded)
   [ ] Spinner verbs (.claude/settings.json has no spinnerVerbs block)
   [ ] GitHub remote
+  [ ] Mirrored on rocinante26 (peer remote + both rosters)
   [✓] /office-hours doc imported
 
-7/11 in place. Want to address the missing/drifted items? (Y/n)
+7/12 in place. Want to address the missing/drifted items? (Y/n)
 ```
 
 If the user says Y, fall through into the regular interactive walkthrough, only running phases for missing/drifted items.
@@ -1020,11 +1036,13 @@ Usage: /groot-project [verb-or-flags]
 Verbs / flags:
   (none)            Interactive walkthrough at cwd.
   status            Read-only audit; report what's in place vs missing.
-  --auto            Skip prompts; sensible defaults; skip external integrations.
+  --auto            Skip prompts; sensible defaults (GitHub + mirror still run).
   --public          If a GitHub remote is created, make it public (default: private).
+  --no-github       No GitHub remote; the repo lives only on the two fleet hosts.
+  --no-mirror       Don't mirror onto the other fleet host (sets designsync.optout).
   help              Show this message.
 
-Combinable: --auto and --public may combine. `status` is standalone.
+Combinable: --auto, --public, --no-github and --no-mirror may combine. `status` is standalone.
 
 Phases (in order):
   1. Git init                       (auto)
@@ -1037,7 +1055,8 @@ Phases (in order):
   6C. Commit-footer hook            (auto: hooks/prepare-commit-msg appends Claude footer)
   7. Terminal background            (delegates to /terminal-setup)
   8. Spinner verbs                  (always asks; auto-skips)
-  9. GitHub remote                  (always asks)
+  9. GitHub remote                  (auto: private; --no-github skips)
+  9B. Mirror on both hosts          (auto: design-sync-setup; --no-mirror skips)
   10. Final summary
 
 Aggressive restructuring (top-level docs/, sibling specs/, etc.) requires
