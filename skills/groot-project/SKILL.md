@@ -843,7 +843,7 @@ If `gh` isn't installed, print: _"`gh` not found. Install via `brew install gh` 
 
 ### Phase 9B: Mirror on both hosts
 
-**Default-Y**, same rule: the repo exists on both fleet hosts (`rocinante26` ↔ `titan26`) with live `design/` sync. Runs after Phase 9 so the other host clones from GitHub when there is a remote.
+**Default-Y**, same rule: the repo exists on both fleet hosts (the always-on host and the workstation) with live `design/` sync. Runs after Phase 9 so the other host clones from GitHub when there is a remote.
 
 - **Skip when** `--no-mirror` was passed: run `git config designsync.optout true` (silences the "never wired" SessionStart banner) and print _"Mirror: skipped (--no-mirror) — this repo stays on <host>."_
 - **Presence check (re-runs):** `git remote get-url peer` answers **and** this repo's path is a line in `~/.config/design-sync/repos` → print _"Mirror: already wired to <peer>."_ and skip.
@@ -928,7 +928,7 @@ Project audit for myproject:
   [✓] .groot-project.toml ([terminal].background, [ports].dev=3004 recorded)
   [ ] Spinner verbs (.claude/settings.json has no spinnerVerbs block)
   [ ] GitHub remote
-  [ ] Mirrored on rocinante26 (peer remote + both rosters)
+  [ ] Mirrored on the other fleet host (peer remote + both rosters)
   [✓] /office-hours doc imported
 
 7/12 in place. Want to address the missing/drifted items? (Y/n)
