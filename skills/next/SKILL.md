@@ -104,8 +104,10 @@ What it scans:
     (HUMAN-REVIEW open items are scanned too but never offered as a
      pick — surfaced as a non-blocking "waiting for your eyes" aside.)
   Global spark inbox (spark-drain):
-    Run `spark-drain file` (infers the project from the git repo
-    name; deterministic, commits only the sparkfile). Auto-file, no
+    Run `spark-drain file` sandbox-disabled (infers the project from
+    the git repo name; deterministic, commits only the sparkfile; the
+    move into iCloud `done/` fails inside the sandbox and leaves a
+    half-applied drain). Auto-file, no
     offer — report "Filed N spark(s) → design/IDEAS.md" as a line,
     and let any freshly-filed spark compete as a pick candidate.
     (Revised 2026-07-04 with /sup: filing is always safe — the

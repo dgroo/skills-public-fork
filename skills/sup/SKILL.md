@@ -257,8 +257,11 @@ One `/sup`-specific note on the harvest: the Session recap you produced above is
 
 After `backlog-scan`, also check two additional surfaces and fold their results into the candidate pool:
 
-- **Global spark inbox (auto-file).** Run `spark-drain file` (project inferred from
-  the git repo name; deterministic, milliseconds, commits only the sparkfile). If it
+- **Global spark inbox (auto-file).** Run `spark-drain file` **sandbox-disabled** (project
+  inferred from the git repo name; deterministic, milliseconds, commits only the sparkfile).
+  It renames each capture into the iCloud `done/` folder, which the sandbox can't write — a
+  sandboxed run appends the gist and then dies on the move, leaving a half-applied drain
+  that re-files as a duplicate next time (grove, 2026-11-07). If it
   filed anything, add exactly ONE non-blocking line — "Filed N spark(s) →
   design/IDEAS.md" — echoing the gists only if ≤3. No offer, no decision: filing into
   a sparkfile is always safe (append-only; `/idea iterate` is the review point).
