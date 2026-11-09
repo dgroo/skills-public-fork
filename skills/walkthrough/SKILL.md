@@ -117,7 +117,8 @@ Standard arc:
 
 Drafting principles:
 
-- **Concrete commands and file paths.** Show what the user actually types and what files get created.
+- **Written for the human, readable by a non-technical reader.** The walkthrough is what the user does and sees. Technical detail appears only where the user actually touches it (a command they type because it is the only way to launch the thing; a file they open and read) and never as mechanism, file-and-line anchors, ports, protocols or internals. The test: a non-technical person reads it and follows. Everything that fails that test goes in the shadow file, below.
+- **The `-impl` shadow.** Every walkthrough gets a sibling `walkthrough-impl.md` (same headings, same order) holding how each thing the user sees is produced: files and lines, mechanisms, sources, `[planned]`/`[extrap]` provenance, and what building it would force. Each section of the human doc ends with a one-line *How: [impl § …](walkthrough-impl.md#…)* link; the impl doc opens with a link back. Sources lists live in the impl doc. (Origin: Derek, 2026-11-09, on the Empathy braindump walkthroughs.)
 - **Tag extrapolations** with `[extrap]` and a brief inline note when you infer past what the docs settle.
 - **Iceberg discipline.** Describe just enough of each feature for the story to make sense; don't unload spec content.
 
@@ -129,14 +130,15 @@ The dir uses a flat versioned layout:
 
 ```
 design/walkthroughs/<YYYY-MM-DD>-<slug>/
-  walkthrough.md           ← current
+  walkthrough.md           ← current, human-centric
+  walkthrough-impl.md      ← its technical shadow: same headings, the how, the anchors, the sources
   walkthrough-v1.md        ← prior, with @user+seen: markers preserved (post-revise)
   walkthrough-v2.md
   review-1.md              ← chained, never overwritten (post-write-review)
   review-2.md
 ```
 
-At first draft, only `walkthrough.md` exists. Versioned-prior and review files appear as the iteration loop runs.
+At first draft, `walkthrough.md` and `walkthrough-impl.md` exist. Versioned-prior and review files appear as the iteration loop runs.
 
 ### (Optional) LLM companion
 
@@ -279,7 +281,8 @@ Markers:
 
 Artifact layout (per walkthrough dir):
   design/walkthroughs/<YYYY-MM-DD>-<slug>/
-    walkthrough.md           ← current
+    walkthrough.md           ← current, human-centric
+    walkthrough-impl.md      ← technical shadow, same headings
     walkthrough-v1.md ...    ← prior versions (post-revise)
     review-1.md ...          ← chained review files (post-write-review)
 
@@ -299,6 +302,7 @@ On second invocation in the same project: if scoping conversations are repeating
 ## Common mistakes
 
 - **Drifts into architecture/spec content.** Narrative becomes a reorganized DESIGN.md. Fix: re-center on the protagonist's actions and what they see.
+- **Technical detail leaks into the human doc.** File-and-line anchors, ports, polling intervals and internals sit in the paragraphs a non-technical reader is meant to follow (the first Empathy draft, 2026-11-09, had `FleetModel.swift:46` and `http://<host>:7500/sessions` in its launch paragraph). Fix: move it to `walkthrough-impl.md` under the same heading and leave a *How:* link; keep only what the user themselves types or opens.
 - **Skips the scoping pass.** Produces a generic narrative that satisfies no specific user type. Fix: confirm perspective + scenario before drafting unless they're obvious.
 - **Forgets variation notes.** Assumes the chosen scenario covers all cases. Fix: always end with bottom-section notes on materially different scenarios.
 - **Untagged extrapolation.** Implies behaviors the docs don't settle; reader trusts the narrative as spec. Fix: `[extrap]` every speculative passage.
