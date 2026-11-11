@@ -2,12 +2,13 @@
   "author": "Derek",
   "threadsFolder": "vfcomments",
   "rootFolder": "design",
-  "markerDisplay": "glyph",
-  "hideDefinitions": true,
   "highlightAnchors": true,
   "collapseResolved": true,
   "agentPattern": "",
   "markerColor": "#b58cf6",
+  "resolvedColor": "#8fd19e",
   "agentNoteFile": "AGENTS.md",
-  "contextChars": 32
+  "showProvenance": true,
+  "contextChars": 32,
+  "settingsVersion": 1
 }
