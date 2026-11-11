@@ -5,6 +5,12 @@ priority: low
 
 # Ownership-at-a-glance rework (parked)
 
+## Executive summary
+
+**What:** Parked decision on how to make Derek-authored skills distinguishable from upstream Joe Walnes skills at a glance in `ls`.  
+**Where it stands:** Parked since May 2026; the simple MAINTAINERS.md manifest stays until a revisit trigger fires.  
+**Needs you:** nothing
+
 ## Problem
 
 When `ls`ing the local skills directory, Derek can't tell at a glance which skills are his vs Joe Walnes's upstream. The current solution is `MAINTAINERS.md` at the repo root — a hand-maintained manifest that lists ownership but isn't visible from `ls`.

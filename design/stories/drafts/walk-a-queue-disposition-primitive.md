@@ -5,6 +5,12 @@ priority: low
 
 # Walk-a-queue: a shared per-item disposition primitive (parked)
 
+## Executive summary
+
+**What:** Parked proposal for a shared walk-a-queue primitive (gate, per-item loop, confidence pre-filter, audit write-back) replacing four skills' duplicated disposition loops.  
+**Where it stands:** Parked, low priority; waits on the HUMAN-REVIEW queue in remote-coding-setup being built.  
+**Needs you:** nothing
+
 ## Problem
 
 At least four skills independently reimplement the same interaction loop — *present a

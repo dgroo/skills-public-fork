@@ -7,6 +7,12 @@ priority: medium
 
 **Status:** draft · filed 2026-06-20 · Opus 4.8 (1M context)
 
+## Executive summary
+
+**What:** Make `/groot-project` state-aware, so re-running it on an existing project sweeps for drift against current conventions and proposes fixes.  
+**Where it stands:** Draft. Five design decisions are made; the delegate detect-mode contract and the `go` safe-set boundary are still undefined.  
+**Needs you:** nothing
+
 ## Problem
 
 Derek's coding setup evolves continuously — new conventions, new color schemes, new
@@ -55,7 +61,7 @@ is the *sweep + the checklist*, not new audit logic. What's already there:
 
 ## Design decisions
 
-### 1. One state-aware entry point — no separate verb
+### 1. One state-aware entry point — no separate verb · decided 2026-06-20
 
 `/groot-project` reads the project's state and does the appropriate thing. Fresh/empty
 repo → bootstrap (unchanged). Already-scaffolded project → the **conformance/currency
@@ -63,7 +69,7 @@ sweep becomes the primary behavior**. Same command, no `update` flag to remember
 the natural extension of the existing "detects what's there" design: not just *is it
 present* but *is it current*.
 
-### 2. Bootstrap auto-adds; the sweep proposes (but `go` is trivial)
+### 2. Bootstrap auto-adds; the sweep proposes (but `go` is trivial) · decided 2026-06-20
 
 - **Bootstrap layer** stays auto-add-missing — presence is binary and safe.
 - **Sweep layer** is *propose-and-confirm* — currency findings are judgment calls
@@ -75,7 +81,7 @@ present* but *is it current*.
   Findings that are genuinely judgment-heavy or destructive are called out separately and
   excluded from the blanket `go`.
 
-### 3. Orchestrator, not monolith
+### 3. Orchestrator, not monolith · decided 2026-06-20
 
 The sweep delegates to each domain owner's conformance mode and aggregates one report. It
 must **not** reimplement design-audit (cleanup-design owns it) or color-setup
@@ -89,7 +95,7 @@ would change; writes nothing." The convention to push onto delegates as they're 
 a `--dry-run`/`--check` mode and an exit/stdout contract the sweep can parse. (`last-codex-review --nudge`
 already fits — it's read-only and emits one line or nothing.)
 
-### 4. Checklist = pointers to owners, not copies of values
+### 4. Checklist = pointers to owners, not copies of values · decided 2026-06-20
 
 The sweep checks the project against a **checklist of "what a current project should
 have/be."** The governing principle (Derek): **a single source of truth per convention**
@@ -115,7 +121,7 @@ brand-new convention" — which is what decision 5 covers. This shrinks the main
 burden from "keep every expected value current" (impossible by hand) to "remember to
 register new conventions" (a discipline rule).
 
-### 5. Anti-rot: inline checklist + a discipline rule (option 1, registry deferred)
+### 5. Anti-rot: inline checklist + a discipline rule (option 1, registry deferred) · decided 2026-06-20
 
 The checklist lives inline in the `/groot-project` skill (a list of pointer-checks). New
 conventions get onto it via a **discipline rule** — the same pattern already trusted

@@ -7,6 +7,12 @@ priority: high
 
 *Authored by Claude Fable 5.1 with Derek · Last updated 2026-10-02.*
 
+## Executive summary
+
+**What:** A `/pm <text>` intake path files "I want this soon" asks into a per-project `design/ASKS.md` queue that `/next` and `/sup` rank first.  
+**Where it stands:** Increments 1–3 shipped and verified; increments 4–5 and further design moved to grootPM.  
+**Needs you:** nothing
+
 Derek's words: "I often want to file 'I'd like to work on this soon' tasks into projects, that may or may not already be stories, and are more significant than /idea — add this to the work/story queue; if there's already a story, bump it in priority, if not create one. What I probably actually want is something that acts as the PM: as CTO/CEO I'd talk to a PM and fire off tasks/work, confident they would organize them into the queue and help prioritize." And: "one way I'd really want to be able to use this is to fire things into a session while it is working on something else."
 
 Derek accepted the design and all eight decisions on 2026-10-01.
@@ -25,25 +31,25 @@ Derek accepted the design and all eight decisions on 2026-10-01.
 
 Derek took option 1 of each on 2026-10-01. The alternatives stay listed so the calls are not re-argued from scratch.
 
-### D1. Where the capability lives
+### D1. Where the capability lives · decided 2026-10-01
 
 1. **Extend `/pm` (decided).** `/pm <text>` is intake, `/pm triage` drains the Inbox, bare `/pm` stays the periodic pass. `SKILL.md` becomes a short router with receipt at the top; the pass moves to a sibling `review.md` that is read only when the pass runs, so a receipt does not pull 150 lines of ceremony into a working session. One name for "tell the PM."
 2. **A new small skill for intake** (`/ask`), with `/pm` gaining only the Queue reconciliation. Cheapest to load, but it splits the persona across two names and adds a skill to maintain.
 3. **Minimal: no new verb.** `/story` gains a body-level duplicate check and writes a Queue line; the ranking rule is added. No Inbox, no sizing, no routing to TODO or IDEAS. This reaches "file it, bump it if it exists" and nothing else Derek listed. It is a real option if the PM persona turns out to be more than is wanted.
 
-### D2. A separate `ASKS.md`, or ask metadata on the items themselves
+### D2. A separate `ASKS.md`, or ask metadata on the items themselves · decided 2026-10-01
 
 1. **`design/ASKS.md` with Inbox and Queue (decided).** One file to open, reorder by hand, and annotate. Receipt is a one-line append that cannot be mis-filed. Origin is the file. Compatible with `/go-team`.
 2. **Frontmatter only**: an `asked: [dates]` list on stories and an inline marker on TODO entries, with order derived from recency. No second surface and nothing to drift, but there is no list to review, no hand-set order, and a mid-turn receipt would still need somewhere durable to land before triage.
 3. **Reuse `design/NEXT.md`.** Not recommended: it is the session handoff, owned by `/wrapup`, and its sections park after 14 days.
 
-### D3. What a bump does to order
+### D3. What a bump does to order · decided 2026-10-01
 
 1. **A position cue in the ask wins; otherwise stamp the date and let the PM place it under the pass's existing rule (decided)**: strong signal moves it (the ask unblocks the item above it), no signal leaves it where it is, and the re-ask count is what the review weighs ("asked three times, still sixth").
 2. **Stamp only.** Order changes only in the review.
 3. **A re-ask always goes to the top.** Simple, but it silently rewrites an order Derek set by hand.
 
-### D4. Priority vocabulary
+### D4. Priority vocabulary · decided 2026-10-01
 
 Four vocabularies are in use (see Prior art). The Queue takes over the job of saying what is wanted soon, which lowers the stakes of this decision.
 
@@ -51,24 +57,24 @@ Four vocabularies are in use (see Prior art). The Queue takes over the job of sa
 2. **Adopt the corpus standard's `now | soon | someday`.** It matches Derek's own phrasing and it is a horizon, which is what an ask carries. It costs a field edit on roughly a hundred stories and a change to every reader. If chosen, the first `/pm` review in each project is the migration.
 3. **`P0–P3` everywhere.** One vocabulary, same migration cost as option 2, and it reads as severity, which fits bugs better than stories.
 
-### D5. When triage runs
+### D5. When triage runs · decided 2026-10-01
 
 1. **A background subagent starts as soon as the receipt is written, with two fallbacks (decided).** The agent keeps the reading out of the working session's context. If no agent tool is available, triage runs in-session when the current block of work ends, the way `/story` resurfaces a stub today. In every case the Inbox is durable, so any later `/pm`, `/sup`, `/next` or `/wrapup` sees the untriaged count.
 2. **Always in-session at the block boundary.** No agent cost; spends the working session's context.
 3. **Only at the next `/pm`.** Cheapest; the `Filed:` line can never say more than "in the inbox."
 
-### D6. Filing into another project
+### D6. Filing into another project · decided 2026-10-01
 
 1. **`/pm @<project> <text>` appends to that project's Inbox and stops (decided).** Triage happens in a session of that project, which knows its own corpus. If the project is not cloned on this host, the ask goes in the current project's Inbox tagged `@<project>` and the `Filed:` line says so.
 2. **Route through upstream `/request`.** Its mailbox lives outside every checkout, so it is not carried between hosts by design sync and is invisible to a board that renders the corpus. Its foreign-repo guard hook is not installed here and contradicts the one-front-door hub workflow.
 3. **One central inbox for all projects.** Simplest receipt, but it puts every project's asks in one repo regardless of sensitivity tier.
 
-### D7. A cap on the Queue
+### D7. A cap on the Queue · decided 2026-10-01
 
 1. **Soft cap, PM pushes back (decided).** Past about eight open items the PM says so and asks which ones drop to `someday`. A queue of twenty is a backlog with a different name.
 2. **No cap.**
 
-### D8. How a mid-turn ask is received
+### D8. How a mid-turn ask is received · decided 2026-10-01
 
 The facts are under "Mid-turn mechanics" below. The short version: a slash command typed during a turn waits for the turn to end, and a plain message does not.
 
