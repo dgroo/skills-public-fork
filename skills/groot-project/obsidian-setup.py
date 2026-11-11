@@ -212,7 +212,22 @@ def obsidian_color(project_dir: Path) -> str | None:
     with toml_path.open("rb") as fh:
         data = tomllib.load(fh)
     color = (data.get("obsidian") or {}).get("background")
-    return color.strip() if isinstance(color, str) and color.strip() else None
+    if not isinstance(color, str) or not color.strip():
+        return None
+    # The value lands verbatim in a CSS snippet and appearance.json, so only a
+    # hex colour may pass; the terminal path is parsed and re-rendered by
+    # derive_accent and never needed this check.
+    return normalize_hex(color.strip(), f"{toml_path} [obsidian].background")
+
+
+def normalize_hex(color: str, where: str) -> str:
+    """`#RRGGBB`, upper-case, from `#RGB` or `#RRGGBB`; anything else is refused."""
+    s = color.lstrip("#")
+    if len(s) == 3:
+        s = "".join(c * 2 for c in s)
+    if len(s) != 6 or any(c not in "0123456789abcdefABCDEF" for c in s):
+        raise SystemExit(f"{where} is {color!r}; expected a hex colour like #2F6FB2.")
+    return "#" + s.upper()
 
 
 def vault_accent(project_dir: Path) -> tuple[str, str]:
