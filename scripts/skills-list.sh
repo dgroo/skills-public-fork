@@ -2,10 +2,10 @@
 # List Claude Code skills, grouped by source.
 #
 # Usage:
-#   skill-list.sh           # default: same as `make list` (mine + install status)
-#   skill-list.sh all       # every group, prefixed
-#   skill-list.sh groups    # list available groups
-#   skill-list.sh <group>   # mine | gstack | installed | plugins | upstream
+#   skills-list.sh           # default: same as `make list` (mine + install status)
+#   skills-list.sh all       # every group, prefixed
+#   skills-list.sh groups    # list available groups
+#   skills-list.sh <group>   # mine | gstack | installed | plugins | upstream
 set -euo pipefail
 
 REPO_DIR="${SKILL_LIST_REPO_DIR:-$HOME/code/claude/skills}"
@@ -164,7 +164,7 @@ EOF
         ;;
     -h|--help|help)
         cat <<'EOF'
-Usage: skill-list [<group>]
+Usage: skills-list [<group>]
 
   (no arg)    Same as `make list` — your skills + install status.
   all         Every group, prefixed with [group] headers.
@@ -174,7 +174,7 @@ EOF
         ;;
     *)
         echo "Unknown group: $arg" >&2
-        echo "Run 'skill-list groups' for the list." >&2
+        echo "Run 'skills-list groups' for the list." >&2
         exit 2
         ;;
 esac

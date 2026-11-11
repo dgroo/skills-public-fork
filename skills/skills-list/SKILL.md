@@ -1,6 +1,6 @@
 ---
-name: skill-list
-description: List installed Claude Code skills, grouped by source. Use when asked to "list skills", "what skills do I have", "show my skills", "/skill-list", or "/skill-list <group>". Subcommands — (no arg) same as `make list`; `all` everything grouped; `groups` available group names; `<group>` one of mine/gstack/installed/plugins/upstream. Fast — just shells out to a script and prints the output verbatim.
+name: skills-list
+description: List installed Claude Code skills, grouped by source. Use when asked to "list skills", "what skills do I have", "show my skills", "/skills-list", or "/skills-list <group>". Subcommands — (no arg) same as `make list`; `all` everything grouped; `groups` available group names; `<group>` one of mine/gstack/installed/plugins/upstream. Fast — just shells out to a script and prints the output verbatim.
 argument-hint: "[all | groups | mine | gstack | installed | plugins | upstream]"
 allowed-tools: Bash
 ---
@@ -10,19 +10,19 @@ allowed-tools: Bash
 Run the script and print its output **verbatim**. No analysis, no commentary, no summary. The script is the answer.
 
 ```bash
-bash ~/code/claude/skills/scripts/skill-list.sh "$ARGUMENTS"
+bash ~/code/claude/skills/scripts/skills-list.sh "$ARGUMENTS"
 ```
 
 That's it. One bash call, print the output, stop.
 
 ## Help
 
-When invoked as `/skill-list help`, print the following block verbatim:
+When invoked as `/skills-list help`, print the following block verbatim:
 
 ```
-skill-list — List installed Claude Code skills, grouped by source.
+skills-list — List installed Claude Code skills, grouped by source.
 
-Usage: /skill-list [group]
+Usage: /skills-list [group]
 
 Subcommands (passed to the underlying script verbatim):
   (none)            Same as `make list` from this repo.
@@ -35,7 +35,7 @@ Subcommands (passed to the underlying script verbatim):
   upstream          Upstream-tracked (joewalnes/skills) skills.
   help              Show this message.
 
-Implementation: shells out to scripts/skill-list.sh and prints output verbatim.
+Implementation: shells out to scripts/skills-list.sh and prints output verbatim.
 
 See SKILL.md for full reference.
 ```
