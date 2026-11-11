@@ -129,7 +129,7 @@ One line per skill, grouped by job. `/skills-list mine brief` prints the same in
 | `cmd-add` | Vets and writes a new slash command in ~/.claude/commands, after checking it should not be a skill. |
 | `md-add` | Adds one entry to the right CLAUDE.md or rules file after a copy-editor pass on your wording. |
 | `skill-add` | Vets a proposed skill against the catalog for overlap, then creates it, updates the README and installs it. |
-| `skills-list` | Lists installed skills grouped by source, as plain script output with no analysis. |
+| `skills-list` | Lists installed skills by source; with brief, the one-line index of skills and commands by job. |
 | `skills-review` | Audits installed skills for duplicates and conflicts and writes an HTML report; do recommended applies it. |
 | `statusline-explain` | Explains each statusline segment with its current value and flags unusual states. |
 

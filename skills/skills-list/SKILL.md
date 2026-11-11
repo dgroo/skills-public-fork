@@ -3,7 +3,7 @@ name: skills-list
 description: List installed skills by source, or one line each by job with `brief`. Use for "what skills and commands do I have".
 argument-hint: "[all | groups | mine | gstack | installed | plugins | upstream | commands] [brief]"
 allowed-tools: Bash
-summary: "Lists installed skills grouped by source, as plain script output with no analysis."
+summary: "Lists installed skills by source; with brief, the one-line index of skills and commands by job."
 group: tooling
 ---
 
