@@ -7,6 +7,8 @@
 
 ## Open
 
+- [ ] **P1** (feature) Skills index in README § Skills + `/skills-list brief` — 2026-11-10
+  One human one-liner per own skill, grouped by job, the five `~/.claude/commands` rows, one pointer line for gstack/plugins; a `make readme-check` (or pre-commit) check that every `skills/*/` dir appears exactly once and every row names a real dir. Open call: curated rows vs a `summary:` frontmatter key. Then `brief` as a modifier on any `/skills-list` group prints those lines grouped as the index groups them; acceptance test `/skills-list mine brief`. Full asks (grootPM, 2026-11-10 07:01 and 07:40) in git history of `design/ASKS.md`. The `skill-list` → `skills-list` rename itself landed 2026-11-11.
 - [ ] **P3** (docs) Write the upstream-merge recipe under "Upstream provenance" in `CLAUDE.md` — 2026-10-01
   The first merge in three months (2026-10-01, `b3911fc`) was done by hand: rename any local skill whose name upstream now uses (ours, not theirs — `go-team` calls upstream's `consolidate` by path), `git merge upstream/main`, resolve `README.md` / `TODO.md` / `DIARY.md` to the fork, keep upstream's `CLAUDE.md` additions but drop its commit-policy hunk (`/consolidate` before push), `make install` and read it for `COLLISION` lines. Source: meta-feedback 2026-10-01.
 - [x] **P3** (chore) Decide: stay a fork of joewalnes/skills, or restructure as a wrapper/overlay — 2026-06-09 · **decided 2026-10-01: stay a fork and merge** (Derek; merge `b3911fc` cost five conflicts, four of them repo docs). Unblocks the `upstream-*` → `fork-*` rename and the status-skill consolidation.
