@@ -1,0 +1,14 @@
+---
+author: user
+priority: high
+---
+
+# Design-directory lifecycle: z.archived sweep, done markers, retire paragraphs
+
+> **Captured via `/pm` — not yet pondered.** Verbatim capture below; no exploration or design thinking has happened. Run `/ponder design-directory-lifecycle-in-skills` to develop it. Don't implement from this stub.
+
+Related (found at triage): grootPM `design/stories/ready/design-directory-lifecycle.md` (D3, D4, D7). Touches the same /cleanup-design and /groot-project surfaces as [design-setup](design-setup-skill.md) and [notes-tracker](notes-tracker.md); sequence with them. Also `groot-project-conformance-sweep.md`.
+
+Asked 2026-11-07 12:11 (via design/ASKS.md):
+
+high, from grootPM (2026-11-07): the design-directory lifecycle is decided; see grootPM design/stories/ready/design-directory-lifecycle.md, D3, D4, D7. /cleanup-design: the archive bucket becomes the sweep (move files marked status: done into <dir>/z.archived/ in bulk, repoint links in live files, per-item mark proposals only on computed signals such as a plan whose story is in done/; when sweeping a project with an existing archived/ rename it to z.archived/; recognise both; drop the Orient note that plans fold into stories). /wrapup Phase 3 asks 'notes absorbed, plans whose story shipped this session?' and writes the marker (status: done, done: <date>, superseded_by: <path>, one-line Done banner under the H1). /pm's accuracy review covers notes as well as stories. /groot-project's notes, plans and helping-hands README templates gain the retire paragraph.
