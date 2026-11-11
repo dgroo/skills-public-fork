@@ -249,9 +249,18 @@ Technical considerations, schema sketches, ASCII diagrams, implementation detail
 
 ## Decision records
 
-### D1. <The question> · open
+### D1. <Title> · open
 
-The full argument: options, the recommendation and why, what was rejected. Headings carry the status word (`· open`, `· decided <date>`, `· built`) so the Outline shows it.
+**Question:** One sentence a reader without the context can follow.
+
+**Options:**
+
+1. **<Label>** — what it is; what it costs.
+2. **<Label>** — what it is; what it costs.
+
+**Recommended:** option 1, because <one sentence>. Rejected: 2 because <why>.
+
+<!-- On decision: append "**Decided <date>:** option N (Derek: "…") · any deviation and why", flip the heading to "· decided <date>", rewrite nothing above. Shape: pm/exec-summary.md § Decision records. -->
 
 ## Related
 

@@ -1,6 +1,6 @@
 # The Executive summary block
 
-_Authored by Claude Fable 5.1 with Derek · Last updated 2026-11-01._
+_Authored by Claude Fable 5.1 with Derek · Last updated 2026-11-11 08:34._
 
 Every story and epic opens with this block, directly under the provenance stamp and the `**Epic:**` line. It is the layer Derek reads with his CEO hat on, between projects; the record below it stays complete. Contract: grootPM `design/stories/ready/at-a-glance-doc-tops.md` (D1–D7) and `work-model-contract.md` § The contract.
 
@@ -21,6 +21,32 @@ Every story and epic opens with this block, directly under the provenance stamp 
 - `Needs you` is complete by construction: one bullet per open `<!-- derek(<source>): … -->` mark in the doc and per decision heading marked `· open`, nothing else. Each bullet at most 20 words, opening with a verb label: **Decide** (an answer is wanted), **Look** (a sign-off on something built), **Do** (his hands, a helping-hand). If nothing waits, the line is `**Needs you:** nothing`.
 - More than five bullets means the doc is the problem, not the block: write `**Needs you:** N decisions open, § Decisions` and let the one-line decisions list carry them.
 - Decision headings carry a status word (`· open`, `· decided 2026-10-19`, `· built`) so Obsidian's Outline shows the state of every decision; the `## Decisions` block is one line per decision (status, pick or recommendation, link) and the full argument lives under `## Decision records`.
+
+## Decision records
+
+Every record under `## Decision records` takes one fixed shape, so a human or an LLM can see what was asked, what was recommended and why, and what was decided (contract: grootPM `at-a-glance-doc-tops.md` D5, amended 2026-11-09). Derek, 2026-11-08: "at the end of any of these decision record types of things, there needs to be a final line that states (or re-states) which choice is recommended and why."
+
+```markdown
+### Dn. <Title> · open | decided <date>
+
+**Question:** <one sentence a reader without the context can follow>
+
+<Derek's words on it, verbatim, introduced as his — when there are any>
+
+**Options:**
+
+1. **<Label>** — what it is; what it costs.
+2. **<Label>** — …
+
+**Recommended:** option N, because <one sentence>. Rejected: M because <why>; …
+
+**Decided <date>:** option N (Derek: "<his words>") · <any deviation from the recommendation, and why>
+```
+
+- An open record ends at `**Recommended:**`, always its last line. Each labelled line is its own paragraph (a blank line between), so the fleet's prettier hook cannot join them.
+- Deciding appends the `**Decided <date>:**` line and flips the heading's status word. Nothing above it is rewritten, so the record and the decision both stay visible.
+- No backfill: an existing record takes the shape when it is next touched.
+- The `## Decisions` one-liner list and the headings' status words are unchanged.
 
 ## The pass
 
