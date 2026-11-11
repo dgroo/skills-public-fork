@@ -7,7 +7,7 @@ priority: high
 
 > **Captured via `/pm` — not yet pondered.** Verbatim capture below; no exploration or design thinking has happened. Run `/ponder brains-skill` to develop it. Don't implement from this stub.
 
-Related (found at triage): grootPM `design/stories/drafts/brain-dump-intake.md` (D1–D7 decided; D7 amended 2026-11-10 to the /brains name); [notes-tracker](notes-tracker.md) carries the NOTES.md half of the parse contract.
+Related (found at triage): grootPM `design/stories/ready/brain-dump-intake.md` (D1–D7 decided; D7 amended 2026-11-10 to the /brains name); [notes-tracker](notes-tracker.md) carries the NOTES.md half of the parse contract.
 
 Asked 2026-11-07 13:46 (via design/ASKS.md):
 
