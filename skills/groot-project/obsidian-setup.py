@@ -5,7 +5,8 @@ A project's color is its identity: `.groot-project.toml [terminal].background`
 already paints the terminal on `cd`. This makes the project's Obsidian vault a
 second view onto that same color — and gives every vault a consistent, readable
 theme + a curated plugin set — so a wall of stacked Obsidian windows stops
-looking identical.
+looking identical. An optional `[obsidian].background` in the same file gives
+the vault its own chrome colour instead, used as written (no derivation).
 
 Design (the package.json / node_modules split):
   - COMMITTED config under .obsidian/ declares the baseline:
@@ -194,6 +195,34 @@ def project_color(project_dir: Path) -> str:
             f"{toml_path} has no [terminal].background — run /terminal-setup first."
         )
     return color.strip()
+
+
+def obsidian_color(project_dir: Path) -> str | None:
+    """The project's `[obsidian].background` hex when it chose one for the vault.
+
+    Separate from the terminal colour on purpose (Derek, 2026-11-10: "probably
+    separate colors for Obsidian and terminals"): a terminal background is dark
+    and fills a screen, vault chrome is a strip, and the same hue does not always
+    serve both. When present it is used as written; derive_accent() is only for
+    the terminal fallback.
+    """
+    toml_path = project_dir / ".groot-project.toml"
+    if not toml_path.exists():
+        return None
+    with toml_path.open("rb") as fh:
+        data = tomllib.load(fh)
+    color = (data.get("obsidian") or {}).get("background")
+    return color.strip() if isinstance(color, str) and color.strip() else None
+
+
+def vault_accent(project_dir: Path) -> tuple[str, str]:
+    """(accent hex, one-line provenance) for the vault's chrome."""
+    own = obsidian_color(project_dir)
+    if own:
+        return own, f"{own} ([obsidian].background, used as written)"
+    bg = project_color(project_dir)
+    accent = derive_accent(bg)
+    return accent, f"{bg} ([terminal].background) -> {accent} (derived accent)"
 
 
 def derive_accent(bg_hex: str) -> str:
@@ -598,12 +627,11 @@ def main() -> None:
     if not project_dir.is_dir():
         raise SystemExit(f"not a directory: {project_dir}")
 
-    bg = project_color(project_dir)
-    accent = derive_accent(bg)
+    accent, provenance = vault_accent(project_dir)
     vault = project_dir / ".obsidian"
 
     print(f"vault:  {vault}")
-    print(f"color:  {bg} (terminal) -> {accent} (obsidian accent + chrome)\n")
+    print(f"color:  {provenance}\n")
 
     write_config(vault, accent, args.dry_run)
     print()

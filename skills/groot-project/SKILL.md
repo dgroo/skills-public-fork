@@ -749,7 +749,7 @@ If the project already has a known port (the user had `vite --port 5173` hardcod
 
 ### Phase 7C: Obsidian vault baseline
 
-If the project has (or wants) an Obsidian vault, give it the federation-standard `.obsidian/` baseline so a wall of stacked Obsidian windows stops looking identical and every vault gets a consistent, readable setup. This is the **second view onto the project's color**: Phase 7 painted the terminal from `[terminal].background`; this paints the vault's window chrome from the same value. Depends on Phase 7 having recorded a color.
+If the project has (or wants) an Obsidian vault, give it the federation-standard `.obsidian/` baseline so a wall of stacked Obsidian windows stops looking identical and every vault gets a consistent, readable setup. This is the **second view onto the project's color**: Phase 7 painted the terminal from `[terminal].background`; this paints the vault's window chrome from the same value, unless the project records its own `[obsidian].background`, which is then used as written (a terminal background is dark and fills a screen; vault chrome is a strip, and the same hue does not always serve both). Depends on Phase 7 having recorded a color.
 
 **"Federation" is literal — this phase enrolls the repo in a live cross-vault sync.** `~/bin/obsidian-config-sync` (launchd agent `com.groot.obsidian-config-sync`) sweeps `~/code` and reconciles shared vault config across every participating vault. It auto-discovers by presence of a tracked `.obsidian/`, so **committing the config this phase writes is what joins the fleet** — expect an unattended `chore(obsidian): sync shared config (…)` commit to land in the repo shortly after, authored by the watcher, not by you. That's the system working, not a bug. Say so up front; it is otherwise a genuine surprise (it was, in vffins on 2026-07-15).
 
@@ -766,7 +766,7 @@ After adopting a _new_ vault, the watcher's `WatchPaths` is a baked list that pr
 - **Exists** → apply the baseline (idempotent merge — never clobbers user keys) and register the vault.
 - **Absent** → ask: _"Set up an Obsidian vault baseline for this project? (Y/skip)"_. Only create `.obsidian/` on an explicit yes. In `--auto` mode, **skip** when absent (don't conjure vaults unprompted); apply only when `.obsidian/` already exists.
 
-**What it does** (via the helper, which reads `[terminal].background` and derives a vivid same-hue accent):
+**What it does** (via the helper, which reads `[obsidian].background` when present, else `[terminal].background` with a vivid same-hue accent derived from it):
 
 ```
 ~/.claude/skills/groot-project/obsidian-setup.py [PROJECT_DIR] [--no-fetch] [--no-register] [--dry-run]
