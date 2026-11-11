@@ -22,7 +22,7 @@ Inbox: raw asks, verbatim, oldest first, not yet triaged. New asks are appended 
 - [ ] Design-directory lifecycle in /cleanup-design, /wrapup, /pm, /groot-project → [design/stories/drafts/design-directory-lifecycle-in-skills.md](design/stories/drafts/design-directory-lifecycle-in-skills.md) · asked 2026-11-07
 - [ ] /brains — the brain-dump parse skill → [design/stories/drafts/brains-skill.md](design/stories/drafts/brains-skill.md) · asked 2026-11-07, 2026-11-10
 - [ ] design/notes/NOTES.md tracker in /brains, /wrapup, /cleanup-design → [design/stories/drafts/notes-tracker.md](design/stories/drafts/notes-tracker.md) · asked 2026-11-09
-- [ ] Skills index in README § Skills + /skills-list brief → [TODO.md](TODO.md) · asked 2026-11-10 · Done: /skills-list mine brief prints the index one-liners, grouped
+- [ ] Skills index in README § Skills + /skills-list brief → [TODO.md](TODO.md) · asked 2026-11-10 · format decided 2026-11-11: `summary:` + `group:` frontmatter, README and brief generated · Done: /skills-list mine brief prints the index one-liners, grouped
 - [ ] Fork question: break from joewalnes/skills or keep merging? (ponder) → [design/stories/drafts/fork-or-follow-upstream.md](design/stories/drafts/fork-or-follow-upstream.md) · asked 2026-10-19
 
 ## Inbox
