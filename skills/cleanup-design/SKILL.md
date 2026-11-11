@@ -1,6 +1,8 @@
 ---
 name: cleanup-design
 description: Use when asked to clean up, audit, or refresh the project's design corpus ("clean up design", "what's stale", "should anything move to done", "audit the design docs", "any drift between recent decisions and docs", "post-decision sweep"), OR to check a project against the canonical design-corpus model / catch a drifted project up on conventions ("does this match our standard layout", "conform this project", "/cleanup-design conformance"). For maintaining design-doc invariants in projects that use `design/` (or equivalent) with stories, helping-hands, notes, and canonical design docs.
+summary: "Audits the design corpus for stale docs and drift, or checks it against the standard layout."
+group: design
 ---
 
 # cleanup-design

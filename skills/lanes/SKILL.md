@@ -2,6 +2,8 @@
 name: lanes
 description: Work out what a project's domain lanes should be — the 2-4 durable areas of work several sessions could own in parallel — from the directory structure, the design corpus, and which files actually change together in the commit history. Re-run it periodically to reconsider as the project develops; it flags dead lanes and missing ones. Use when asked "what lanes should this project have", "propose lanes", "are our lanes still right", "/lanes". Companion to /lane, which puts a session into one.
 allowed-tools: Bash, Read, Glob, Grep, AskUserQuestion
+summary: "Works out what a project's domain lanes should be from its layout and commit co-change history."
+group: code
 ---
 
 # Lanes — what are this project's domains?

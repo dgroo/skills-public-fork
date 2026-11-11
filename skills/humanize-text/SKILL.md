@@ -2,6 +2,8 @@
 name: humanize-text
 description: Use when asked to strip AI "tells" from written prose — "humanize this", "de-slop this writing", "does this read as AI-written", "make this sound like me", "/humanize-text". Detects AI fingerprints (em-dash clusters, "it's not just X, it's Y", rule-of-three cadence, reflexive hedging, banned vocab) and proposes voice-preserving edits that do not change meaning. Calibrates against the author's own writing corpus and surfaces any meaning-affecting word choice separately for sign-off. NOT for code (see /humanize-code) or visual/UI slop (see /design-review).
 argument-hint: "[<file> | review | profile [show|edit|add] ]"
+summary: "Strips AI tells from prose as a proposed diff, calibrated to your own voice profile."
+group: design
 ---
 
 # /humanize-text

@@ -2,6 +2,8 @@
 name: idea
 description: Capture a quick spark to the project's sparkfile (default `design/IDEAS.md`). One line per entry, optional bracketed tags inferred only when an obvious cue is present. `/idea <text>` to add, `/idea review` to show the list, `/idea iterate` to walk each entry with elaborate / delete / skip. Triggers on "/idea …", "spark", "add to sparkfile", "save this idea", "jot this down".
 argument-hint: <text to capture> | review | iterate
+summary: "Appends a one-line spark to the Someday list in design/TODO.md; review and iterate walk the list."
+group: backlog
 ---
 
 # Idea

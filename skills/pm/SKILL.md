@@ -1,7 +1,10 @@
 ---
 name: pm
-description: The project's PM. `/pm <text>` — or a plain `pm: <text>` message, which a hook files the moment it is typed, even mid-turn — takes work Derek wants done — anything from a spark to an epic — records it, checks it against existing work (an existing story gets the addition and a bump instead of a twin), and puts it on the ask queue in `design/ASKS.md`, which /next and /sup rank directly under the session handoff. `/pm triage` works through asks waiting in the inbox. Bare `/pm` is the periodic backlog-stewardship pass — hygiene via /cleanup-design, an accuracy review of stories, durable reprioritization (TODO order and story priority, asking on genuine tradeoffs), and grounded gap proposals. Use for "add this to the queue", "I want to work on this soon", "file this with the PM", "bump the X story", "run a PM pass", "is the backlog stale / in the right order / missing anything".
+description: "Hand work to the project's PM: file an ask on the queue, triage the inbox, or run a backlog review pass."
+when_to_use: "`/pm <text>` — or a plain `pm: <text>` message, which a hook files the moment it is typed, even mid-turn — takes work Derek wants done — anything from a spark to an epic — records it, checks it against existing work (an existing story gets the addition and a bump instead of a twin), and puts it on the ask queue in `design/ASKS.md`, which /next and /sup rank directly under the session handoff. `/pm triage` works through asks waiting in the inbox. Bare `/pm` is the periodic backlog-stewardship pass — hygiene via /cleanup-design, an accuracy review of stories, durable reprioritization (TODO order and story priority, asking on genuine tradeoffs), and grounded gap proposals. Use for \"add this to the queue\", \"I want to work on this soon\", \"file this with the PM\", \"bump the X story\", \"run a PM pass\", \"is the backlog stale / in the right order / missing anything\"."
 argument-hint: "<work to file> | triage | ? | ! | help"
+summary: "Files an ask in design/ASKS.md against existing work; triage sorts the inbox, bare runs a backlog review."
+group: backlog
 ---
 
 # /pm — the project's PM

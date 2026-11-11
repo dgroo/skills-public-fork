@@ -5,7 +5,9 @@
 #   skills-list.sh           # default: same as `make list` (mine + install status)
 #   skills-list.sh all       # every group, prefixed
 #   skills-list.sh groups    # list available groups
-#   skills-list.sh <group>   # mine | gstack | installed | plugins | upstream
+#   skills-list.sh <group>   # mine | gstack | installed | plugins | upstream | commands
+#   skills-list.sh <group> brief   # one line each; mine/upstream/commands from the
+#                                  # skills index (scripts/skills-index.py), grouped by job
 set -euo pipefail
 
 REPO_DIR="${SKILL_LIST_REPO_DIR:-$HOME/code/claude/skills}"
@@ -13,7 +15,26 @@ MINE_DIR="$REPO_DIR/skills"
 CLAUDE_SKILLS_DIR="$HOME/.claude/skills"
 PLUGINS_CACHE_DIR="$HOME/.claude/plugins/cache"
 
+# The skill passes its whole argument string as one word ("mine brief").
+# shellcheck disable=SC2086
+set -- ${*:-}
 arg="${1:-}"
+brief="${2:-}"
+SKILLS_INDEX="$REPO_DIR/scripts/skills-index.py"
+if [ "$arg" = "brief" ]; then arg="mine"; brief="brief"; fi
+if [ -n "$brief" ] && [ "$brief" != "brief" ]; then
+    echo "Unknown modifier: $brief (the only one is 'brief')" >&2
+    exit 2
+fi
+if [ "$arg" = "commands" ]; then
+    exec python3 "$SKILLS_INDEX" brief commands
+fi
+if [ "$brief" = "brief" ]; then
+    case "$arg" in
+        mine|upstream) exec python3 "$SKILLS_INDEX" brief "$arg" ;;
+        all) exec python3 "$SKILLS_INDEX" brief mine ;;
+    esac
+fi
 
 # Extract `description:` from a SKILL.md.
 desc_of() {
@@ -147,9 +168,13 @@ case "$arg" in
         list_upstream
         ;;
     mine)        list_mine ;;
-    gstack)      list_gstack ;;
-    installed)   list_installed ;;
-    plugins)     list_plugins ;;
+    gstack|installed|plugins)
+        if [ "$brief" = "brief" ]; then
+            "list_$arg" | python3 "$SKILLS_INDEX" shorten
+        else
+            "list_$arg"
+        fi
+        ;;
     upstream)    list_upstream ;;
     groups)
         cat <<'EOF'
@@ -159,7 +184,11 @@ Available groups:
   installed   — direct installs at ~/.claude/skills/<name>/ (real dirs, not symlinks, not gstack)
   plugins     — plugin-installed skills under ~/.claude/plugins/cache/
   upstream    — skills tracked in upstream/main (joewalnes/skills fork base)
+  commands    — the slash commands in ~/.claude/commands, one line each
   all         — every group, prefixed
+
+Add 'brief' after a group for one line each: 'mine brief' is the skills index
+(every skill in this repo and the commands, grouped by job).
 EOF
         ;;
     -h|--help|help)
@@ -169,7 +198,9 @@ Usage: skills-list [<group>]
   (no arg)    Same as `make list` — your skills + install status.
   all         Every group, prefixed with [group] headers.
   groups      List available group names.
-  <group>     One of: mine, gstack, installed, plugins, upstream.
+  <group>     One of: mine, gstack, installed, plugins, upstream, commands.
+  <group> brief   One line each. 'mine brief' is the skills index: every skill
+              in this repo and the commands, grouped by job.
 EOF
         ;;
     *)

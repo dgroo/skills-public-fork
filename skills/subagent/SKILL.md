@@ -2,6 +2,8 @@
 name: subagent
 description: Use when asked to delegate a task to a subagent via the Agent / Task tool ("spawn a subagent", "do this in a subagent", "subagent for that", "/subagent"). Runs a four-check evaluation (result-shape, size, context-savings, decision-load) and either spawns with a well-formed prompt OR pushes back with specific reasons. User override always wins; the skill's job is to make the heuristic legible, not to overrule judgment.
 argument-hint: [task description]
+summary: "Checks whether a task suits a subagent on four criteria, then spawns it with a good brief or pushes back."
+group: delegate
 ---
 
 # subagent

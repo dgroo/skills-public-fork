@@ -1,8 +1,10 @@
 ---
 name: skills-list
-description: List installed Claude Code skills, grouped by source. Use when asked to "list skills", "what skills do I have", "show my skills", "/skills-list", or "/skills-list <group>". Subcommands — (no arg) same as `make list`; `all` everything grouped; `groups` available group names; `<group>` one of mine/gstack/installed/plugins/upstream. Fast — just shells out to a script and prints the output verbatim.
-argument-hint: "[all | groups | mine | gstack | installed | plugins | upstream]"
+description: List installed skills by source, or one line each by job with `brief`. Use for "what skills and commands do I have".
+argument-hint: "[all | groups | mine | gstack | installed | plugins | upstream | commands] [brief]"
 allowed-tools: Bash
+summary: "Lists installed skills grouped by source, as plain script output with no analysis."
+group: tooling
 ---
 
 # Skill List
@@ -33,9 +35,14 @@ Subcommands (passed to the underlying script verbatim):
   installed         Directly-installed (~/.claude/skills/) only.
   plugins           Skills from installed plugins.
   upstream          Upstream-tracked (joewalnes/skills) skills.
+  commands          The slash commands in ~/.claude/commands, one line each.
+  <group> brief     One line each. `mine brief` is the skills index: every
+                    skill in this repo and the commands, grouped by job, from
+                    each skill's summary: line. Bare `brief` means `mine brief`.
   help              Show this message.
 
 Implementation: shells out to scripts/skills-list.sh and prints output verbatim.
+The brief lines come from scripts/skills-index.py, which also writes README § Skills.
 
 See SKILL.md for full reference.
 ```

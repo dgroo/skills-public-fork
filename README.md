@@ -38,46 +38,114 @@ make list       # Show available skills and install status
 
 ## Skills
 
-| Skill                | Description                                                                                                                                                                                                                                                                                                                                                                                                            |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `bug`                | Add a new bug to the project's tracker (alias for `/todo`)                                                                                                                                                                                                                                                                                                                                                             |
-| `bug-bash`           | Autonomously work through a project's bug list, fixing bugs in priority order                                                                                                                                                                                                                                                                                                                                          |
-| `md-add`      | Add a single entry to a CLAUDE.md file with a copy-edit pass — sharpens vague triggers, flags redundancy, picks the right section, preserves the user's voice                                                                                                                                                                                                                                                          |
-| `cleanup-design`     | Audit and refresh a project's `design/` corpus — flag staleness, surface drift between recent decisions and docs, suggest moves to `done/`                                                                                                                                                                                                                                                                             |
-| `cmd-add`            | Add a Claude Code slash command — gates command-vs-skill (defaults to command since commands cost no context until used), scans for collisions, writes `~/.claude/commands/<name>.md`, shows the propagation command for dot-claude                                                                                                                                                                                    |
-| `design-setup`       | Check a project's `design/` against the standard (via `/cleanup-design conformance`) and add templated subdirectories from files in the skill's directory. `/design-setup research` creates `design/research/` with the Do Research file and names it in `design/README.md`; never overwrites |
-| `groot-project`      | Bootstrap a project the Derek way — git, `design/` subtree with readiness-by-directory stories, CLAUDE.md skeleton, Makefile, terminal background color (via `/terminal-setup`), optional GitHub remote and gbrain. Coexists with `/project-setup`. Re-runnable                                                                                                                                                        |
-| `hello-world`        | A simple test greeting skill                                                                                                                                                                                                                                                                                                                                                                                           |
-| `helping-hands`      | Work through a project's `helping-hands/` items — tasks needing the user's hands, eyes, credentials. Validates each item, extends LLM-side scaffolding, surfaces a single concrete ask. `/helping-hands new <slug>` files a new entry from the canonical template                                                                                                                                                      |
-| `humanize-text`      | Strip AI "tells" from prose without changing meaning or flattening the author's voice. Detects fingerprints (em-dash clusters, "it's not just X, it's Y", rule-of-three cadence, banned vocab), calibrates against the author's own corpus (`~/.claude/voice/profile.md`), and surfaces meaning-affecting word choices separately for sign-off. Companion to `/md-add`; sibling of the planned `/humanize-code` |
-| `idea`               | Capture a quick spark to the project's sparkfile (`design/IDEAS.md`). `/idea <text>` to add, `/idea review` to list, `/idea iterate` to walk each entry                                                                                                                                                                                                                                                                |
-| `land`               | Verify a feature branch and fast-forward it onto main, re-checking everything that changed since this session last looked. Materialises the merged tree and tests _that_ rather than the branch; cherry-picks when main has moved, so no rebase is needed. Solo-project FF flow — not gstack's PR-and-deploy `/ship` → `/land-and-deploy`                                                                     |
-| `meta-feedback`      | End-of-session lookback on the collaboration: turns divergences between ask and outcome into proposed changes (prompting, CLAUDE.md / rules / memory, skills), scoped global or project. Signal over volume. `file` mode writes a central report without asking (what `/wrapup` calls); `review` collates pending reports into `design/meta-feedback/REVIEW.md`, an Obsidian page with a recommendation and tick-boxes per item; `apply` acts on what was ticked and deletes resolved reports; `/sup` nudges when any are pending |
-| `next`               | Forward-only "what should I pick up?" — scans queued-work surfaces (TODO, ready/draft stories, helping-hands, REVISIT, open PRs, stale branches) via `~/bin/backlog-scan` and presents a few dependency- and leverage-ranked candidates as the shared `Next` menu (`go` / `1` / `2` / `?` suffix). Conservative pick-scaled context-window check. Companion to `/sup`                                                                                        |
-| `ponder`             | Declare a thinking/research task — explore the repo, recover in-repo prior art, think in options, write a drafts story with named open decisions, and stop before building. Turning the thinking into real work is gated behind an explicit go. `/ponder handoff` packages the thread for another session/repo                                                                                                          |
-| `terminal-setup`     | Set a per-project terminal background color (and optional shell alias) that follows you across iTerm2, Ghostty, Alacritty, Kitty, WezTerm. Records the choice in `.groot-project.toml`; the shell applies it via OSC 11 on `cd`. Successor to `iterm-setup` — handles `[iterm]` → `[terminal]` migration automatically                                                                                                 |
-| `prior-art`          | 20-minute prior-art check before building a new project — surfaces 1–3 closest existing tools and asks "what's your honest reason to build anyway?"                                                                                                                                                                                                                                                                    |
-| `pm`                 | The project's PM. `/pm <text>` — or a plain `pm: <text>` message, filed by a hook the moment it is typed, even mid-turn — takes an ask (spark to epic), records it verbatim in `design/ASKS.md`, checks it against existing work (bumping the existing story instead of twinning it) and places it on the ask queue that `/next` and `/sup` rank directly under the session handoff; `/pm triage` drains the inbox. Bare `/pm` is the periodic backlog-stewardship pass — wraps `/cleanup-design` for hygiene, then adds a judgment-heavy accuracy review of stories/notes, **durable** reprioritization (reorders `TODO`/story-frontmatter, asks on genuine tradeoffs), a review of the ask queue (reconciles and prunes landed asks; proposes admissions, reorders and drops past a soft cap of eight), and grounded gap-proposal. Stateless; the backlog files are the state |
-| `project-setup`      | Walk through project setup improvements for AI-assisted development                                                                                                                                                                                                                                                                                                                                                    |
-| `readme`             | Generate or update project README documentation                                                                                                                                                                                                                                                                                                                                                                        |
-| `release-setup`      | Set up automated cross-platform binary releases for a Go project                                                                                                                                                                                                                                                                                                                                                       |
-| `scorecard`          | Comprehensive codebase quality audit with letter grades                                                                                                                                                                                                                                                                                                                                                                |
-| `sitrep`             | Quick situation report — recap progress, uncommitted work, gaps, and next steps                                                                                                                                                                                                                                                                                                                                        |
-| `skill-add`          | Evaluation gate for proposing a new skill — scans the catalog for collisions, overlaps, and wrap candidates; pushes back on thin value; interviews and creates if it proceeds                                                                                                                                                                                                                                          |
-| `skills-list`        | Fast plain-text listing of installed skills, grouped by source. `(no arg)` mirrors `make list`; `all` lists everything; `groups` lists group names; `<group>` is one of mine/gstack/installed/plugins/upstream. Single bash call, output verbatim — no LLM analysis                                                                                                                                                    |
-| `lane`               | Move this session into a domain lane — a long-lived worktree for one area of a project. `/lane <name>` enters it (creating it if needed) via EnterWorktree; bare `/lane` reports your lane or offers the roster. Enters, never merely labels — a session's lane is where it physically is                                                                              |
-| `lanes`              | Work out what a project's domain lanes *should* be, from the tree, the design corpus, and which files actually change together (`lane --cluster`). Re-run to reconsider: flags dead lanes, missing ones, and feature-named drift. Companion to `/lane`                                                                                                                  |
-| `standup`            | Who is waiting on you across every Claude Code session on this host, longest stall first — the interrupt list for running several sessions in parallel. Scoped to the current project by default (`all` for the host). Reads `cc-session-board --waiting`; §1 of the session-teams standup design                                                                                                                       |
-| `skills-review`      | Audit installed Claude Code skills — enumerate, categorize, flag duplicates and conflicts. Generates an HTML report and can act on its recommendations                                                                                                                                                                                                                                                                 |
-| `statusline-explain` | Explain each segment of the Claude Code statusline — current value, what it means, and a note when the value is in an unusual state. Parses the live `~/.claude/statusline-command.sh` so it stays in sync as segments change                                                                                                                                                                                          |
-| `story`              | Verbatim story capture with zero derail — file a paragraph of intent as a "not yet pondered" stub in `design/stories/drafts/<slug>.md` and return to the work at hand. Resurfaces the stub once the current block of work wraps, to flesh it out while it's fresh. The rung between `/idea` (a sentence) and `/ponder` (think now)                                                                                                                                       |
-| `subagent`           | Evaluate whether a task is actually suited to a subagent (four-check heuristic), then either spawn with a well-formed prompt or push back with specific reasons                                                                                                                                                                                                                                                        |
-| `sup`                | Local extension of `/sitrep` — adds session recap, sibling-session + relay awareness, active backlog scan + pick recommendation, new-session check, intent routing, and a cold-return briefing (fires after a multi-day gap: reconstructs the sessions you had going + flags unfinished work)                                                                                                                            |
-| `todo`               | Add a new bug or todo to the project's tracker                                                                                                                                                                                                                                                                                                                                                                         |
-| `tool-web`           | Build a lightweight single-file web application with no external dependencies                                                                                                                                                                                                                                                                                                                                          |
-| `walkthrough`        | Produce a narrative walkthrough of how an app or system is used end-to-end from a specific user's perspective — tutorial-quadrant docs, story-shaped                                                                                                                                                                                                                                                                   |
-| `wrapup`             | Action-imperative session-end gate. Inventories in-flight state, writes routine prep (DIARY, stories, `design/NEXT.md` handoff) and auto-commits + pushes complete work, files a `/meta-feedback` lookback without asking, then emits a definitive READY / WAIT / STAY verdict. Asks only for destructive ops or ambiguous dirt. `checkpoint` captures without leaving; `all` wraps every session on the host and snapshots the roster for `cc-relaunch` (`/reclaude`) to relaunch after a reboot. Companion to `/sup` |
-| `yolo-mode`          | Bounded-autonomous "work overnight while I sleep" mode. Pushes forward on the design/docs backlog in an isolated worktree, atomic commits, a `YOLO-LOG.md` review trail, destructive ops deferred to `YOLO-QUEUE.md` instead of run. Fans work to subagents for endurance. Behavioral half only — needs `--dangerously-skip-permissions` for true unattended running. Code work is opt-in (`--code`)                   |
+One line per skill, grouped by job. `/skills-list mine brief` prints the same index in a session, along with the slash commands. Each line is the skill's own `summary:` (see [CLAUDE.md](CLAUDE.md) § When adding a new skill).
+
+<!-- skills-index:begin (generated by `make readme-index` from each skill's summary: and group: — do not edit by hand) -->
+
+### Session — where things stand, what to pick up, wrapping up
+
+| Skill | What it does |
+| --- | --- |
+| `meta-feedback` | Looks back at the session for where ask and outcome diverged and proposes CLAUDE.md, memory or skill fixes. |
+| `next` | Ranks the best next chunk of work from the backlog and this conversation, with no situation recap. |
+| `regroup` | Lands outstanding lane work and pulls every clean worktree forward to one baseline commit; ? reports only. |
+| `retro` | Reports what actually happened in a session or fleet from its transcripts and repo, before any rule change. |
+| `roci-sitrep` | Reports the always-on host's vitals, git fleet, services, relay state and open helping-hands on one page. |
+| `sitrep` | Reports the session's branch, in-progress work, blocked agents and next steps; sup is the fuller version. |
+| `standup` | Lists which of your Claude sessions are waiting on you, longest-stalled first; all covers the host. |
+| `sup` | Reports the situation, ranks queued work and routes a new intent to a workspace; a superset of sitrep. |
+| `wrapup` | Preps and commits the session's loose ends, then gives a READY, WAIT or STAY verdict on ending it. |
+
+### Backlog — capturing work and working the queue
+
+| Skill | What it does |
+| --- | --- |
+| `bug` | Files a bug in the project tracker; an alias for todo. |
+| `bug-bash` | Works through the project's bug list on its own, fixing, testing and committing in priority order. |
+| `helping-hands` | Works through design/helping-hands items that need your hands or credentials, pushing each as far as it can. |
+| `idea` | Appends a one-line spark to the Someday list in design/TODO.md; review and iterate walk the list. |
+| `pm` | Files an ask in design/ASKS.md against existing work; triage sorts the inbox, bare runs a backlog review. |
+| `request` | Files a change request in another project's inbox instead of editing that repo. |
+| `revisit` | Files and works through REVISIT.md items that resurface at a future date or when an event happens. |
+| `story` | Files your text verbatim as a stub in design/stories/drafts/ and returns to the current work. |
+| `todo` | Adds a bug or task to the project tracker with codebase context and a priority. |
+
+### Design and docs — thinking, the design/ directory, writing
+
+| Skill | What it does |
+| --- | --- |
+| `cleanup-design` | Audits the design corpus for stale docs and drift, or checks it against the standard layout. |
+| `design-setup` | Checks a project's design/ against the standard and adds templated subdirectories (research/ with the Do Research file). |
+| `docs` | Plans and writes user documentation in Diataxis structure, with a reader test before merge. |
+| `humanize-text` | Strips AI tells from prose as a proposed diff, calibrated to your own voice profile. |
+| `ponder` | Runs a design-thinking pass on a topic and writes a drafts story with named open decisions; builds nothing. |
+| `prior-art` | Checks what already exists before you build a new project and ends with a one-line judgment. |
+| `readme` | Writes or updates a project README from the codebase. |
+| `walkthrough` | Drafts a narrative walkthrough of using an app from one user's view, then iterates on review feedback. |
+
+### Project setup
+
+| Skill | What it does |
+| --- | --- |
+| `groot-project` | Bootstraps a project's git, design/, CLAUDE.md, Makefile, terminal color and remotes; safe to re-run. |
+| `project-launcher` | Generates a per-project .app that opens a terminal attached to the project's tmux session on the host. |
+| `project-setup` | Suggests optional AI-workflow conventions for an existing project; groot-project builds the skeleton. |
+| `relay-setup` | Initializes design/relay/ so two hosts can hand work between Claude sessions through git. |
+| `release-setup` | Sets up automated cross-platform binary releases on every push to main for a Go project. |
+| `terminal-setup` | Sets a per-project terminal background color and optional shell alias, recorded in .groot-project.toml. |
+
+### Code — branches, quality, building
+
+| Skill | What it does |
+| --- | --- |
+| `consolidate` | Rebuilds unpushed commits into one per feature or fix, and gates every push on that. |
+| `land` | Re-verifies a feature branch against main, then fast-forwards it onto main; no PR, no deploy. |
+| `lane` | Moves this session into a named domain lane (a long-lived worktree), or reports which lane you are in. |
+| `lanes` | Works out what a project's domain lanes should be from its layout and commit co-change history. |
+| `scorecard` | Grades a whole codebase for quality and agent-readiness as it stands; slop judges a diff. |
+| `slop` | Flags unchosen code, surface area growing without leverage, in a branch; scorecard grades the codebase. |
+| `tool-web` | Builds a single-file web app with no frameworks or external dependencies. |
+| `vfupdate` | Syncs the Verifact demo to upstream sandbox and reports what the update fixed or broke via the demo suite. |
+
+### Delegation and autonomy
+
+| Skill | What it does |
+| --- | --- |
+| `delegate-bulk` | Hands high-volume low-judgement work to a near-free model via pi; non-private data only. |
+| `delegate-image` | Generates a visual as SVG via text models or a raster via an image panel, judged by two models. |
+| `delegate-private` | Runs a task on a local Ollama model so personal or confidential data never leaves the device. |
+| `delegate-review` | Gets an independent code review of Claude's work from a Kimi model via pi. |
+| `delegate-security-audit` | Has a GLM model audit your own code for vulnerabilities via pi, and fix what it finds. |
+| `fleets` | Shows which go-team fleets are alive across projects: leases, last landing, session state. |
+| `go-team` | Runs a crew of agents unattended on a backlog: dispatch, isolated verification, gating, merging. |
+| `subagent` | Checks whether a task suits a subagent on four criteria, then spawns it with a good brief or pushes back. |
+| `yolo-mode` | Works the design/docs backlog overnight in an isolated worktree, with a review log. |
+
+### Claude setup — skills, commands, CLAUDE.md
+
+| Skill | What it does |
+| --- | --- |
+| `beginners-mind` | Audits a project with an under-briefed fresh observer and reports recommendations and oddities. |
+| `cmd-add` | Vets and writes a new slash command in ~/.claude/commands, after checking it should not be a skill. |
+| `md-add` | Adds one entry to the right CLAUDE.md or rules file after a copy-editor pass on your wording. |
+| `skill-add` | Vets a proposed skill against the catalog for overlap, then creates it, updates the README and installs it. |
+| `skills-list` | Lists installed skills grouped by source, as plain script output with no analysis. |
+| `skills-review` | Audits installed skills for duplicates and conflicts and writes an HTML report; do recommended applies it. |
+| `statusline-explain` | Explains each statusline segment with its current value and flags unusual states. |
+
+### Commands — in ~/.claude/commands (the dot-claude repo), no context cost until typed
+
+| Command | What it does |
+| --- | --- |
+| `/cpush` | Commits all changes as atomic commits, then pushes. |
+| `/env-pull` | Pulls the three env repos (~/.claude, skills, dotfiles) and handles easy merges; not the current project. |
+| `/rcs-issue` | Files an environment refinement into the remote-coding cross-project queue. |
+| `/reclaude` | Relaunches the Claude sessions that wrapup all recorded before a host reboot. |
+| `/spawn` | Starts a new detached Claude session on this host, reachable from Remote Control. |
+
+gstack and plugin skills are not indexed here: `/skills-list gstack brief` and `/skills-list plugins brief` list them from their own descriptions.
+
+<!-- skills-index:end -->
 
 ## Development
 

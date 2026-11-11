@@ -2,6 +2,8 @@
 name: skill-add
 description: Use when proposing a new Claude Code skill — evaluates the idea against the installed catalog for collisions, overlaps, and wrap candidates; pushes back if the value is thin; interviews for clarifications only if proceeding; then creates the skill file, updates README, and runs make install. Triggers on "/skill-add <description>", "I want to add a skill that…", "let's make a skill for…", "should I write a skill that…".
 argument-hint: <one-line description of the proposed skill>
+summary: "Vets a proposed skill against the catalog for overlap, then creates it, updates the README and installs it."
+group: tooling
 ---
 
 # Add a Skill
@@ -108,7 +110,7 @@ A short, focused interview. Skip questions whose answers are already clear from 
 
 Ask only what you need:
 
-1. **Final name and description.** The frontmatter `description:` is what makes the skill discoverable — needs to be specific enough that future-you matches it on the right trigger. Draft one, get approval.
+1. **Final name, description and summary.** The frontmatter `description:` is what makes the skill discoverable — needs to be specific enough that future-you matches it on the right trigger, and its opening words are all the `/` picker shows. The `summary:` is the one-line reminder the skills index prints, and `group:` files it under a job. Draft all three, get approval.
 2. **Argument shape.** `<arg>`, `[optional arg]`, subcommands (`/idea review`)? Used for `argument-hint:`.
 3. **Tool restrictions.** Read-only? Then `allowed-tools` should restrict accordingly (see `/sitrep`, `/sup` for examples). Most skills don't need this.
 4. **Voice.** Joe-style (tight, numbered phases, code-fence examples — see `/todo`, `/scorecard`) or Derek-style (more editorial, decision tables, longer rationale — see `/md-add`, `/groot-project`). Default: Joe-style unless the skill is genuinely opinion-heavy.
@@ -121,10 +123,10 @@ Ask only what you need:
 
 1. **Write `skills/<name>/SKILL.md`.** Use the structure of an adjacent skill in the chosen style as a template — don't invent a new shape.
 2. **Include the standard `help` verb.** Every new skill ships with a `help` routing entry plus a dedicated `## Help` section. See [Help verb convention](#help-verb-convention) below for the format. This is non-negotiable scaffolding — don't ask the user whether to include it.
-3. **Update `README.md`.** Add a row to the Skills table, alphabetical order. (Project convention — see this repo's `CLAUDE.md`.)
+3. **Write the index line and regenerate `README.md`.** The new SKILL.md's frontmatter carries `summary:` (one sentence, at most 110 characters, double-quoted, what the skill does as a reminder in a list of sixty; no triggers) and `group:` (one of the keys in `scripts/skills-index.py`'s `GROUPS`). Then `make readme-index` rewrites README § Skills from them; never hand-edit that section. `make readme-check` must pass, and the pre-commit hook runs it.
 4. **Run `make install`.** Symlinks the skill into `~/.claude/skills/`.
 5. **Show the result.** Path to the new SKILL.md, the README row added, and the install output line.
-6. **Commit and push local-only skills proactively** (per the global commit-proactively rule — a new local skill is additive and harmless; convention updated 2026-07-05 after the don't-commit gate cost a cross-machine look at `/ponder`). Atomic commit: the skill dir + README row. **Upstream-bound skills are the exception** — leave them uncommitted for the PR flow.
+6. **Commit and push local-only skills proactively** (per the global commit-proactively rule — a new local skill is additive and harmless; convention updated 2026-07-05 after the don't-commit gate cost a cross-machine look at `/ponder`). Atomic commit: the skill dir + the regenerated README. **Upstream-bound skills are the exception** — leave them uncommitted for the PR flow.
 
 If the skill needs companion files (a script, a template), create them alongside `SKILL.md` in the same directory.
 

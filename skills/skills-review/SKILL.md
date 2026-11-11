@@ -2,6 +2,8 @@
 name: skills-review
 description: Audit installed Claude Code skills — enumerate, categorize, flag duplicates and conflicts, surface usefulness for this user. Default mode regenerates an HTML report at ~/.claude/design/skills-review.html and opens it. Use when asked to "review skills", "audit skills", "what skills do I have", "skills review", or "do recommended" / "apply skills-review recommendations" to act on a prior report's action items.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+summary: "Audits installed skills for duplicates and conflicts and writes an HTML report; do recommended applies it."
+group: tooling
 ---
 
 # Skills Review

@@ -51,9 +51,11 @@ Update `README.md` (and any relevant docs) before committing if the change affec
 
 After creating a new skill in `skills/<name>/SKILL.md`:
 
-1. Update `README.md` — add the skill to the right table (dev loop or on-demand)
+1. Give it `summary:` and `group:` in its frontmatter (see *Skill frontmatter*), then run `make readme-index` — README § Skills is generated, never hand-edited
 2. Run `make install` to symlink it
 3. Commit both the skill and the README update together
+
+**On every edit to a skill, re-read its `summary:` and fix it if the edit made it wrong.** The line is the index entry Derek reads (`/skills-list mine brief`, README § Skills); it lives with the skill so that keeping it true is part of changing the skill. `make readme-check` (also in the pre-commit hook, for commits touching `skills/`, `README.md` or the index scripts) fails when a skill has no `summary:` or `group:`, or the README section is stale.
 
 ### Writing the skill — routing and context cost
 
@@ -74,6 +76,14 @@ When a skill needs a helper script (not a one-off command in a Bash tool call), 
 ### Skill frontmatter
 
 Every SKILL.md must have `name` and `description` (≤ 120 chars, says when — see *Writing the skill*). Add `argument-hint` if the skill accepts arguments — it shows in autocomplete.
+
+Every skill also has `summary:` and `group:`, which Claude Code ignores and the skills index reads (`scripts/skills-index.py`):
+
+- `summary:` — one double-quoted sentence, at most 110 characters, starting with a verb: what the skill does, as a reminder in a list of sixty. No triggers, no mechanism; where a neighbour exists, the line shows the difference.
+- `group:` — the job it belongs to, one of the keys in `GROUPS` in `scripts/skills-index.py` (session, backlog, design, project, code, delegate, tooling). A new group is a line there.
+- Upstream-tracked skills cannot carry these (the upstream-edit guard), so theirs live in `scripts/skills-index-sidecar.toml`, as do the lines for the slash commands in `~/.claude/commands`.
+
+The `/` picker shows only the opening of `description:` (about two terminal lines), so the first clause says what the skill does. Trigger phrases that do not fit in 120 characters go in `when_to_use:`, which the model's listing appends to the description and the picker does not show.
 
 `allowed-tools` is optional and **enforced** — it restricts which tools Claude can use without asking permission while the skill is active. Use it for read-only or limited-scope skills (e.g. sitrep). Omit it to use normal permission settings.
 

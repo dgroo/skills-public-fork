@@ -2,6 +2,8 @@
 name: md-add
 description: Use when adding a single entry to a CLAUDE.md file, typically via /md-add <text>, or when the user says "add this to claude.md", "remember this in claude.md", or "put this in my claude.md". Routes the entry to the right home — global CLAUDE.md, a project CLAUDE.md, or a path-scoped ~/.claude/rules/*.md for file-type/domain-specific rules so the always-loaded file doesn't bloat — then acts as a copy editor on the draft before writing: flags vague triggers, redundancy with existing entries, and voice mismatches; preserves the user's voice rather than rewriting.
 argument-hint: <text to add>
+summary: "Adds one entry to the right CLAUDE.md or rules file after a copy-editor pass on your wording."
+group: tooling
 ---
 
 # /md-add

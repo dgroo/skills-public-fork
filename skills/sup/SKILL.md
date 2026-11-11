@@ -2,6 +2,8 @@
 name: sup
 description: Personalized situation report — mirrors /sitrep's full output, actively scans for queued work and ranks the top candidates, closing with the shared `Next` menu (`go` takes the lead pick, `1`/`2`/`3` the alternates, a `?` suffix asks for detail first), then issues a high-confidence new-session recommendation as a visible markdown heading when warranted. Also routes a stated intent to the right workspace (proceed here / join a live session / provision an isolated worktree) so parallel threads don't collide; the `wt` modifier forces the worktree placement (act-unless-overkill). Use when resuming a session, asking "where were we?", when the chunk of work feels finished, or when starting a new thread with "/sup <what I want to do>" (or "/sup wt <intent>" when you already know it wants isolation).
 allowed-tools: Read, Glob, Grep, Bash, Agent, TaskList
+summary: "Reports the situation, ranks queued work and routes a new intent to a workspace; a superset of sitrep."
+group: session
 ---
 
 # Sup — Situation Report (Derek's flavor)

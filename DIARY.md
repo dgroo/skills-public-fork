@@ -4,6 +4,18 @@ Latest entries first. Record significant decisions, architecture changes, and no
 
 ---
 
+## 2026-11-11 — `/design-setup` first increment, and the skills index
+
+Two items Derek had said go on that morning sat recorded and unassigned until he asked why he could not use `design-setup` yet. Both were built in one session spawned by the grootPM session.
+
+`/design-setup` shipped as the smallest thing that is usable: `research` places the Do Research file and names the directory in `design/README.md`, and `check` hands off to `/cleanup-design conformance`. The procedure is a Python script beside SKILL.md, not prose, because "never overwrite" and "a second run changes nothing" are claims a script can be tested for and a set of instructions cannot. The README edit is position-dependent (Empathy's trust line says "the four above"), so the template line was reworded to be true wherever it lands, and a README the script does not recognise gets the lines printed, not guessed at. The skill never writes a `design/README.md`: that would have been the third copy of the layout the ask was written to prevent. Which copy becomes the source, and the two absorptions, went back to Derek as decisions in the story.
+
+The skills index follows Derek's rule that knowledge of a thing lives with the thing: `summary:` and `group:` in each skill's frontmatter, with a sidecar only for what cannot carry its own (upstream-tracked skills, and the commands, which live in dot-claude). The sidecar is plain enough to parse without `tomllib` because `python3` on this host is 3.9. The check is scoped in the pre-commit hook to commits that touch the index's inputs, so the design-sync watcher and a sibling session's diary commit can never be blocked by it. Commands became a group on the listing, not a `/commands` command: one place to look was the ask, and a second lookup command is a second place.
+
+Why `/pm` showed nothing useful: the `/` picker prints about two terminal lines of `description:`, and `/pm`'s 900 characters opened with invocation mechanics. Probing the picker in a throwaway tmux session showed it does not print `when_to_use:`, while the model's listing appends it, so the triggers moved there and the description became one sentence. The same probe is how the claim in CLAUDE.md was checked; the docs are silent on the picker. A strict YAML parse of every frontmatter, run to check the 34 edits, turned up ten skills that were already invalid, seven of which the model lists with no description at all. That is in TODO.md, not fixed here: six are upstream's.
+
+---
+
 ## 2026-08-05 — `/story`: the missing rung between `/idea` and `/ponder`
 
 Derek asked whether any mechanism existed for filing a paragraph of story-shaped intent mid-session — typed while the session is busy with something else — and the catalog scan said no: `/idea` is deliberately one-line-per-entry, `/todo` is the do-now tracker lane (and loses the "wants design thinking" signal), and `/ponder` does the thinking *now*, which is exactly the derail the situation forbids. The gap got its own skill rather than a widening of `/idea`, because the sparkfile's one-line format is load-bearing for its review/iterate flow; `/story` files the text **verbatim** as a `design/stories/drafts/<slug>.md` stub (`author: user`, a "captured, not yet pondered" marker naming `/ponder <slug>` as the developer) and gets out in one line. The `drafts/` placement does double duty — the stories convention already forbids implementing from `drafts/` without promotion, which is precisely the guardrail an unpondered stub needs.

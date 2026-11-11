@@ -2,6 +2,8 @@
 name: story
 description: Capture a story-shaped work item mid-session with near-zero derail — file the user's text verbatim as a stub in `design/stories/drafts/<slug>.md`, marked "captured, not yet pondered", queue an in-session task to resurface it once the current block of work wraps (fresh-context elaboration beats cold pickup), then return to whatever the session was doing. No exploration, no elaboration, no questions at capture time. The rung between /idea (one-line spark) and /ponder (does the design thinking now). Triggers on "/story <text>", "file this as a story", "capture this as a story", "story for later".
 argument-hint: <text to capture> | help
+summary: "Files your text verbatim as a stub in design/stories/drafts/ and returns to the current work."
+group: backlog
 ---
 
 # Story — verbatim story capture, zero derail

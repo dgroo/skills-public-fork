@@ -2,6 +2,8 @@
 name: land
 description: Verify a feature branch and fast-forward it onto main, re-checking everything that has changed since this session last looked. For solo-project FF-to-main landing — no PR, no deploy. Use when asked to "land it", "land <branch>", "merge this to main", "is it safe to merge", "/land". Distinct from gstack's /ship and /land-and-deploy, which are PR-and-deploy shaped.
 argument-hint: "[branch] [? = verify only]"
+summary: "Re-verifies a feature branch against main, then fast-forwards it onto main; no PR, no deploy."
+group: code
 ---
 
 # /land — verify, then fast-forward

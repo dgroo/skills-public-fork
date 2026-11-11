@@ -2,6 +2,8 @@
 name: cmd-add
 description: Use when proposing a new Claude Code slash command — gates command-vs-skill, scans for collisions, writes the file at ~/.claude/commands/, and shows the propagation command for dot-claude. Triggers on "/cmd-add <description>", "I want a shortcut for…", "let's add a slash command for…", "make /<name> do X".
 argument-hint: <one-line description of what the command should do>
+summary: "Vets and writes a new slash command in ~/.claude/commands, after checking it should not be a skill."
+group: tooling
 ---
 
 # Add a Slash Command
@@ -121,7 +123,8 @@ Wait for: **proceed / modify / abandon.**
 
     Don't run it. The user runs it (or invokes `/cpush` once they've added that one).
 
-3. **Show the result.** Path, body, and the propagation hint.
+3. **Add the command to the skills index.** Append a `[commands.<name>]` table with a one-line `summary = "…"` to `~/code/claude/skills/scripts/skills-index-sidecar.toml`, run `make -C ~/code/claude/skills readme-index`, and commit the two files there. That index is the one place Derek looks up skills and commands (`/skills-list commands`, `/skills-list mine brief`); a command missing from it is listed as "not in the index".
+4. **Show the result.** Path, body, and the propagation hint.
 
 ---
 

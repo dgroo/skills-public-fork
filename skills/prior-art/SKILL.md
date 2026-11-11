@@ -8,6 +8,8 @@ allowed-tools:
   - Read
   - Write
   - Bash
+summary: "Checks what already exists before you build a new project and ends with a one-line judgment."
+group: design
 ---
 
 # Prior Art Check

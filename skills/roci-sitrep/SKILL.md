@@ -2,6 +2,8 @@
 name: roci-sitrep
 description: Whole-host status snapshot for the always-on remote-coding host. Composes git-fleet across ~/code, host vitals (uptime, load, disk, tailscale), container daemon state, brew services, relay state across projects, and open helping-hands. Use when asked "how's Roci?", "status report", "roci sitrep", "/roci-sitrep", or invoked from `/loop` for periodic monitoring. Distinct from /sup (current session/repo) — this is fleet-state across the host.
 allowed-tools: Read, Glob, Grep, Bash
+summary: "Reports the always-on host's vitals, git fleet, services, relay state and open helping-hands on one page."
+group: session
 ---
 
 # /roci-sitrep — Fleet-state report for the remote-coding host

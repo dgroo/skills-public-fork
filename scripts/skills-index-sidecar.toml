@@ -1,0 +1,103 @@
+# Index entries for things whose own file cannot carry them: skills tracked in
+# upstream (joewalnes/skills), and the slash commands in ~/.claude/commands (another repo).
+# Read by scripts/skills-index.py. Restricted TOML: [skills.<name>] / [commands.<name>]
+# tables, and summary = "..." / group = "..." lines only.
+
+[skills.bug]
+summary = "Files a bug in the project tracker; an alias for todo."
+group = "backlog"
+
+[skills.bug-bash]
+summary = "Works through the project's bug list on its own, fixing, testing and committing in priority order."
+group = "backlog"
+
+[skills.consolidate]
+summary = "Rebuilds unpushed commits into one per feature or fix, and gates every push on that."
+group = "code"
+
+[skills.delegate-bulk]
+summary = "Hands high-volume low-judgement work to a near-free model via pi; non-private data only."
+group = "delegate"
+
+[skills.delegate-image]
+summary = "Generates a visual as SVG via text models or a raster via an image panel, judged by two models."
+group = "delegate"
+
+[skills.delegate-private]
+summary = "Runs a task on a local Ollama model so personal or confidential data never leaves the device."
+group = "delegate"
+
+[skills.delegate-review]
+summary = "Gets an independent code review of Claude's work from a Kimi model via pi."
+group = "delegate"
+
+[skills.delegate-security-audit]
+summary = "Has a GLM model audit your own code for vulnerabilities via pi, and fix what it finds."
+group = "delegate"
+
+[skills.docs]
+summary = "Plans and writes user documentation in Diataxis structure, with a reader test before merge."
+group = "design"
+
+[skills.fleets]
+summary = "Shows which go-team fleets are alive across projects: leases, last landing, session state."
+group = "delegate"
+
+[skills.go-team]
+summary = "Runs a crew of agents unattended on a backlog: dispatch, isolated verification, gating, merging."
+group = "delegate"
+
+[skills.project-setup]
+summary = "Suggests optional AI-workflow conventions for an existing project; groot-project builds the skeleton."
+group = "project"
+
+[skills.readme]
+summary = "Writes or updates a project README from the codebase."
+group = "design"
+
+[skills.release-setup]
+summary = "Sets up automated cross-platform binary releases on every push to main for a Go project."
+group = "project"
+
+[skills.request]
+summary = "Files a change request in another project's inbox instead of editing that repo."
+group = "backlog"
+
+[skills.retro]
+summary = "Reports what actually happened in a session or fleet from its transcripts and repo, before any rule change."
+group = "session"
+
+[skills.scorecard]
+summary = "Grades a whole codebase for quality and agent-readiness as it stands; slop judges a diff."
+group = "code"
+
+[skills.sitrep]
+summary = "Reports the session's branch, in-progress work, blocked agents and next steps; sup is the fuller version."
+group = "session"
+
+[skills.slop]
+summary = "Flags unchosen code, surface area growing without leverage, in a branch; scorecard grades the codebase."
+group = "code"
+
+[skills.todo]
+summary = "Adds a bug or task to the project tracker with codebase context and a priority."
+group = "backlog"
+
+[skills.tool-web]
+summary = "Builds a single-file web app with no frameworks or external dependencies."
+group = "code"
+
+[commands.cpush]
+summary = "Commits all changes as atomic commits, then pushes."
+
+[commands.env-pull]
+summary = "Pulls the three env repos (~/.claude, skills, dotfiles) and handles easy merges; not the current project."
+
+[commands.rcs-issue]
+summary = "Files an environment refinement into the remote-coding cross-project queue."
+
+[commands.reclaude]
+summary = "Relaunches the Claude sessions that wrapup all recorded before a host reboot."
+
+[commands.spawn]
+summary = "Starts a new detached Claude session on this host, reachable from Remote Control."

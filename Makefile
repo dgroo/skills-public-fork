@@ -5,7 +5,7 @@ HOOKS_DST := $(CURDIR)/.git/hooks
 
 SKILL_DIRS := $(wildcard $(SKILLS_DIR)/*)
 
-.PHONY: install uninstall list install-hooks check-pii upstream-check upstream-skills
+.PHONY: install uninstall list install-hooks check-pii upstream-check upstream-skills readme-index readme-check
 
 install: install-hooks
 	@mkdir -p "$(TARGET_DIR)"
@@ -70,6 +70,14 @@ install-hooks:
 
 check-pii:
 	@bash $(CURDIR)/scripts/check-pii.sh --all
+
+# The skills index: README § Skills and `/skills-list … brief`, generated from each
+# skill's summary: and group: (scripts/skills-index.py).
+readme-index:
+	@python3 $(CURDIR)/scripts/skills-index.py readme
+
+readme-check:
+	@python3 $(CURDIR)/scripts/skills-index.py check
 
 upstream-check:
 	@bash $(CURDIR)/scripts/upstream-check.sh

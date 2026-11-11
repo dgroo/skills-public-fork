@@ -1,6 +1,8 @@
 ---
 name: vfupdate
 description: Sync the Verifact demo (demo-local branches) to upstream sandbox while using the demo as a regression smoke test — run the demo suite before, update the code from upstream, run it again, and report the delta (what got fixed, what newly broke, what's still broken). Use when asked to "catch up the demo", "pull upstream Verifact code", "update and check the demo", "/vfupdate", or to check whether an upstream sync broke anything.
+summary: "Syncs the Verifact demo to upstream sandbox and reports what the update fixed or broke via the demo suite."
+group: code
 ---
 
 # vfupdate — update the Verifact demo and regression-check it
