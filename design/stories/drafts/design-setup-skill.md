@@ -12,3 +12,11 @@ Related (found at triage): `groot-project-conformance-sweep.md` (drafts, 2026-06
 Asked 2026-11-11 06:27 (via design/ASKS.md):
 
 high — Build a design-setup skill (Derek, 2026-11-10, from grootPM): one skill that owns a project's design/ directory, both checking that it is clean and set up to the standard and spawning its structured subdirectories (e.g. 'design-setup research' creates design/research/ with the Do Research file). It absorbs /groot-project's design-subtree phase (groot-project then calls it) and /cleanup-design conformance, so it is the one place that knows the layout, not a third. Templates are files in the skill's directory, not text embedded in SKILL.md; the first optional template is Empathy's design/research/Do Research.md (project-neutral, copy as is) plus the two lines it needs in design/README.md. Derek's reason for a separate skill: making this general enough for Empathy and Very Fine Company, where someone who is not Derek sets up a Pod's design directory without the rest of /groot-project. Decide in the story which copy of the layout stays the source: the skill's templates, groot-claude-coord design-corpus/DESIGN.md (what conformance reads today), or backlog-scan's standard/optional lists (its optional list is empty today). The name design-setup is free as a command and a skill. Story-sized: a refactor of a 1,078-line skill, not an add.
+
+## Captured addition (/pm, unreviewed)
+
+2026-11-11 — Derek's answer, relayed 2026-11-11 from the grootPM session at his "go" (to the /pm triage question on ordering): design-setup goes first and absorbs the design-directory lifecycle story's /groot-project and /cleanup-design changes, so those are not written twice.
+
+**What moves into design-setup** (from [design-directory-lifecycle-in-skills](design-directory-lifecycle-in-skills.md)):
+- /cleanup-design's archive sweep: move files marked `status: done` into `<dir>/z.archived/` in bulk, repoint links in live files, per-item mark proposals only on computed signals (a plan whose story is in `done/`), rename an existing `archived/` to `z.archived/` and recognise both, drop the Orient note that plans fold into stories.
+- /groot-project's notes, plans and helping-hands README templates gaining the retire paragraph (these become design-setup's template files).
