@@ -1,0 +1,1 @@
+The Do Research instruction: a [[Do Research]] link in any design doc asks the reading session to look the topic up; answers are filed here with a recheck date.
