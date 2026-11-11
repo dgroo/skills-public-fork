@@ -6,7 +6,7 @@ already paints the terminal on `cd`. This makes the project's Obsidian vault a
 second view onto that same color — and gives every vault a consistent, readable
 theme + a curated plugin set — so a wall of stacked Obsidian windows stops
 looking identical. An optional `[obsidian].background` in the same file gives
-the vault its own chrome colour instead, used as written (no derivation).
+the vault its own chrome color instead, used as written (no derivation).
 
 Design (the package.json / node_modules split):
   - COMMITTED config under .obsidian/ declares the baseline:
@@ -200,7 +200,7 @@ def project_color(project_dir: Path) -> str:
 def obsidian_color(project_dir: Path) -> str | None:
     """The project's `[obsidian].background` hex when it chose one for the vault.
 
-    Separate from the terminal colour on purpose (Derek, 2026-11-10: "probably
+    Separate from the terminal color on purpose (Derek, 2026-11-10: "probably
     separate colors for Obsidian and terminals"): a terminal background is dark
     and fills a screen, vault chrome is a strip, and the same hue does not always
     serve both. When present it is used as written; derive_accent() is only for
@@ -215,7 +215,7 @@ def obsidian_color(project_dir: Path) -> str | None:
     if not isinstance(color, str) or not color.strip():
         return None
     # The value lands verbatim in a CSS snippet and appearance.json, so only a
-    # hex colour may pass; the terminal path is parsed and re-rendered by
+    # hex color may pass; the terminal path is parsed and re-rendered by
     # derive_accent and never needed this check.
     return normalize_hex(color.strip(), f"{toml_path} [obsidian].background")
 
@@ -226,7 +226,7 @@ def normalize_hex(color: str, where: str) -> str:
     if len(s) == 3:
         s = "".join(c * 2 for c in s)
     if len(s) != 6 or any(c not in "0123456789abcdefABCDEF" for c in s):
-        raise SystemExit(f"{where} is {color!r}; expected a hex colour like #2F6FB2.")
+        raise SystemExit(f"{where} is {color!r}; expected a hex color like #2F6FB2.")
     return "#" + s.upper()
 
 
