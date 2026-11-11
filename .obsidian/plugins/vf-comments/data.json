@@ -1,0 +1,13 @@
+{
+  "author": "Derek",
+  "threadsFolder": "threads",
+  "rootFolder": "design",
+  "markerDisplay": "glyph",
+  "hideDefinitions": true,
+  "highlightAnchors": true,
+  "collapseResolved": true,
+  "agentPattern": "",
+  "markerColor": "#b58cf6",
+  "agentNoteFile": "AGENTS.md",
+  "contextChars": 32
+}

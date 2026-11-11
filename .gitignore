@@ -14,3 +14,6 @@ __pycache__/
 !.obsidian/plugins/another-dynamic-highlights/
 .obsidian/plugins/another-dynamic-highlights/*
 !.obsidian/plugins/another-dynamic-highlights/data.json
+!.obsidian/plugins/vf-comments/
+.obsidian/plugins/vf-comments/*
+!.obsidian/plugins/vf-comments/data.json
