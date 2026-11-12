@@ -13,7 +13,7 @@ This complements `/go-team retro`, which reads `LESSONS.md` — the fleet's *sel
 ## Run the script first
 
 ```bash
-python3 ~/.claude/skills/retro/scripts/retro.py <project-dir> [--hours 48]
+python3 ${CLAUDE_SKILL_DIR}/scripts/retro.py <project-dir> [--hours 48]
 ```
 
 It reads the project's session transcripts (`~/.claude/projects/…/*.jsonl`) and its repo, and reports numbers: session span and idle share; every idle gap with what preceded it and what resumed it; human turns and the human's own redirects ("why do we keep stalling", "this has been going on a while"); which channels were used — `AskUserQuestion` versus `DECISION NEEDED`, `Cron`/`ScheduleWakeup`, `Agent`, `SendMessage`; every question asked; and the repo's fleet artefacts — commits, merges, `Thesis:` trailers, leases, landing sources, the compass line, the top open ask and whether anyone holds a lane lease for it, the last lesson written.

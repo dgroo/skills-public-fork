@@ -24,7 +24,7 @@ Override the location with `$CLAUDE_REQUESTS_DIR`, the project name with `--proj
 ## Sending
 
 ```bash
-python3 ~/.claude/skills/request/scripts/request.py send <project> "<title>" \
+python3 ${CLAUDE_SKILL_DIR}/scripts/request.py send <project> "<title>" \
   --body "<what you observed (measured), and what you need>" \
   [--repro "<how to see it>"] [--hunch "<your guess at the cause>"] [--priority blocking|normal|low]
 ```
@@ -43,11 +43,11 @@ Then get on with something else. Do not go and fix it yourself.
 ## Receiving
 
 ```bash
-python3 ~/.claude/skills/request/scripts/request.py inbox          # open + accepted, blocking first
-python3 ~/.claude/skills/request/scripts/request.py show <id>      # ids prefix-match, like git SHAs
-python3 ~/.claude/skills/request/scripts/request.py accept <id> --note "reproduced; scheduling"
-python3 ~/.claude/skills/request/scripts/request.py decline <id> --reason "..."
-python3 ~/.claude/skills/request/scripts/request.py done <id> --ref <sha|branch|PR>
+python3 ${CLAUDE_SKILL_DIR}/scripts/request.py inbox          # open + accepted, blocking first
+python3 ${CLAUDE_SKILL_DIR}/scripts/request.py show <id>      # ids prefix-match, like git SHAs
+python3 ${CLAUDE_SKILL_DIR}/scripts/request.py accept <id> --note "reproduced; scheduling"
+python3 ${CLAUDE_SKILL_DIR}/scripts/request.py decline <id> --reason "..."
+python3 ${CLAUDE_SKILL_DIR}/scripts/request.py done <id> --ref <sha|branch|PR>
 ```
 
 `/sitrep` shows the inbox. `/go-team` dispatches from it — **after** the human's own `ASKS.md`, **before** the project's self-generated backlog: a blocked peer is external demand, not work the fleet invented for itself. On accept, copy the request into your tracker with its id; on done, record the ref so the requester can pull it. Decline with a reason rather than letting it rot — the requester is waiting on an answer either way.
@@ -55,7 +55,7 @@ python3 ~/.claude/skills/request/scripts/request.py done <id> --ref <sha|branch|
 ## Checking on what you sent
 
 ```bash
-python3 ~/.claude/skills/request/scripts/request.py sent [--all]
+python3 ${CLAUDE_SKILL_DIR}/scripts/request.py sent [--all]
 ```
 
 `/sitrep` includes this. When one turns `done`, the ref tells you what to pull or bump.

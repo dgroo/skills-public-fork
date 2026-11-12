@@ -15,9 +15,9 @@ A **machine-wide git pre-push hook** refuses any push whose range isn't reader-r
 Reader-ready means: no merge commits in the range, and nothing the tool would fold. The refusal prints the plan and the exact command.
 
 ```bash
-python3 ~/.claude/skills/consolidate/scripts/consolidate.py --check          # what the hook runs; exit 0 = ready
-python3 ~/.claude/skills/consolidate/scripts/consolidate.py                  # propose, on @{upstream}..HEAD
-python3 ~/.claude/skills/consolidate/scripts/consolidate.py --apply --messages msgs.json
+python3 ${CLAUDE_SKILL_DIR}/scripts/consolidate.py --check          # what the hook runs; exit 0 = ready
+python3 ${CLAUDE_SKILL_DIR}/scripts/consolidate.py                  # propose, on @{upstream}..HEAD
+python3 ${CLAUDE_SKILL_DIR}/scripts/consolidate.py --apply --messages msgs.json
 ```
 
 ## What it does

@@ -181,7 +181,7 @@ def main():
             print(f"{len(rows)} commits, reader-ready" + (f" ({len(rows) - len(groups)} optional joins; run without --check to see)" if len(groups) < len(rows) else "")); return
         print_plan(rows, groups, homes, why)
         print(f"\nNOT READER-READY: {merges} merge(s), {fixups} fixup(s) amending work in this range. Run:\n"
-              f"  python3 ~/.claude/skills/consolidate/scripts/consolidate.py {base_sha[:12]}..{head} --apply\n"
+              f"  python3 {os.path.abspath(__file__)} {base_sha[:12]}..{head} --apply\n"
               f"and pass --messages FILE so each commit says what the change IS.")
         sys.exit(1)
     if git(repo, "status", "--porcelain").strip():

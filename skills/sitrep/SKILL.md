@@ -17,10 +17,10 @@ Run these in parallel:
 3. `git log --oneline -5` — recent commits for context
 4. `git stash list` — anything stashed
 5. **`ListAgents`** — background agents and other sessions (see below)
-6. `python3 ~/.claude/skills/request/scripts/request.py inbox` and `… sent` — work other projects have asked of this one, and what this one is waiting on elsewhere (skip silently if the script isn't installed)
+6. `python3 ${CLAUDE_SKILL_DIR}/../request/scripts/request.py inbox` and `… sent` — work other projects have asked of this one, and what this one is waiting on elsewhere (skip silently if the script isn't installed)
 7. `ASKS.md` (or whatever `CLAUDE.md` names as the requests lane), if present — the human's own top open ask
 8. If `$(git rev-parse --git-common-dir)/leases/` is non-empty, `CronList` — a fleet with leases and no scheduled `/go-team` job is a fleet nobody is ticking (measured: four such fleets sat 90–99% idle). That goes under **Needs you**.
-9. `python3 ~/.claude/skills/consolidate/scripts/consolidate.py --check` — one line: is the unpushed range reader-ready, or how many commits would become how many (the pre-push gate will refuse the latter)
+9. `python3 ${CLAUDE_SKILL_DIR}/../consolidate/scripts/consolidate.py --check` — one line: is the unpushed range reader-ready, or how many commits would become how many (the pre-push gate will refuse the latter)
 10. Scan the conversation history you have in context for what was last discussed
 
 ### Reading the agent roster

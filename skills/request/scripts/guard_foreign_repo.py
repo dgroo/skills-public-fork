@@ -49,7 +49,7 @@ def main():
         "permissionDecisionReason": (
             f"{target} is inside another project's repository ({other}). Don't edit other projects' "
             f"checkouts — their agents may be mid-change. File a request instead:\n"
-            f"  python3 ~/.claude/skills/request/scripts/request.py send {other} \"<title>\" --body \"<observation + goal>\"")}}))
+            f"  python3 {Path(__file__).resolve().parent / 'request.py'} send {other} \"<title>\" --body \"<observation + goal>\"")}}))
 
 
 if __name__ == "__main__":
