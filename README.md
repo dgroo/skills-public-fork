@@ -6,7 +6,7 @@ A collection of custom Claude Code skills.
 
 ### Option 1: Global install (recommended)
 
-Symlinks skills into `~/.claude/skills/` so they're available as `/skill-name` in every project, on every machine.
+Links this repo into `~/.claude/skills/vfs`, where Claude Code loads it in place as the `vfs` plugin (the name in `.claude-plugin/plugin.json`). Every skill is then `/vfs:<skill>` in every project, and the bare `/<skill>` runs it too unless another command has that name. The index below lists bare names.
 
 ```bash
 git clone https://github.com/joewalnes/skills.git
@@ -14,7 +14,11 @@ cd skills
 make install
 ```
 
-Skills are symlinked, not copied — edits made by Claude in any project write back to this repo, making it easy to commit and push upstream.
+The repo is linked, not copied — edits made by Claude in any project write back to this repo, making it easy to commit and push upstream. A new or edited skill shows up at the next session start or `/reload-plugins`; `make install` only needs running once per machine.
+
+A skill finds its own files through `${CLAUDE_SKILL_DIR}` (a sibling skill is `${CLAUDE_SKILL_DIR}/../<name>`), never by an install path. Anything outside a `SKILL.md` that needs a fixed address uses `~/.claude/skills/vfs/skills/<name>/`.
+
+A machine installed before 2026-11-12 also has one symlink per skill (`~/.claude/skills/<name>`). While those exist the skills load from them and the `vfs:` prefix does not show; `make unlink-legacy` removes them, and is safe only when no running session on the host still needs them.
 
 To remove:
 

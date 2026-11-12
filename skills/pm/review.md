@@ -59,7 +59,7 @@ No block → skip silently, but if the corpus is substantial, note once in the p
 
 ### 4. Reprioritize — durably
 
-This is the core capability no other skill has. Judge relative priority **across the whole backlog** using the shared ranking model — read [`backlog-ranking.md`](../next/backlog-ranking.md) (installed at `~/.claude/skills/next/backlog-ranking.md`) §3: _unblocks-downstream → removes-risk → session-capacity → continuity → smaller-concrete-wins_. Same criteria `/next` and `/sup` rank by, so priorities don't drift between "what's next" and "what's important."
+This is the core capability no other skill has. Judge relative priority **across the whole backlog** using the shared ranking model — read [`backlog-ranking.md`](../next/backlog-ranking.md) (installed at `~/.claude/skills/vfs/skills/next/backlog-ranking.md`) §3: _unblocks-downstream → removes-risk → session-capacity → continuity → smaller-concrete-wins_. Same criteria `/next` and `/sup` rank by, so priorities don't drift between "what's next" and "what's important."
 
 Then **write the order back** — this is durable, not a session-scoped ranking:
 
@@ -72,7 +72,7 @@ Split by confidence, mirroring cleanup-design's move-to-done discipline:
 - **Strong signal → act.** Where the correct order is unambiguous (story A demonstrably blocks B and C; a stale draft clearly belongs at the bottom), just make the edit.
 - **Genuine tradeoff → ask.** Where priority is a real judgment call — two items of comparable value, a tradeoff only Derek can weigh (user-facing polish vs. infra debt), a bet on direction — **present it as a compact option list and let Derek decide.** Never manufacture a confident reorder out of a genuine tie. This is the one place even `/pm !` still stops.
 
-**Then the Executive-summary pass on every story this pass changed** — demoted, rewritten, or given a new `priority:` (a story closed into `done/` is skipped) — per [`exec-summary.md`](exec-summary.md) § The pass (installed at `~/.claude/skills/pm/exec-summary.md`): a fresh Sonnet reader writes the block, you read it back, `backlog-scan` confirms `ok`. Run it as the last write before the files land. Stories whose block was merely missing or stale were already swept by §2's `/cleanup-design` call; this trigger is only for the ones §3 and §4 touched. Intake (`SKILL.md`) does not run it.
+**Then the Executive-summary pass on every story this pass changed** — demoted, rewritten, or given a new `priority:` (a story closed into `done/` is skipped) — per [`exec-summary.md`](exec-summary.md) § The pass (installed at `~/.claude/skills/vfs/skills/pm/exec-summary.md`): a fresh Sonnet reader writes the block, you read it back, `backlog-scan` confirms `ok`. Run it as the last write before the files land. Stories whose block was merely missing or stale were already swept by §2's `/cleanup-design` call; this trigger is only for the ones §3 and §4 touched. Intake (`SKILL.md`) does not run it.
 
 ### 4B. The ask queue — reconcile it, then review it with Derek
 

@@ -52,7 +52,7 @@ Update `README.md` (and any relevant docs) before committing if the change affec
 After creating a new skill in `skills/<name>/SKILL.md`:
 
 1. Give it `summary:` and `group:` in its frontmatter (see *Skill frontmatter*), then run `make readme-index` — README § Skills is generated, never hand-edited
-2. Run `make install` to symlink it
+2. Nothing to install: the repo is loaded in place as the `vfs` plugin, so the skill appears as `/vfs:<name>` (and bare `/<name>`) at the next session start or `/reload-plugins`. Refer to its own files as `${CLAUDE_SKILL_DIR}/…`, never `~/.claude/skills/<name>/…`
 3. Commit both the skill and the README update together
 
 **On every edit to a skill, re-read its `summary:` and fix it if the edit made it wrong.** The line is the index entry Derek reads (`/skills-list mine brief`, README § Skills); it lives with the skill so that keeping it true is part of changing the skill. `make readme-check` (also in the pre-commit hook, for commits touching `skills/`, `README.md` or the index scripts) fails when a skill has no `summary:` or `group:`, or the README section is stale.

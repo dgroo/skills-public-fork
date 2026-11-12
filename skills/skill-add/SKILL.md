@@ -124,7 +124,7 @@ Ask only what you need:
 1. **Write `skills/<name>/SKILL.md`.** Use the structure of an adjacent skill in the chosen style as a template — don't invent a new shape.
 2. **Include the standard `help` verb.** Every new skill ships with a `help` routing entry plus a dedicated `## Help` section. See [Help verb convention](#help-verb-convention) below for the format. This is non-negotiable scaffolding — don't ask the user whether to include it.
 3. **Write the index line and regenerate `README.md`.** The new SKILL.md's frontmatter carries `summary:` (one sentence, at most 110 characters, double-quoted, what the skill does as a reminder in a list of sixty; no triggers) and `group:` (one of the keys in `scripts/skills-index.py`'s `GROUPS`). Then `make readme-index` rewrites README § Skills from them; never hand-edit that section. `make readme-check` must pass, and the pre-commit hook runs it.
-4. **Run `make install`.** Symlinks the skill into `~/.claude/skills/`.
+4. **No install step.** The repo is loaded in place as the `vfs` plugin (`~/.claude/skills/vfs`), so the skill is available as `/vfs:<name>`, and bare `/<name>`, at the next session start or `/reload-plugins`. Inside the SKILL.md, refer to bundled files as `${CLAUDE_SKILL_DIR}/…`, never by an install path.
 5. **Show the result.** Path to the new SKILL.md, the README row added, and the install output line.
 6. **Commit and push local-only skills proactively** (per the global commit-proactively rule — a new local skill is additive and harmless; convention updated 2026-07-05 after the don't-commit gate cost a cross-machine look at `/ponder`). Atomic commit: the skill dir + the regenerated README. **Upstream-bound skills are the exception** — leave them uncommitted for the PR flow.
 
@@ -216,7 +216,7 @@ Phases:
   3. Decide         Present findings; user picks proceed / modify / abandon.
   4. Interview      Short, focused — only what isn't already clear.
   5. Create         Write SKILL.md (with mandatory `help` verb), update README,
-                    run make install. Commit+push (local-only).
+                    no install step. Commit+push (local-only).
 
 Conventions:
   Help verb         Every new skill ships with a `/<name> help` routing entry +

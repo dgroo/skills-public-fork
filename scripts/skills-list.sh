@@ -13,6 +13,8 @@ set -euo pipefail
 REPO_DIR="${SKILL_LIST_REPO_DIR:-$HOME/code/claude/skills}"
 MINE_DIR="$REPO_DIR/skills"
 CLAUDE_SKILLS_DIR="$HOME/.claude/skills"
+# Must match "name" in .claude-plugin/plugin.json and PLUGIN_NAME in the Makefile.
+PLUGIN_NAME="vfs"
 PLUGINS_CACHE_DIR="$HOME/.claude/plugins/cache"
 
 # The skill passes its whole argument string as one word ("mine brief").
@@ -132,19 +134,29 @@ list_default() {
     echo "Skills in this repo:"
     list_mine
     echo ""
-    echo "Installed symlinks in $CLAUDE_SKILLS_DIR:"
+    echo "Install status in $CLAUDE_SKILLS_DIR:"
+    plugin_link="$CLAUDE_SKILLS_DIR/$PLUGIN_NAME"
+    if [ -L "$plugin_link" ] && [ "$(readlink "$plugin_link")" = "$REPO_DIR" ]; then
+        echo "  ✓ $PLUGIN_NAME plugin linked: every skill above is /$PLUGIN_NAME:<name>, or bare /<name>"
+    elif [ -e "$plugin_link" ] || [ -L "$plugin_link" ]; then
+        echo "  ✗ $plugin_link exists and is not this repo (run 'make install' to see the collision)"
+    else
+        echo "  - $PLUGIN_NAME plugin not linked (run 'make install')"
+    fi
+    legacy=0
     for skill in "$MINE_DIR"/*/; do
         [ -d "$skill" ] || continue
         name=$(basename "$skill")
         target="$CLAUDE_SKILLS_DIR/$name"
         if [ -L "$target" ] && [ "$(readlink "$target")" = "${skill%/}" ]; then
-            echo "  ✓ $name"
+            legacy=$((legacy + 1))
         elif [ -e "$target" ]; then
-            echo "  ✗ $name (exists, not our link)"
-        else
-            echo "  - $name (not installed)"
+            echo "  ✗ $name (a different $target exists and takes the bare name)"
         fi
     done
+    if [ "$legacy" -gt 0 ]; then
+        echo "  … $legacy per-skill symlinks from the old layout remain; those skills load from them and show no $PLUGIN_NAME: prefix ('make unlink-legacy' once no session needs them)"
+    fi
 }
 
 case "$arg" in
