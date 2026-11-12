@@ -63,10 +63,10 @@ Gather context in parallel:
 5. `git stash list` — anything stashed
 6. Check for running background tasks (TaskList tool)
 7. If `scripts/upstream-check.sh` exists at repo root, run it — surfaces unpulled upstream commits. (Only meaningful in the skills repo; silently skip elsewhere.)
-8. `python3 ~/.claude/skills/sup/sibling-sessions.py` — surfaces other CC sessions in this project's cwd whose last turn was within the last 2 hours, each tagged `active` / `idle` / `predecessor` (liveness is the last real turn, not the file mtime), with a topic hint. Prints nothing when no siblings; just include verbatim. **Only `active` lines are possible live collisions.**
+8. `python3 ${CLAUDE_SKILL_DIR}/sibling-sessions.py` — surfaces other CC sessions in this project's cwd whose last turn was within the last 2 hours, each tagged `active` / `idle` / `predecessor` (liveness is the last real turn, not the file mtime), with a topic hint. Prints nothing when no siblings; just include verbatim. **Only `active` lines are possible live collisions.**
 9. If `design/relay/STATE.md` exists, run `relay-status` for a one-line relay state; silently skip if the file doesn't exist or `relay-status` isn't on PATH.
 10. Scan conversation history for what was last discussed
-11. `python3 ~/.claude/skills/sup/service-check.py` — expected-services probe, run from the repo root and **sandbox-disabled** (it probes processes/daemons/docker sockets, which all read as down from inside the sandbox — the never-diagnose-down rule). Prints nothing when the project declares no services; see "Expected services" for the mechanism and the Pick-`0` rendering.
+11. `python3 ${CLAUDE_SKILL_DIR}/service-check.py` — expected-services probe, run from the repo root and **sandbox-disabled** (it probes processes/daemons/docker sockets, which all read as down from inside the sandbox — the never-diagnose-down rule). Prints nothing when the project declares no services; see "Expected services" for the mechanism and the Pick-`0` rendering.
 12. **Pending meta-feedback** — list report files (everything but `LEDGER.md`) in `design/meta-feedback/` of the remote-coding capture repo (the repo named in global CLAUDE.md's "Cross-project capture" rule). Reports are central on purpose, so this finds them from any project — including ones from projects Derek has since stopped working on. Count headline proposals still `· open`, note the oldest report's age and any `⚠` (major) item. If `REVIEW.md` is there, also count its unticked `- [ ]` item boxes (lines starting `- [ ] do`, `hand off`, `close`, `decline as`) and whether any report is newer than the page's stamp. Print each count on its own labelled line (`open-proposals=N`, `review-open-boxes=M`); an unlabelled number at the end of several greps is easy to attribute to the wrong probe (grove, 2026-10-23: a `REVIEW.md:0` from one grep was reported as the page's open-box count when it had 34). No files → silent.
 13. `cadence-nudges` — the periodic-ceremonies table (read-only dotfiles wrapper over the silent-unless-due helper family: codex review, backlog staleness, beginners-mind, `## Project goals` block presence/freshness, README presence). Prints a `⏰ Cadence` header + one `↳` line per due ceremony, nothing when none due. Session start is where these actually get seen — `/wrapup` runs the same wrapper as the end-of-session backstop. Absent command (older host) → silently skip.
 
@@ -122,7 +122,7 @@ The `/sup` failure mode this section exists to prevent: user has multiple CC ses
 
 ### Sibling sessions (local)
 
-Source: `python3 ~/.claude/skills/sup/sibling-sessions.py`. The script reads `~/.claude/projects/<encoded-cwd>/*.jsonl` files, excludes the current session via `$CLAUDE_CODE_SESSION_ID`, and emits a topic hint per sibling. Topic priority: latest `away_summary` content → `custom-title` → last user message.
+Source: `python3 ${CLAUDE_SKILL_DIR}/sibling-sessions.py`. The script reads `~/.claude/projects/<encoded-cwd>/*.jsonl` files, excludes the current session via `$CLAUDE_CODE_SESSION_ID`, and emits a topic hint per sibling. Topic priority: latest `away_summary` content → `custom-title` → last user message.
 
 **Liveness comes from the last actual turn, not the file mtime — and the script says so explicitly with a per-line `active` / `idle` / `predecessor` label. Trust the label; do not re-derive liveness from the age string.** The mtime of a session's jsonl bumps when the session *ends* (summary/metadata writes), so the old mtime-based reading would report a just-closed session as "active 20s ago" — the exact false collision that sent a `/sup` chasing a window that wasn't live. The labels mean:
 
@@ -156,7 +156,7 @@ This is the cross-host analogue of sibling sessions: same "don't start parallel 
 
 The failure mode this section prevents: a project has long-lived servers that are _supposed_ to be running — a prod compose stack, a tunnel, the `dev` launcher's dev server — and a reboot or crashed daemon silently took them down. `/sup` reads as "all clear, here's your next story" while prod is dark. The service check makes "do we have servers that should be running, and are they?" a standing part of the report.
 
-Source: `python3 ~/.claude/skills/sup/service-check.py`, run from the repo root **sandbox-disabled** (it probes processes/daemons/docker sockets, which all read as down from inside the sandbox — the never-diagnose-down rule from `~/.claude/CLAUDE.md`). A non-zero exit or a stderr line from the probe is a probe failure and is reported as one ("services NOT probed: python 3.9 has no tomllib"), never as "no services declared" — the probe exited 0 and silent on every `/sup` on Rocinante26 for days while vffins2 declared three services (2026-10-23). It reads the project's `.groot-project.toml`:
+Source: `python3 ${CLAUDE_SKILL_DIR}/service-check.py`, run from the repo root **sandbox-disabled** (it probes processes/daemons/docker sockets, which all read as down from inside the sandbox — the never-diagnose-down rule from `~/.claude/CLAUDE.md`). A non-zero exit or a stderr line from the probe is a probe failure and is reported as one ("services NOT probed: python 3.9 has no tomllib"), never as "no services declared" — the probe exited 0 and silent on every `/sup` on Rocinante26 for days while vffins2 declared three services (2026-10-23). It reads the project's `.groot-project.toml`:
 
 - **`[[services]]` entries** declare long-lived services beyond the dev server. Each carries `name`, `check` (shell command, exit 0 = up), and `start` (the remediation command — surfaced as a hint, never executed by the probe):
 
@@ -253,7 +253,7 @@ Run **only when the current chunk is parkable** — clean tree, or one obvious c
 
 ### Build the candidate pool
 
-Read [`backlog-ranking.md`](../next/backlog-ranking.md) (installed at `~/.claude/skills/next/backlog-ranking.md` — the candidate model shared with `/next`, so the two can't drift) and follow it: run `backlog-scan` (§1), harvest this conversation's still-**outstanding** loose ends (§2), then rank the merged pool by the ranking criteria (§3) under the grounding rules (§4).
+Read [`backlog-ranking.md`](../next/backlog-ranking.md) (installed at `${CLAUDE_SKILL_DIR}/../next/backlog-ranking.md` — the candidate model shared with `/next`, so the two can't drift) and follow it: run `backlog-scan` (§1), harvest this conversation's still-**outstanding** loose ends (§2), then rank the merged pool by the ranking criteria (§3) under the grounding rules (§4).
 
 One `/sup`-specific note on the harvest: the Session recap you produced above is the _descriptive_ "what happened" (finished work included); the §2 harvest is _forward-only_ and feeds the Pick — only the still-open subset. Render the result per "What to render" below. `/sup` and `/next` share both the candidate model _and_ the `Next` menu they close with; what makes this `/sup` is the recap above it, not a different presentation.
 

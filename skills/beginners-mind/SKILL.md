@@ -140,7 +140,7 @@ Capture as `{{token_budget}}` and `{{cadence_days}}`.
 
 ### Step 8 — Write the profile
 
-Read `~/.claude/skills/beginners-mind/templates/profile.md`. If the template file is not found, surface an error: "Template missing at ~/.claude/skills/beginners-mind/templates/profile.md — re-run `make install` from ~/code/claude/skills." Then abort the init flow.
+Read `${CLAUDE_SKILL_DIR}/templates/profile.md`. If the template file is not found, surface an error: "Template missing at ${CLAUDE_SKILL_DIR}/templates/profile.md — re-run `make install` from ~/code/claude/skills." Then abort the init flow.
 
 Substitute all `{{placeholders}}` from the prior steps:
 
@@ -559,7 +559,7 @@ Each item: what it is + why it stands out.
 
 ### Step 5.2 — Apply the report template
 
-Read `~/.claude/skills/beginners-mind/templates/report.md`. Substitute all placeholders. The four section bodies come from Step 5.1.
+Read `${CLAUDE_SKILL_DIR}/templates/report.md`. Substitute all placeholders. The four section bodies come from Step 5.1.
 
 If any section is empty after filtering, write "_No items this run._" rather than omitting the section.
 

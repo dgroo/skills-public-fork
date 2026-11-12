@@ -44,10 +44,10 @@ Gather state and print a summary before asking anything:
   - Joe-style artifacts: `DIARY.md`, `CHANGELOG.md` at the project root (indicates `/project-setup` has run or the user uses that convention). A root `TODO.md` is handled above, as drift toward `design/TODO.md`.
   - gstack artifacts: `~/.gstack/projects/<basename>/`, gstack hooks in `.claude/settings.json`, gstack-specific CLAUDE.md sections (e.g., a `## gstack` heading).
   - Existing `## Project conventions` section in `CLAUDE.md` — this is the shared memory across `/groot-project`, `/project-setup`, and gstack. If present, **read it and respect it** before suggesting changes.
-- Is there a terminal background color recorded for this project? (`~/.claude/skills/terminal-setup/terminal-setup.py <basename> --list-colors` shows the existing-background banner if so.)
+- Is there a terminal background color recorded for this project? (`${CLAUDE_SKILL_DIR}/../terminal-setup/terminal-setup.py <basename> --list-colors` shows the existing-background banner if so.)
 - Is the directory under `~/code/`? (Affects alias suggestion in iTerm phase.)
 - **Remotes** (drive Phases 9 / 9B and the `status` lines): does `git remote get-url origin` answer (GitHub remote in place)? Is it mirrored — `git remote get-url peer` answers **and** the repo path is a line in `~/.config/design-sync/repos`? Or has it opted out (`git config designsync.optout` is `true`)? Local reads only; nothing here ssh-es.
-- Is there a `.groot-project.toml` at the repo root? (`~/.claude/skills/terminal-setup/terminal-setup.py --groot-toml-read` — empty output means none; otherwise prints `[terminal]` as `KEY=VALUE` lines, transparently translating legacy `[iterm]` files.) This is the in-repo persistence file used to reproduce per-project workstation setup on a fresh clone. Phase 7 reads it to apply recorded settings; if absent, Phase 7 offers to write it from the just-applied settings.
+- Is there a `.groot-project.toml` at the repo root? (`${CLAUDE_SKILL_DIR}/../terminal-setup/terminal-setup.py --groot-toml-read` — empty output means none; otherwise prints `[terminal]` as `KEY=VALUE` lines, transparently translating legacy `[iterm]` files.) This is the in-repo persistence file used to reproduce per-project workstation setup on a fresh clone. Phase 7 reads it to apply recorded settings; if absent, Phase 7 offers to write it from the just-applied settings.
 - Does `.claude/settings.json` exist with a `spinnerVerbs` block? Read the count + mode for the pre-flight summary; Phase 8 uses this to decide skip vs ask.
 
 **Four steps need the sandbox off** (the first three each failed once with a bare `Operation not permitted` on plumage, 2026-10-09): `make hooks-install` writes `.git/hooks/`, `/terminal-setup`'s alias step writes `~/.shrc`, `gh repo create` needs the network, and Phase 9B's `design-sync-setup` ssh-es to the other host. Run those four `dangerouslyDisableSandbox` on the first attempt, not after a retry.
@@ -771,7 +771,7 @@ After adopting a _new_ vault, the watcher's `WatchPaths` is a baked list that pr
 **What it does** (via the helper, which reads `[obsidian].background` when present, else `[terminal].background` with a vivid same-hue accent derived from it):
 
 ```
-~/.claude/skills/groot-project/obsidian-setup.py [PROJECT_DIR] [--no-fetch] [--no-register] [--dry-run]
+${CLAUDE_SKILL_DIR}/obsidian-setup.py [PROJECT_DIR] [--no-fetch] [--no-register] [--dry-run]
 ```
 
 Run it sandbox-disabled: it writes Obsidian's vault list under `~/Library/Application Support/obsidian/`.
@@ -1083,7 +1083,7 @@ See SKILL.md for full reference.
 ## Reference
 
 - All canonical templates (stories/, STORY_TEMPLATE, helping-hands, notes/, plans/, design/README) live in this SKILL.md itself — no external dependencies, portable across machines.
-- terminal-setup: `~/.claude/skills/terminal-setup/terminal-setup.py`
+- terminal-setup: `${CLAUDE_SKILL_DIR}/../terminal-setup/terminal-setup.py`
 - `gh` CLI for GitHub remote: https://cli.github.com/
 - `/project-setup` skill (Joe Walnes upstream): retrofits 10 conventions to existing projects (independent of this skill)
 - `/office-hours` skill (gstack): produces a design doc at `~/.gstack/projects/<basename>/*.md` that this skill can import

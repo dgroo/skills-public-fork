@@ -10,7 +10,7 @@ group: project
 
 Each project gets a deterministic background color that the shell applies on `cd` via OSC 11. Visually distinct projects at a glance — without any terminal-specific configuration. Optionally also adds a shell alias to `~/.shrc` (or `~/.zshrc`) for quick navigation.
 
-The actual work is done by `~/.claude/skills/terminal-setup/terminal-setup.py`. This skill is the interactive wrapper.
+The actual work is done by `${CLAUDE_SKILL_DIR}/terminal-setup.py`. This skill is the interactive wrapper.
 
 ## How this differs from /iterm-setup (the predecessor)
 
@@ -42,7 +42,7 @@ The chpwd + precmd plumbing lives in `~/.shrc` (block labeled "Claude terminal s
 0. **Check for `.groot-project.toml`.** Before anything else:
 
    ```
-   ~/.claude/skills/terminal-setup/terminal-setup.py --groot-toml-read
+   ${CLAUDE_SKILL_DIR}/terminal-setup.py --groot-toml-read
    ```
 
    The script reads `./.groot-project.toml` and prints `KEY=VALUE` lines for the `[terminal]` section (empty output if file/section absent). **Legacy `[iterm]` sections read transparently** — the `color` key is renamed to `background` on the way out, so the parsed dict looks the same whether the file is old or new.
@@ -57,20 +57,20 @@ The chpwd + precmd plumbing lives in `~/.shrc` (block labeled "Claude terminal s
    **Legacy `[iterm]` files migrate automatically.** Step 5's write replaces the `[iterm]` block with a `[terminal]` block. If a user wants to migrate a project _without_ changing the color, they can run:
 
    ```
-   ~/.claude/skills/terminal-setup/terminal-setup.py --migrate-toml
+   ${CLAUDE_SKILL_DIR}/terminal-setup.py --migrate-toml
    ```
 
    directly. For a batch migration across `~/code/*`:
 
    ```
    find ~/code -name .groot-project.toml -maxdepth 2 -exec \
-     ~/.claude/skills/terminal-setup/terminal-setup.py --migrate-toml {} \;
+     ${CLAUDE_SKILL_DIR}/terminal-setup.py --migrate-toml {} \;
    ```
 
    **If empty** (no file, or no `[terminal]`/`[iterm]` section): check for a legacy iTerm2 Dynamic Profile before falling through to a fresh palette pick.
 
    ```
-   ~/.claude/skills/terminal-setup/terminal-setup.py --legacy-iterm-read
+   ${CLAUDE_SKILL_DIR}/terminal-setup.py --legacy-iterm-read
    ```
 
    This reads `~/Library/Application Support/iTerm2/DynamicProfiles/<basename>.json` and prints `background=#RRGGBB` if found. **If non-empty** — the user has an existing iTerm-era color for this project but no `.groot-project.toml` yet — prompt via AUQ:
@@ -95,7 +95,7 @@ The chpwd + precmd plumbing lives in `~/.shrc` (block labeled "Claude terminal s
    **Then check for an existing alias for this directory:**
 
    ```
-   ~/.claude/skills/terminal-setup/terminal-setup.py --cwd-aliases
+   ${CLAUDE_SKILL_DIR}/terminal-setup.py --cwd-aliases
    ```
 
    This prints alias names from `~/.shrc` (and `~/.zshrc` as fallback) whose `cd` target resolves to the current directory. Handles direct `cd ~/X` / `cd /abs/X` / `cd $HOME/X` and chained `code;cd X`-style aliases.
@@ -107,8 +107,8 @@ The chpwd + precmd plumbing lives in `~/.shrc` (block labeled "Claude terminal s
    Gather palette data with two bash calls (can run in parallel):
 
    ```
-   ~/.claude/skills/terminal-setup/terminal-setup.py <project> --list-colors
-   ~/.claude/skills/terminal-setup/terminal-setup.py <project> --list-colors --vivid
+   ${CLAUDE_SKILL_DIR}/terminal-setup.py <project> --list-colors
+   ${CLAUDE_SKILL_DIR}/terminal-setup.py <project> --list-colors --vivid
    ```
 
    Parse both outputs to extract:
@@ -159,7 +159,7 @@ The chpwd + precmd plumbing lives in `~/.shrc` (block labeled "Claude terminal s
 5. **Write `.groot-project.toml` (and the alias).** Run:
 
    ```
-   ~/.claude/skills/terminal-setup/terminal-setup.py <project> --color <N> --alias <alias>
+   ${CLAUDE_SKILL_DIR}/terminal-setup.py <project> --color <N> --alias <alias>
    ```
 
    Or with `--no-alias` to skip the alias. The script will:

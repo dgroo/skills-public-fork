@@ -33,7 +33,7 @@ Run from the project root (anywhere with a `.groot-project.toml`, or anywhere �
 
 ## What it does
 
-The actual work is done by `~/.claude/skills/project-launcher/project_launcher.py`. Steps it takes:
+The actual work is done by `${CLAUDE_SKILL_DIR}/project_launcher.py`. Steps it takes:
 
 1. Read `.groot-project.toml` if present (used for `[launcher].name` override; everything else has sensible defaults).
 2. Compute the project name (CLI arg → TOML → cwd basename) and `.app` name (Title-cased project name).
@@ -64,7 +64,7 @@ cd ~/code/<newproject>
 
 ## Adding a new terminal app
 
-Edit `~/.claude/skills/project-launcher/project_launcher.py` — there's one `TERMINAL_LAUNCH_SCRIPTS` map. Add an entry. No other change needed.
+Edit `${CLAUDE_SKILL_DIR}/project_launcher.py` — there's one `TERMINAL_LAUNCH_SCRIPTS` map. Add an entry. No other change needed.
 
 ## Why script-file indirection (not inline AppleScript heredocs)
 
@@ -95,7 +95,7 @@ Generates in the project root:
   .gitignore additions      Both files ignored.
 
 Adds a new terminal app via:
-  Edit ~/.claude/skills/project-launcher/project_launcher.py
+  Edit ${CLAUDE_SKILL_DIR}/project_launcher.py
   → TERMINAL_LAUNCH_SCRIPTS map; one entry per terminal.
 
 Coexists with:

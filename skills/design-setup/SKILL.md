@@ -32,7 +32,7 @@ When `cleanup-design` is not installed, or it reports that it has no canon to co
 
 ## Add a template
 
-Run the script that sits beside this file, from anywhere inside the project (it finds the git root; pass `--project <dir>` otherwise). `<skill-dir>` is this skill's base directory, `~/.claude/skills/design-setup` when installed:
+Run the script that sits beside this file, from anywhere inside the project (it finds the git root; pass `--project <dir>` otherwise). `<skill-dir>` is this skill's base directory, `${CLAUDE_SKILL_DIR}`:
 
 ```bash
 python3 <skill-dir>/design-setup.py add <template>

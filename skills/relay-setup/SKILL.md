@@ -47,7 +47,7 @@ These prompts use `AskUserQuestion` for cleanest UX. Skip the prompts entirely i
 
 ## What the worker script does
 
-`~/.claude/skills/relay-setup/relay_setup.py` does:
+`${CLAUDE_SKILL_DIR}/relay_setup.py` does:
 
 1. Verify we're in a git working tree with an origin remote. Error out if not.
 2. Verify `design/relay/` doesn't exist. Error out if it does (with the message: "already initialized; rm the dir manually to reinitialize").

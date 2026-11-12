@@ -19,14 +19,14 @@ Derek hands work to the PM the way he would to a team lead: he says what he want
 | `/pm <text>`            | **Intake.** [Receipt](#receipt--always-first-always-one-append), then [triage](#triage) unless the session is mid-task. Typed mid-turn, it waits for the turn to end. |
 | `/pm @<project> <text>` | **Intake for another project.** `ask` resolves the name through `pick-a-port --inventory --json` and files the receipt in *that* project's Inbox, verbatim with its tag; triage is that project's, not this session's. A name not on this host files here with the tag and says so. |
 | `/pm triage`            | [Triage](#triage) everything waiting in the Inbox.                                                                   |
-| `/pm`, `/pm ?`, `/pm !` | The periodic pass. **Read [`review.md`](review.md)** (installed at `~/.claude/skills/pm/review.md`) and follow it.   |
+| `/pm`, `/pm ?`, `/pm !` | The periodic pass. **Read [`review.md`](review.md)** (installed at `${CLAUDE_SKILL_DIR}/review.md`) and follow it.   |
 | `/pm help`              | Print the [Help](#help) block verbatim.                                                                              |
 
 Anything after `/pm` that is not `triage`, `?`, `!` or `help` is an ask. That includes instructions about work already on file ("bump the auth story", "move the importer to the top", "drop the tagging one"): they are asks about the queue, and triage applies them to the existing line.
 
 ## The ask file
 
-`design/ASKS.md` holds what Derek has asked for, in order. Use root `ASKS.md` only when the project keeps its meta-files at the root and has no `design/`. If neither exists, create `design/ASKS.md` from [`asks-template.md`](asks-template.md) (installed at `~/.claude/skills/pm/asks-template.md`). In a linked worktree the ask file is the **main checkout's** copy, not the worktree's: asks belong on trunk, where design sync and the lead read them.
+`design/ASKS.md` holds what Derek has asked for, in order. Use root `ASKS.md` only when the project keeps its meta-files at the root and has no `design/`. If neither exists, create `design/ASKS.md` from [`asks-template.md`](asks-template.md) (installed at `${CLAUDE_SKILL_DIR}/asks-template.md`). In a linked worktree the ask file is the **main checkout's** copy, not the worktree's: asks belong on trunk, where design sync and the lead read them.
 
 - **`## Queue`** is the priority list: one line per ask, top is next. Each line points at the story or TODO entry that holds the substance. `/next` and `/sup` rank the top open line directly under the session handoff (`backlog-ranking.md` §3).
 - **`## Inbox`** is the last section of the file: raw asks, verbatim, oldest first, not yet triaged.
@@ -45,7 +45,7 @@ Otherwise:
 Then decide whether to triage now:
 
 - **The session is idle, or the ask is what Derek is doing:** triage in the same turn.
-- **The session is in the middle of other work:** do not triage in this context. Acknowledge as `triage pending` and go back to the work. Hand the Inbox to a **background agent** if the session can start one (Sonnet-tier, not Haiku, which did not hold the stub format when tried; brief: "read `~/.claude/skills/pm/SKILL.md`, run its Triage section in `<project path>`, and report the `Filed:` lines"), and relay its `Filed:` lines when it reports. If it cannot, add an in-session task ("triage the ASKS inbox when the current block wraps"). Either way the Inbox is the persistent record.
+- **The session is in the middle of other work:** do not triage in this context. Acknowledge as `triage pending` and go back to the work. Hand the Inbox to a **background agent** if the session can start one (Sonnet-tier, not Haiku, which did not hold the stub format when tried; brief: "read `${CLAUDE_SKILL_DIR}/SKILL.md`, run its Triage section in `<project path>`, and report the `Filed:` lines"), and relay its `Filed:` lines when it reports. If it cannot, add an in-session task ("triage the ASKS inbox when the current block wraps"). Either way the Inbox is the persistent record.
 
 How the two typed forms behave mid-turn: `pm: <text>` is a plain message, so the hook files it at Enter and it reaches you while the turn is still running; keep working, and end the turn with its `Filed:` line. `/pm <text>` is a slash command, which Claude Code holds until the turn ends. A turn that received a `pm:` ask and ends without a `Filed:` line is refused once by the `pm-filed-check` hook.
 

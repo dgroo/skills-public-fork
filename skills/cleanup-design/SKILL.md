@@ -81,7 +81,7 @@ Group findings into buckets with suggested dispositions:
 - **`mark-resolved`** — helping-hand has decision elsewhere but status still open
 - **`update-reference`** — cross-reference path is stale (file moved/deprecated)
 - **`archive`** — note that should move to `deprecated/`
-- **`refresh-summary`** — the story's `## Executive summary` block is missing or stale; the pass in `~/.claude/skills/pm/exec-summary.md` § The pass rewrites it
+- **`refresh-summary`** — the story's `## Executive summary` block is missing or stale; the pass in `${CLAUDE_SKILL_DIR}/../pm/exec-summary.md` § The pass rewrites it
 - **`leave`** — flagged but no action; mention only if explicitly listed
 
 ### 4. Present
@@ -97,7 +97,7 @@ Show the staged list grouped by bucket. For each item: file path, line number (i
 On approval:
 
 - Edit prose changes.
-- Run the Executive-summary pass (`~/.claude/skills/pm/exec-summary.md` § The pass: a fresh Sonnet reader per story, spawned together; read back; `backlog-scan` confirms `ok`) on each approved `refresh-summary` story and on any live story another bucket edited — last, so the block is each story's final write.
+- Run the Executive-summary pass (`${CLAUDE_SKILL_DIR}/../pm/exec-summary.md` § The pass: a fresh Sonnet reader per story, spawned together; read back; `backlog-scan` confirms `ok`) on each approved `refresh-summary` story and on any live story another bucket edited — last, so the block is each story's final write.
 - Move files (with `git mv` if in a git repo; otherwise Write+verify+delete).
 - Update frontmatter (status changes, deprecation flags).
 - Strip dead references or update to new paths.
