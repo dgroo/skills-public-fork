@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Machine-wide git hook dispatcher. Every hook name in this directory is a symlink to this file.
 
-Installed once with:  git config --global core.hooksPath ~/.claude/skills/consolidate/hooks
+Installed once with:  git config --global core.hooksPath ~/.claude/skills/vfs/skills/consolidate/hooks
 so it applies to every repository on the machine and every process that runs git -- Claude
 sessions, pi agents, and the human at the terminal -- with nothing to install per repo. (A repo
 that sets its own core.hooksPath, e.g. husky, overrides this; that's git's precedence.)

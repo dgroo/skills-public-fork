@@ -10,7 +10,7 @@ A human reads every commit. Commit as often as you like while working — checkp
 
 ## The gate
 
-A **machine-wide git pre-push hook** refuses any push whose range isn't reader-ready (`hooks/dispatch.py`, installed once via `git config --global core.hooksPath ~/.claude/skills/consolidate/hooks`). It applies to every repo on the machine and every process that runs git — Claude sessions, pi agents, the human — with nothing to install per project. It chains to any repo-local `.git/hooks/<name>` so per-repo hooks keep working. The only bypass is `git push --no-verify`, which Claude sessions are denied; the human can, with a reason a reader would accept.
+A **machine-wide git pre-push hook** refuses any push whose range isn't reader-ready (`hooks/dispatch.py`, installed once via `git config --global core.hooksPath ~/.claude/skills/vfs/skills/consolidate/hooks`). It applies to every repo on the machine and every process that runs git — Claude sessions, pi agents, the human — with nothing to install per project. It chains to any repo-local `.git/hooks/<name>` so per-repo hooks keep working. The only bypass is `git push --no-verify`, which Claude sessions are denied; the human can, with a reason a reader would accept.
 
 Reader-ready means: no merge commits in the range, and nothing the tool would fold. The refusal prints the plan and the exact command.
 

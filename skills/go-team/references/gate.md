@@ -4,7 +4,7 @@ Part of the `/go-team` skill; read before verifying or merging any branch. The l
 
 ## Verifying a worker's branch (before the gate)
 
-**First, consolidate the branch.** `python3 ~/.claude/skills/consolidate/scripts/consolidate.py --repo "$REPO" "main..$BRANCH" --apply` — a worker's twelve checkpoints land as the two or three changes they were, and `Thesis:`/`Surface:` trailers survive in the first body. Do this before the verification worktree, because it changes the branch's HEAD and the verdict must be for the SHA that will merge; your own run of the check tool in the worktree below produces it.
+**First, consolidate the branch.** `python3 ~/.claude/skills/vfs/skills/consolidate/scripts/consolidate.py --repo "$REPO" "main..$BRANCH" --apply` — a worker's twelve checkpoints land as the two or three changes they were, and `Thesis:`/`Surface:` trailers survive in the first body. Do this before the verification worktree, because it changes the branch's HEAD and the verdict must be for the SHA that will merge; your own run of the check tool in the worktree below produces it.
 
 Do this for every worker report, before you believe any of it — in its own throwaway worktree, never the shared checkout:
 
@@ -71,7 +71,7 @@ fi
 # and what would I do next? If it can't, the branch goes back. Four docs pages
 # shipped as development notes before anyone read them as a user.
 # Shape, not just correctness. Exit 2 = return to the worker with the printed reasons; it is not a failure of the code.
-python3 ~/.claude/skills/slop/scripts/slop_diff.py --repo "$REPO" "main..$BRANCH" --require-thesis \
+python3 ~/.claude/skills/vfs/skills/slop/scripts/slop_diff.py --repo "$REPO" "main..$BRANCH" --require-thesis \
   || { echo "RETURN TO WORKER: shape check did not pass (see reasons above)"; exit 2; }
 echo "GATES PASS on $SHA in isolation"
 cd "$REPO"

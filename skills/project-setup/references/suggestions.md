@@ -293,7 +293,7 @@ Then scaffold the files:
     Done: <what must be true, checkable by an agent — "the docs site builds and every page in the plan exists", not "docs are better">
   ```
   Agents rank this above everything they find for themselves, and `/go-team` refuses to dispatch an ask without a `Done:` line — "build the complete application" is not a task.
-- **`.claude/agents/foreman.md`** — the go-team foreman's agent definition (template in `~/.claude/skills/go-team/references/foreman-agent.md`). Its tool list has no `AskUserQuestion`, so the fleet cannot block on the human.
+- **`.claude/agents/foreman.md`** — the go-team foreman's agent definition (template in `~/.claude/skills/vfs/skills/go-team/references/foreman-agent.md`). Its tool list has no `AskUserQuestion`, so the fleet cannot block on the human.
 - **`LESSONS.md`** — the ledger. Seed it with the entry template from `/go-team` (what happened / what it cost / the rule / **the mechanism** / scope) and the rule that you sharpen an existing lesson before adding a new one.
 - **The verdict file.** A `check` target or script that runs every instrument the recipe names and writes `.verdict` in the worktree root — one line per instrument `name=<exit code>`, plus `head=<full sha>` and `at=<iso8601>`. Merge paths read the file, never the worker's report. Add `.verdict` to `.gitignore`. Template (Python, per this repo's script rule):
 
@@ -309,11 +309,11 @@ Then scaffold the files:
   ```
 - **A pre-commit hook** that runs the lint instrument, so a failing lint state is uncommittable — there's nothing to misreport. Optionally also refuse a commit whose subject says "fix" and whose diff deletes nothing unless the body names a `Cause:` — the cheapest mechanical check against fix-by-addition.
 - **Leases.** Nothing to create; just note in `CLAUDE.md` that dispatch writes `$(git rev-parse --git-common-dir)/leases/<branch>` and merge removes it by name.
-- **The push gate.** Nothing to create per repo: `/consolidate` installs a machine-wide pre-push hook via `core.hooksPath` that refuses a range that isn't one commit per feature or fix. On a new machine: `git config --global core.hooksPath ~/.claude/skills/consolidate/hooks`. It chains to this repo's `.git/hooks/*`, so the pre-commit lint hook above keeps running.
+- **The push gate.** Nothing to create per repo: `/consolidate` installs a machine-wide pre-push hook via `core.hooksPath` that refuses a range that isn't one commit per feature or fix. On a new machine: `git config --global core.hooksPath ~/.claude/skills/vfs/skills/consolidate/hooks`. It chains to this repo's `.git/hooks/*`, so the pre-commit lint hook above keeps running.
 - **The foreign-repo guard.** Add to `.claude/settings.json` (merge, don't replace):
   ```json
   {"hooks": {"PreToolUse": [{"matcher": "Edit|Write|MultiEdit|NotebookEdit",
-    "hooks": [{"type": "command", "command": "python3 ~/.claude/skills/request/scripts/guard_foreign_repo.py"}]}]}}
+    "hooks": [{"type": "command", "command": "python3 ~/.claude/skills/vfs/skills/request/scripts/guard_foreign_repo.py"}]}]}}
   ```
   It denies edits into a *different* git repository and points at `/request`. Referenced by path so it never goes stale; if the skills aren't installed the hook errors and the call proceeds, which is the right failure mode.
 
