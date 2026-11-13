@@ -6,6 +6,10 @@
 <!-- Category: bug, feature, chore, docs -->
 
 ## Open
+- [ ] **P2** (decision) A name on the `.pii-patterns` list is in pushed history; scrub it or leave it — 2026-11-13
+  A story edit on 2026-11-13 named a private project, and the design-sync watcher committed and pushed it (its commits skip the pre-commit scan). The tree was reworded the same morning and is clean; the name remains in the history of `design/stories/` between `faaf472` and the reword. Scrubbing means rewriting and force-pushing `main`, which is Derek's call. Separately worth deciding: whether the watcher's `docs(design)` commits in this public repo should run `scripts/check-pii.sh`.
+- [ ] **P3** (decision) Offer the six-skill frontmatter fix upstream — 2026-11-13
+  `8da5990` quotes one invalid YAML line in each of `consolidate`, `retro`, `delegate-bulk`, `delegate-security-audit`, `go-team`, `scorecard`; upstream/main has the same lines. The commit is kept apart so it can go upstream as is. Opening a PR on joewalnes/skills is Derek's to do or approve.
 
 - [ ] **P2** (feature) `/groot-project`: emit the remaining templates from a script instead of having the model copy them out of SKILL.md — 2026-11-13
   Handed off from the meta-feedback review (Derek's tick, with his note to verify against the design-directory work). Verified 2026-11-13: everything under `design/` is now copied by `design-directory.py setup`. Still written by hand from the skill text: `CLAUDE.md`, `DIARY.md`, `TODO.md`, the Makefile and the three git hooks. Hand-copying is how template defects got through (a garbled stories README template shipped to several projects before the move). Extend the script, or a sibling of it, to those files, never overwriting.
