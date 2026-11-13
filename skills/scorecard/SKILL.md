@@ -1,6 +1,6 @@
 ---
 name: scorecard
-description: Letter-grade audit of a codebase as it stands: code quality and agent-readiness. Use after a feature or before a big PR.
+description: "Letter-grade audit of a codebase as it stands: code quality and agent-readiness. Use after a feature or before a big PR."
 argument-hint: [directory | --quick]
 ---
 

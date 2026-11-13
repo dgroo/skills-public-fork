@@ -1,6 +1,6 @@
 ---
 name: go-team
-description: Run a crew of agents unattended: dispatch, verify in isolation, gate, merge. Use for overnight runs on a wide backlog.
+description: "Run a crew of agents unattended: dispatch, verify in isolation, gate, merge. Use for overnight runs on a wide backlog."
 argument-hint: [start | retro | status | --agents N]
 ---
 

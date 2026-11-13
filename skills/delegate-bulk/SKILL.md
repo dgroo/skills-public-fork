@@ -1,6 +1,6 @@
 ---
 name: delegate-bulk
-description: Bulk low-judgement work on a near-free model via pi: mass review, sample data, mechanical rewrites. Non-private data only.
+description: "Bulk low-judgement work on a near-free model via pi: mass review, sample data, mechanical rewrites. Non-private data only."
 argument-hint: <task>
 ---
 

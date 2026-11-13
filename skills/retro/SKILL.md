@@ -1,7 +1,7 @@
 ---
 name: retro
 description: Evidence-first retrospective of a session or fleet from its transcripts and repo. Use when a process isn't working and you want to know why before changing anything.
-argument-hint: [project-dir] [--hours N]
+argument-hint: "[project-dir] [--hours N]"
 ---
 
 # Retro: find out what actually happened before deciding what to change

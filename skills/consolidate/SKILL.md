@@ -1,7 +1,7 @@
 ---
 name: consolidate
 description: Rebuild unpushed commits into one per feature or fix, tree-identical; also the machine-wide pre-push gate. Use before any push.
-argument-hint: [<base>..<head>] [--check | --apply [--messages FILE]]
+argument-hint: "[<base>..<head>] [--check | --apply [--messages FILE]]"
 ---
 
 # Consolidate: commit often, push what a reader would choose

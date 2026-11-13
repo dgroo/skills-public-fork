@@ -1,6 +1,6 @@
 ---
 name: delegate-security-audit
-description: Security audit by GLM via pi: find and fix vulnerabilities in the user's own code. Use when asked for an audit or vuln hunt.
+description: "Security audit by GLM via pi: find and fix vulnerabilities in the user's own code. Use when asked for an audit or vuln hunt."
 argument-hint: <scope of the audit>
 ---
 
