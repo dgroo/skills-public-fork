@@ -5,7 +5,7 @@ priority: medium # high | medium | low
 
 # Story Title
 
-_Authored by <model> with Derek · Last updated <YYYY-MM-DD HH:MM>._
+_Authored by <model> with <owner> · Last updated <YYYY-MM-DD HH:MM>._
 
 ## Executive summary
 
@@ -47,7 +47,7 @@ Technical considerations, schema sketches, ASCII diagrams, implementation detail
 
 **Recommended:** option 1, because <one sentence>. Rejected: 2 because <why>.
 
-<!-- On decision: append "**Decided <date>:** option N (Derek: "…") · any deviation and why", flip the heading to "· decided <date>", rewrite nothing above. Shape: pm/exec-summary.md § Decision records. -->
+<!-- On decision: append "**Decided <date>:** option N (<owner>: "…") · any deviation and why", flip the heading to "· decided <date>", rewrite nothing above. Shape: pm/exec-summary.md § Decision records. -->
 
 ## Related
 

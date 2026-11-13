@@ -1,7 +1,5 @@
 # Do Research
 
-*Authored by Claude Fable 5.2 with Derek · Last updated 2026-11-10 16:15.*
-
 A `[[Do Research]]` link in any document under `design/` is an instruction to the session reading it: do some research on the topic, or refer to research already done, which may or may not need refreshing. There are two ways to name the topic:
 
 - `[[Do Research]]: do these concepts still hold up?` The words after the link on the same line are the topic.
@@ -22,7 +20,7 @@ Three rules for the research itself:
 
 - **When the topic is whether an idea holds up, try to disprove it.** Look for the strongest case against the idea and for what people who solved the same problem did instead. A search built to agree with the author proves nothing.
 - **Match the effort to the cost of being wrong.** A naming question gets a few searches. A question the architecture rests on gets sources read in full. Say which depth was used.
-- **A quick pass is the default.** When a topic wants a long round or several agents, propose it to Derek with a rough size before starting.
+- **A quick pass is the default.** When a topic wants a long round or several agents, propose it to the project's owner with a rough size before starting.
 
 ## How one is closed
 
@@ -33,7 +31,7 @@ Keep the link and the topic. Append the answer to the same line, so the next rea
 
 A line with a ✓ is closed; a line without one is open. The date is the day it was done. The Obsidian backlinks pane on this file lists every call in the vault, open and closed.
 
-When the answer is "this is wrong", the closing line says so plainly and the session raises it with Derek like any other finding. It does not rewrite his text to match.
+When the answer is "this is wrong", the closing line says so plainly and the session raises it with the project's owner like any other finding. It does not rewrite his text to match.
 
 ## A research file
 
@@ -60,7 +58,7 @@ author: Claude Fable 5.2
 
 The body, in this order:
 
-1. **Summary.** For Derek, five lines at most: the answer, how sure it is, and what it means for this project. It reads without the rest.
+1. **Summary.** For the project's owner, five lines at most: the answer, how sure it is, and what it means for this project. It reads without the rest.
 2. **Findings.** Each claim tied to its source, with what was read kept apart from what was inferred.
 3. **What would change this.** The events that would make it stale before its date: a release, a price change, a new entrant.
 4. **Sources.** For each: the link, what it is, and the date it was read. A source that was read and rejected is listed with the reason.

@@ -1,6 +1,6 @@
 # Helping hands
 
-Tasks that need Derek's hands, eyes, account credentials, paid subscription, or physical access.
+Tasks that need the project owner's hands, eyes, account credentials, paid subscription, or physical access.
 
 ## Format
 
