@@ -1,6 +1,7 @@
 ---
 name: lane
-description: Move this session into a domain lane — a long-lived worktree for one area of a project (gameplay, ui, infra). `/lane <name>` enters that lane, creating it if needed; `/lane` with no argument reports which lane you are in, or offers the roster when you are in the main checkout. Use when asked to "put this session on the UI work", "switch to the gameplay lane", "which lane am I in", "/lane". Companion to /lanes, which decides what a project's lanes should be.
+description: 'Move this session into a named domain lane (a long-lived worktree), or report which lane it is in.'
+when_to_use: 'A lane is a long-lived worktree for one area of a project (gameplay, ui, infra). `/lane <name>` enters that lane, creating it if needed; `/lane` with no argument reports which lane you are in, or offers the roster when you are in the main checkout. Use when asked to "put this session on the UI work", "switch to the gameplay lane", "which lane am I in", "/lane". Companion to /lanes, which decides what a project''s lanes should be.'
 allowed-tools: Bash, Read, AskUserQuestion, EnterWorktree
 summary: "Moves this session into a named domain lane (a long-lived worktree), or reports which lane you are in."
 group: code

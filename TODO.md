@@ -7,8 +7,6 @@
 
 ## Open
 
-- [ ] **P3** (chore) Descriptions over 120 characters: move trigger phrases to `when_to_use:` so the `/` picker shows what each skill does — 2026-11-11
-  The picker shows about two terminal lines of `description:` and nothing of `when_to_use:` (probed 2026-11-11 on Claude Code 2.1.322; `/pm` was fixed this way). Most own skills still open with mechanics or triggers. Mechanical once the short description is written; the index `summary:` is a good first draft of each.
 - [ ] **P3** (docs) Write the upstream-merge recipe under "Upstream provenance" in `CLAUDE.md` — 2026-10-01
   The first merge in three months (2026-10-01, `b3911fc`) was done by hand: rename any local skill whose name upstream now uses (ours, not theirs — `go-team` calls upstream's `consolidate` by path), `git merge upstream/main`, resolve `README.md` / `TODO.md` / `DIARY.md` to the fork, keep upstream's `CLAUDE.md` additions but drop its commit-policy hunk (`/consolidate` before push), `make install` and read it for `COLLISION` lines. Source: meta-feedback 2026-10-01.
 - [x] **P3** (chore) Decide: stay a fork of joewalnes/skills, or restructure as a wrapper/overlay — 2026-06-09 · **decided 2026-10-01: stay a fork and merge** (Derek; merge `b3911fc` cost five conflicts, four of them repo docs). Unblocks the `upstream-*` → `fork-*` rename and the status-skill consolidation.
@@ -17,6 +15,8 @@
 
 ## Done
 
+- [x] **P3** (chore) Descriptions over 120 characters: move trigger phrases to `when_to_use:` so the `/` picker shows what each skill does — 2026-11-11 · **done 2026-11-13**: 31 own skills now have a one-sentence `description:` of 120 characters or fewer and their trigger phrases in `when_to_use:` (go-ahead: the grootPM session's reading of Derek's "check if 2 is still an issue, if so I'd say fix them").
+  The picker shows about two terminal lines of `description:` and nothing of `when_to_use:` (probed 2026-11-11 on Claude Code 2.1.322; `/pm` was fixed this way). Most own skills still open with mechanics or triggers. Mechanical once the short description is written; the index `summary:` is a good first draft of each.
 - [x] **P2** (bug) Ten skills have frontmatter that is not valid YAML; seven show no description in the model's skill listing — 2026-11-11 · **fixed 2026-11-13**: the failing `description:` and `argument-hint:` values are quoted in all ten (Derek, relayed by the grootPM session: "check if 2 is still an issue, if so I'd say fix them"). The six upstream-tracked ones are a commit of their own, one line each, offered upstream.
   Found while checking the index edits with a strict parser (`ruby -ryaml`); present before them. An unquoted `: ` inside `description:`, or an unquoted `[…] […]` `argument-hint:`. Own: `relay-setup` (argument-hint; listed with no description), `md-add`, `meta-feedback`, `groot-project` (these three still list a description). Upstream-tracked, so not editable here: `go-team`, `consolidate`, `retro`, `delegate-security-audit`, `delegate-bulk`, `scorecard` (all listed with no description) — report to Joe or carry in the fork decision. Fix for the own four is quoting the value; a strict-YAML check could join `make readme-check`.
 - [x] **P1** (feature) Skills index in README § Skills + `/skills-list brief`, generated from a `summary:` field — 2026-11-10

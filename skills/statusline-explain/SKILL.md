@@ -1,6 +1,7 @@
 ---
 name: statusline-explain
-description: Explain what each segment of the Claude Code statusline means, with the current value and a note when the value is in an unusual state. Use when asked "what does that thing in the statusline mean", "explain the statusline", "what's on my statusline", `/statusline-explain`, or whenever the statusline is the subject of the question.
+description: 'Explain each statusline segment with its current value and flag unusual states.'
+when_to_use: 'Use when asked "what does that thing in the statusline mean", "explain the statusline", "what''s on my statusline", `/statusline-explain`, or whenever the statusline is the subject of the question.'
 allowed-tools: Read, Bash
 summary: "Explains each statusline segment with its current value and flags unusual states."
 group: tooling

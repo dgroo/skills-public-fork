@@ -1,6 +1,7 @@
 ---
 name: skill-add
-description: Use when proposing a new Claude Code skill — evaluates the idea against the installed catalog for collisions, overlaps, and wrap candidates; pushes back if the value is thin; interviews for clarifications only if proceeding; then creates the skill file, updates README, and runs make install. Triggers on "/skill-add <description>", "I want to add a skill that…", "let's make a skill for…", "should I write a skill that…".
+description: 'Vet a proposed skill against the catalog for overlap, then create it, update the README and install it.'
+when_to_use: 'Use when proposing a new Claude Code skill — evaluates the idea against the installed catalog for collisions, overlaps, and wrap candidates; pushes back if the value is thin; interviews for clarifications only if proceeding; then creates the skill file, updates README, and runs make install. Triggers on "/skill-add <description>", "I want to add a skill that…", "let''s make a skill for…", "should I write a skill that…".'
 argument-hint: <one-line description of the proposed skill>
 summary: "Vets a proposed skill against the catalog for overlap, then creates it, updates the README and installs it."
 group: tooling

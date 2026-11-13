@@ -1,6 +1,7 @@
 ---
 name: next
-description: Forward-only "what should I pick up?" — scans the project's queued-work surfaces (TODO, ready/draft stories, helping-hands, REVISIT, open PRs, stale branches) plus the current conversation for outstanding loose ends, and presents a few dependency- and leverage-ranked candidates as a `Next` menu answered with one token (`go` for the lead, `1`/`2`/`3` for the others, a `?` suffix to hear more first). Use when asking "what's next?", "what should I work on?", "what should I pick up?", or "/next". Companion to /sup — /next is forward-only with no situation recap and ranks deeper; /sup leads with the situation report and surfaces the same ranking as the tail of it.
+description: 'Rank the best next chunk of work from the backlog and this conversation, with no situation recap. Use to pick up work.'
+when_to_use: 'Forward-only "what should I pick up?" — scans the project''s queued-work surfaces (TODO, ready/draft stories, helping-hands, REVISIT, open PRs, stale branches) plus the current conversation for outstanding loose ends, and presents a few dependency- and leverage-ranked candidates as a `Next` menu answered with one token (`go` for the lead, `1`/`2`/`3` for the others, a `?` suffix to hear more first). Use when asking "what''s next?", "what should I work on?", "what should I pick up?", or "/next". Companion to /sup — /next is forward-only with no situation recap and ranks deeper; /sup leads with the situation report and surfaces the same ranking as the tail of it.'
 allowed-tools: Read, Glob, Grep, Bash
 summary: "Ranks the best next chunk of work from the backlog and this conversation, with no situation recap."
 group: session

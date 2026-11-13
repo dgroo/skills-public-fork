@@ -1,6 +1,7 @@
 ---
 name: yolo-mode
-description: Bounded-autonomous "work overnight while I sleep" mode. Pushes forward safely on the design/docs backlog inside an isolated git worktree, keeps a human-readable review log, makes atomic commits, and defers destructive ops to a queue instead of running them. Fans work out to subagents to extend session endurance. Use when the user says "work on this overnight", "see what you can get done while I sleep", "yolo mode", or "/yolo-mode". For true unattended running the session must be launched with --dangerously-skip-permissions (or accept-edits) — the skill is the behavioral half only.
+description: 'Work the design/docs backlog overnight in an isolated worktree, keeping a review log. Use for unattended runs.'
+when_to_use: 'Bounded-autonomous "work overnight while I sleep" mode. Pushes forward safely on the design/docs backlog, makes atomic commits, and defers destructive ops to a queue instead of running them. Fans work out to subagents to extend session endurance. Use when the user says "work on this overnight", "see what you can get done while I sleep", "yolo mode", or "/yolo-mode". For true unattended running the session must be launched with --dangerously-skip-permissions (or accept-edits) — the skill is the behavioral half only.'
 argument-hint: [<task or scope hint> | --code | --branch <name>]
 summary: "Works the design/docs backlog overnight in an isolated worktree, with a review log."
 group: delegate

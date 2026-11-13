@@ -1,6 +1,7 @@
 ---
 name: project-launcher
-description: Generate a per-project GUI launcher (.app + inner shell script) that opens a new terminal window, cd's into the project, and attaches to a tmux session on the always-on host over Tailscale. Lives in the project directory itself (gitignored). Run inside the project root. Reuses the `roci` shell function from dotfiles and `/terminal-setup`'s OSC 11 color mechanism — does not reimplement either. Use when asked to "create a launcher", "make a .app for this project", "project launcher", or `/project-launcher`.
+description: 'Generate a per-project .app that opens a terminal attached to the project''s tmux session on the always-on host.'
+when_to_use: 'Generates a per-project GUI launcher (.app + inner shell script) that opens a new terminal window, cd''s into the project, and attaches to a tmux session on the always-on host over Tailscale. Lives in the project directory itself (gitignored). Run inside the project root. Reuses the `roci` shell function from dotfiles and `/terminal-setup`''s OSC 11 color mechanism — does not reimplement either. Use when asked to "create a launcher", "make a .app for this project", "project launcher", or `/project-launcher`.'
 argument-hint: [app-name]
 summary: "Generates a per-project .app that opens a terminal attached to the project's tmux session on the host."
 group: project

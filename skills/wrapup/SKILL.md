@@ -1,6 +1,7 @@
 ---
 name: wrapup
-description: Actively assess whether this session is safe to end. Inventories in-flight state, executes routine wrap-prep writes (DIARY entries, story files, design/NEXT.md session handoff, queue notes) directly, auto-commits and pushes complete work (surfacing only ambiguous or destructive cases), then gives a definitive READY / WAIT / STAY verdict. Judges whether THIS session is the right place to keep working — pushing back with a visible STAY when bouncing would discard real in-flight context — and sharpens that call against an intent hint when one is given.
+description: 'Prep and commit the session''s loose ends, then give a READY, WAIT or STAY verdict on ending it.'
+when_to_use: 'Actively assesses whether this session is safe to end. Inventories in-flight state, executes routine wrap-prep writes (DIARY entries, story files, design/NEXT.md session handoff, queue notes) directly, auto-commits and pushes complete work (surfacing only ambiguous or destructive cases), then gives a definitive READY / WAIT / STAY verdict. Judges whether THIS session is the right place to keep working — pushing back with a visible STAY when bouncing would discard real in-flight context — and sharpens that call against an intent hint when one is given.'
 argument-hint: "[?|!|?!|checkpoint] [<optional intent for next work>]"
 summary: "Preps and commits the session's loose ends, then gives a READY, WAIT or STAY verdict on ending it."
 group: session

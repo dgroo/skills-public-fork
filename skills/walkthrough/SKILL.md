@@ -1,6 +1,7 @@
 ---
 name: walkthrough
-description: Use when asked to produce a narrative walkthrough of how an application or system is used end-to-end from a specific user's perspective ("walk me through using X", "how would a new user start with Y", "narrative of usage", "user journey doc"). Tutorial-quadrant docs — story-shaped, learning-oriented — distinct from reference, spec, and how-to. Centered on a draft → review → branch (write / revise / apply) iteration loop that converges on integrating insights back into the project's design.
+description: 'Draft a narrative walkthrough of using an app from one user''s view, then iterate on review feedback.'
+when_to_use: 'Use when asked to produce a narrative walkthrough of how an application or system is used end-to-end from a specific user''s perspective ("walk me through using X", "how would a new user start with Y", "narrative of usage", "user journey doc"). Tutorial-quadrant docs — story-shaped, learning-oriented — distinct from reference, spec, and how-to. Centered on a draft → review → branch (write / revise / apply) iteration loop that converges on integrating insights back into the project''s design.'
 summary: "Drafts a narrative walkthrough of using an app from one user's view, then iterates on review feedback."
 group: design
 ---

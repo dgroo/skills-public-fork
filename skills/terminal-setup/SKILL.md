@@ -1,6 +1,7 @@
 ---
 name: terminal-setup
-description: Set a per-project terminal background color (and optional shell alias) that follows you across iTerm2, Ghostty, Alacritty, Kitty, WezTerm. The color is recorded in `.groot-project.toml` and applied via the OSC 11 chpwd hook in ~/.shrc. Use when starting a new project, asked to "set up terminal", "set terminal color", "color this project", "add a project alias", or when bootstrapping a new repo. Successor to /iterm-setup — handles `[iterm]` → `[terminal]` migration automatically.
+description: 'Set a per-project terminal background color and optional shell alias, recorded in .groot-project.toml.'
+when_to_use: 'Works across iTerm2, Ghostty, Alacritty, Kitty, WezTerm; the color is applied via the OSC 11 chpwd hook in ~/.shrc. Use when starting a new project, asked to "set up terminal", "set terminal color", "color this project", "add a project alias", or when bootstrapping a new repo. Successor to /iterm-setup — handles `[iterm]` → `[terminal]` migration automatically.'
 argument-hint: [name-or-alias | auto]
 summary: "Sets a per-project terminal background color and optional shell alias, recorded in .groot-project.toml."
 group: project

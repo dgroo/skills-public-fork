@@ -1,6 +1,7 @@
 ---
 name: regroup
-description: Bring every lane in a project to one baseline — land whatever is outstanding, then pull each clean worktree forward to the remote default branch, and prove it with `lane --state`. Use when asked to "consolidate the lanes", "get everyone to a baseline", "are all lanes on the same code — make it so", "regroup before we fan back out", "/regroup" (until 2026-10-01 this was /consolidate; renamed because upstream joewalnes/skills ships an unrelated /consolidate that rewrites commit history). Companion to /lanes (which decides the domains) and /land (which lands one branch); this is the whole-project sweep across all of them.
+description: 'Land outstanding lane work and pull every clean worktree forward to one baseline. Use before fanning lanes back out.'
+when_to_use: 'Proves the result with `lane --state`. Use when asked to "consolidate the lanes", "get everyone to a baseline", "are all lanes on the same code — make it so", "regroup before we fan back out", "/regroup" (until 2026-10-01 this was /consolidate; renamed because upstream joewalnes/skills ships an unrelated /consolidate that rewrites commit history). Companion to /lanes (which decides the domains) and /land (which lands one branch); this is the whole-project sweep across all of them.'
 argument-hint: "[? = report only, change nothing]"
 summary: "Lands outstanding lane work and pulls every clean worktree forward to one baseline commit; ? reports only."
 group: session

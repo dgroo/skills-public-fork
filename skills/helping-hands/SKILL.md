@@ -1,6 +1,7 @@
 ---
 name: helping-hands
-description: Use when asked to work through a project's helping-hands items — the things filed in `design/helping-hands/` (or equivalent) that need the user's hands, eyes, credentials, or paid access ("work my helping-hands", "what's open in helping-hands", "let's knock out a helping-hand", "/hhands", "/helping-hands"). Validates each item is still live, extends the LLM-side scaffolding as far as it can go, and surfaces a single concrete ask. User-invoked on demand; does not replace citation-by-path JIT surfacing for in-flight work.
+description: 'Work through design/helping-hands items that need Derek''s hands or credentials, pushing each as far as it can go.'
+when_to_use: 'Use when asked to work through a project''s helping-hands items — the things filed in `design/helping-hands/` (or equivalent) that need the user''s hands, eyes, credentials, or paid access ("work my helping-hands", "what''s open in helping-hands", "let''s knock out a helping-hand", "/hhands", "/helping-hands"). Validates each item is still live, extends the LLM-side scaffolding as far as it can go, and surfaces a single concrete ask. User-invoked on demand; does not replace citation-by-path JIT surfacing for in-flight work.'
 summary: "Works through design/helping-hands items that need your hands or credentials, pushing each as far as it can."
 group: backlog
 ---

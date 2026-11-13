@@ -1,6 +1,7 @@
 ---
 name: standup
-description: Who is waiting on you, across every Claude Code session on this host. Sorted longest-stall-first, because you are the bottleneck in the conversations you are running in parallel. Use when asking "is anyone waiting on me?", "what's stuck?", "standup", "/standup", or when returning to a project after working elsewhere. Scope defaults to the current project; `/standup all` covers the host. Distinct from /sup (this session's situation) and /roci-sitrep (whole-host vitals).
+description: 'List which Claude sessions on this host are waiting on you, longest-stalled first. Use when returning to a project.'
+when_to_use: 'Sorted longest-stall-first, because you are the bottleneck in the conversations you are running in parallel. Use when asking "is anyone waiting on me?", "what''s stuck?", "standup", "/standup", or when returning to a project after working elsewhere. Scope defaults to the current project; `/standup all` covers the host. Distinct from /sup (this session''s situation) and /roci-sitrep (whole-host vitals).'
 allowed-tools: Read, Bash
 summary: "Lists which of your Claude sessions are waiting on you, longest-stalled first; all covers the host."
 group: session

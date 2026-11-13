@@ -1,6 +1,7 @@
 ---
 name: cmd-add
-description: Use when proposing a new Claude Code slash command — gates command-vs-skill, scans for collisions, writes the file at ~/.claude/commands/, and shows the propagation command for dot-claude. Triggers on "/cmd-add <description>", "I want a shortcut for…", "let's add a slash command for…", "make /<name> do X".
+description: 'Vet and write a new slash command in ~/.claude/commands, after checking it should not be a skill.'
+when_to_use: 'Use when proposing a new Claude Code slash command — gates command-vs-skill, scans for collisions, writes the file at ~/.claude/commands/, and shows the propagation command for dot-claude. Triggers on "/cmd-add <description>", "I want a shortcut for…", "let''s add a slash command for…", "make /<name> do X".'
 argument-hint: <one-line description of what the command should do>
 summary: "Vets and writes a new slash command in ~/.claude/commands, after checking it should not be a skill."
 group: tooling

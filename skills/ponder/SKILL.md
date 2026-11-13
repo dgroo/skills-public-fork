@@ -1,6 +1,7 @@
 ---
 name: ponder
-description: Use when Derek declares a thinking/research task — "do a design pass on X", "I was thinking about X on my hike", "thinking task", "let's think through X", "we may or may not build this", "/ponder <topic>". Declares design-thinking mode - the deliverable is a design artifact (drafts story with named open decisions), NOT code. Explore the repo, recover in-repo prior art, think in options, write the story, stop. Building anything is gated behind Derek's explicit go. NOT for one-line spark capture (/idea), web-research reports (/deep-research), or specs headed straight to implementation (gstack /spec).
+description: 'Run a design-thinking pass on a topic and write a drafts story with named open decisions; builds nothing.'
+when_to_use: 'Use when Derek declares a thinking/research task — "do a design pass on X", "I was thinking about X on my hike", "thinking task", "let''s think through X", "we may or may not build this", "/ponder <topic>". Declares design-thinking mode - the deliverable is a design artifact (drafts story with named open decisions), NOT code. Explore the repo, recover in-repo prior art, think in options, write the story, stop. Building anything is gated behind Derek''s explicit go. NOT for one-line spark capture (/idea), web-research reports (/deep-research), or specs headed straight to implementation (gstack /spec).'
 argument-hint: "[<topic> | handoff | help]"
 summary: "Runs a design-thinking pass on a topic and writes a drafts story with named open decisions; builds nothing."
 group: design

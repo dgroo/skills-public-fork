@@ -14,6 +14,12 @@ The line between the two skills came out as: where a file belongs is `/design-di
 
 One thing to know later: the first real sweep on a real project has not been run. The nested shape (one `z.archived/` per top-level directory, sub-paths kept below it) was taken by default and is cheap to change until then.
 
+## 2026-11-13 — Frontmatter that parses, and descriptions the picker can show
+
+Two hygiene items found on 2026-11-11 were fixed on Derek's word. Ten skills had frontmatter a strict YAML parser rejects (an unquoted `: ` in a description, an unquoted `[..] [..]` argument hint), and seven of them reached the model's listing with no description. The failing values are now quoted, by a script that asserts each parsed value equals the old raw text. Six of the ten are upstream-tracked and upstream has the same six lines, so that half is a commit of its own under the guard's override, one line per file, in a shape upstream could take as is.
+
+Then the 31 own skills whose descriptions ran from 300 to 1,000 characters got what `/pm` got: one sentence on what the skill does, and the trigger phrases moved to `when_to_use:`. The picker shows only the opening of `description:`; the model's listing appends `when_to_use:`, so the triggers still route. A Sonnet subagent did the rewrite and the review was by script (only those two keys changed in each file) and by reading the new listing. The rewrite surfaced one stale description: `/idea` still named `design/IDEAS.md` a month after sparks moved to the Someday list in `design/TODO.md`.
+
 ## 2026-11-11 — `/design-setup` first increment, and the skills index
 
 Two items Derek had said go on that morning sat recorded and unassigned until he asked why he could not use `design-setup` yet. Both were built in one session spawned by the grootPM session.

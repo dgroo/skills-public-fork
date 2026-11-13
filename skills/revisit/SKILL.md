@@ -1,6 +1,7 @@
 ---
 name: revisit
-description: Add or work through entries in a project's `REVISIT.md` — the queue of items to resurface in a future session, either at a future date or when a specific event happens. Mirrors `/todo` (entry-style filing) and `/helping-hands` (walk-with-attempted-self-resolution flow), but the trigger is *time-or-event*, not *as-soon-as-possible*. Use when asked to "revisit this later", "check back in N weeks", "remind me when we work on X", "/revisit", "/revisit walk", "/revisit add ...".
+description: 'File and work through REVISIT.md items that resurface at a future date or when an event happens.'
+when_to_use: 'Add or work through entries in a project''s `REVISIT.md` — the queue of items to resurface in a future session, either at a future date or when a specific event happens. Mirrors `/todo` (entry-style filing) and `/helping-hands` (walk-with-attempted-self-resolution flow), but the trigger is *time-or-event*, not *as-soon-as-possible*. Use when asked to "revisit this later", "check back in N weeks", "remind me when we work on X", "/revisit", "/revisit walk", "/revisit add ...".'
 argument-hint: <text> [--in 6w|--when "<event>"] | add --watch <issue-url> | walk | <slug>
 summary: "Files and works through REVISIT.md items that resurface at a future date or when an event happens."
 group: backlog
