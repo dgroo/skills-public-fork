@@ -6,6 +6,7 @@ Thumbs.db
 *~
 .env
 .env.local
+.pii-patterns.local
 __pycache__/
 *.pyc
 

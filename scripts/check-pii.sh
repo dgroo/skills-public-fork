@@ -28,6 +28,11 @@ fi
 tmp_patterns="$(mktemp)"
 trap 'rm -f "$tmp_patterns"' EXIT
 grep -vE '^[[:space:]]*(#|$)' "$PATTERNS_FILE" > "$tmp_patterns" || true
+# Host-private patterns (machine names and the like) live in an untracked,
+# gitignored file so this public repo never has to name them.
+if [[ -f "$REPO_ROOT/.pii-patterns.local" ]]; then
+  grep -vE '^[[:space:]]*(#|$)' "$REPO_ROOT/.pii-patterns.local" >> "$tmp_patterns" || true
+fi
 if [[ ! -s "$tmp_patterns" ]]; then
   exit 0
 fi
