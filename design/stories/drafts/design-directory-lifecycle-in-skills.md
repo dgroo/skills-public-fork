@@ -7,7 +7,7 @@ priority: high
 
 > **Captured via `/pm` — not yet pondered.** Verbatim capture below; no exploration or design thinking has happened. Run `/ponder design-directory-lifecycle-in-skills` to develop it. Don't implement from this stub.
 
-Related (found at triage): grootPM `design/stories/ready/design-directory-lifecycle.md` (D3, D4, D7). Touches the same /cleanup-design and /groot-project surfaces as [design-setup](design-setup-skill.md) and [notes-tracker](notes-tracker.md); sequence with them. Also `groot-project-conformance-sweep.md`.
+Related (found at triage): grootPM `design/stories/ready/design-directory-lifecycle.md` (D3, D4, D7). Touches the same /cleanup-design and /groot-project surfaces as [design-directory](design-directory-skill.md) and [notes-tracker](notes-tracker.md); sequence with them. Also `groot-project-conformance-sweep.md`.
 
 Asked 2026-11-07 12:11 (via design/ASKS.md):
 
@@ -17,6 +17,6 @@ high, from grootPM (2026-11-07): the design-directory lifecycle is decided; see 
 
 2026-11-11 — Derek's answer, relayed 2026-11-11 from the grootPM session at his "go" (to the /pm triage question on ordering): design-setup goes first and absorbs the design-directory lifecycle story's /groot-project and /cleanup-design changes, so those are not written twice.
 
-**Moves to [design-setup](design-setup-skill.md):** the /cleanup-design archive sweep (z.archived bulk move, link repointing, computed-signal mark proposals, archived/ → z.archived/ rename, dropping the Orient note) and the /groot-project README templates' retire paragraph.
+**Moves to [design-directory](design-directory-skill.md):** the /cleanup-design archive sweep (z.archived bulk move, link repointing, computed-signal mark proposals, archived/ → z.archived/ rename, dropping the Orient note) and the /groot-project README templates' retire paragraph.
 
 **Stays here:** /wrapup Phase 3 asking "notes absorbed, plans whose story shipped this session?" and writing the done marker (`status: done`, `done: <date>`, `superseded_by: <path>`, one-line Done banner under the H1); /pm's accuracy review covering notes as well as stories. Sequenced after design-setup, which owns the layout the marker feeds.
