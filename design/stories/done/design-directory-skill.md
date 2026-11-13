@@ -5,7 +5,7 @@ priority: high
 
 # design-directory — one skill that owns a project's design/ directory
 
-*Authored by Claude Fable 5.2 with Derek · Last updated 2026-11-13 10:40.*
+*Authored by Claude Fable 5.2 with Derek · Last updated 2026-11-13 10:50.*
 
 ## Executive summary
 
@@ -34,7 +34,7 @@ priority: high
 - /cleanup-design: `conformance` runs this skill's check; the `archive` bucket became `mark-done` (propose the marker, never move); the note that plans fold into stories is gone; it no longer reads groot-claude-coord. /pm's review runs the sweep before the audit.
 - D1's two debts are paid: groot-claude-coord `design-corpus/DESIGN.md` names these files as the layout's source (committed there by the watcher, `99cae79`), and `design-directory.py selfcheck` sets the tree up in a scratch directory and fails when `backlog-scan` stops calling its directories standard (in `make design-directory-check` and the pre-commit hook; seen failing on an added directory).
 
-Verified: a real sweep in a scratch repo covering a marked note with a space in its name, a nested note, a helping-hand done and one dropped, an untracked marked file, an existing `archived/`, a name collision, a story carrying `status: done` (not moved), a `status: done` inside a fenced example (not moved), links in angle-bracket, `%20`, titled, reference, `superseded_by:` and path-style wiki forms, a link inside fenced code (left alone), root `CLAUDE.md` (repointed and flagged) and `DIARY.md` (left alone); a second run moved nothing. `check` and `sweep --dry-run` on grootPM, plumage, grootOS and warball left `git status` unchanged; grootOS showed two things scratch repos did not, both fixed before commit (files already in `helping-hands/done/` are left there; reference documents at `design/` root are information, not a finding). In a fresh Haiku session `/design-directory cleanup` showed the list and stopped for a yes, and `/cleanup-design conformance` printed the check and wrote nothing.
+Verified: a real sweep in a scratch repo covering a marked note with a space in its name, a nested note, a helping-hand done and one dropped, an untracked marked file, an existing `archived/`, a name collision, a story carrying `status: done` (not moved), a `status: done` inside a fenced example (not moved), links in angle-bracket, `%20`, titled, reference, `superseded_by:` and path-style wiki forms, a link inside fenced code (left alone), root `CLAUDE.md` (repointed and flagged) and `DIARY.md` (left alone); a second run moved nothing. `check` and `sweep --dry-run` on four real projects left `git status` unchanged; the largest showed two things scratch repos did not, both fixed before commit (files already in `helping-hands/done/` are left there; reference documents at `design/` root are information, not a finding). In a fresh Haiku session `/design-directory cleanup` showed the list and stopped for a yes, and `/cleanup-design conformance` printed the check and wrote nothing.
 
 Not verified: a real sweep on a real project (none was run; the first one is Derek's to start), and anything on Titan26.
 
