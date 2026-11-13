@@ -5,12 +5,12 @@ priority: high
 
 # design-directory — one skill that owns a project's design/ directory
 
-*Authored by Claude Fable 5.2 with Derek · Last updated 2026-11-13 10:20.*
+*Authored by Claude Fable 5.2 with Derek · Last updated 2026-11-13 10:40.*
 
 ## Executive summary
 
 **What:** One skill, `/design-directory` (first built as `/design-setup`), that sets up, checks and cleans up a project's design/ and adds templated subdirectories to it.  
-**Where it stands:** built through increment 2 of 3 (2026-11-13): setup, `research`, `check` and `cleanup` work; increment 3 (the sweep and a native check) is being built on Derek's go.  
+**Where it stands:** built through increment 3 of 3 (2026-11-13): setup, `check`, `cleanup`, `sweep` and `research` work, and /groot-project and /cleanup-design call this skill for the layout.  
 **Needs you:** nothing.
 
 ## Decisions
@@ -24,6 +24,19 @@ priority: high
 - D7 · decided 2026-11-13 · the skill is renamed `design-directory`, with no alias; bare does setup, `cleanup` opens /cleanup-design → [D7](#d7-the-name-and-the-verbs--decided-2026-11-13)
 - D8 · decided 2026-11-13 (by default) · once the sweep exists, `cleanup` runs the sweep and then the /cleanup-design audit → [D8](#d8-what-cleanup-runs-once-the-sweep-exists--decided-2026-11-13)
 - D9 · decided 2026-11-13 (by default) · the helping-hands README and the story template also name "the project's owner", not Derek → [D9](#d9-the-other-templates-that-name-derek--decided-2026-11-13)
+- D10 · decided 2026-11-13 (by default) · one `z.archived/` per top-level directory of `design/`, with a nested file keeping its sub-path below it → [D10](#d10-where-a-nested-file-is-archived--decided-2026-11-13)
+
+## Increment 3 (2026-11-13): the sweep and a check of its own
+
+- `design-directory.py sweep` (`d9209a7`) moves Markdown files whose frontmatter says `status: done` (in `helping-hands/`, also `dropped`) into `design/<directory>/z.archived/`, renames an older `archived/`, and repoints links in live `design/` files and root Markdown other than the diary. It never writes a marker, never overwrites, never touches `stories/` or an older `helping-hands/done/`, and builds the dry run and the real run from one plan. It ends by listing plans whose story is in `done/` and that carry no marker; the skill proposes that mark per plan.
+- `design-directory.py check` is read-only and reads the standard from `templates/standard/files/` and `templates/standard/layout.json`, so it runs without groot-claude-coord. It sorts findings into what setup adds, what the sweep moves, and the deliberate class (a root meta-file, older tiers, an undeclared directory), which it reports and never fixes.
+- `/design-directory cleanup` runs the sweep (list, one approval, move) and then the /cleanup-design audit (D8). Bare `/design-directory` runs setup and then the check.
+- /cleanup-design: `conformance` runs this skill's check; the `archive` bucket became `mark-done` (propose the marker, never move); the note that plans fold into stories is gone; it no longer reads groot-claude-coord. /pm's review runs the sweep before the audit.
+- D1's two debts are paid: groot-claude-coord `design-corpus/DESIGN.md` names these files as the layout's source (committed there by the watcher, `99cae79`), and `design-directory.py selfcheck` sets the tree up in a scratch directory and fails when `backlog-scan` stops calling its directories standard (in `make design-directory-check` and the pre-commit hook; seen failing on an added directory).
+
+Verified: a real sweep in a scratch repo covering a marked note with a space in its name, a nested note, a helping-hand done and one dropped, an untracked marked file, an existing `archived/`, a name collision, a story carrying `status: done` (not moved), a `status: done` inside a fenced example (not moved), links in angle-bracket, `%20`, titled, reference, `superseded_by:` and path-style wiki forms, a link inside fenced code (left alone), root `CLAUDE.md` (repointed and flagged) and `DIARY.md` (left alone); a second run moved nothing. `check` and `sweep --dry-run` on grootPM, plumage, grootOS and warball left `git status` unchanged; grootOS showed two things scratch repos did not, both fixed before commit (files already in `helping-hands/done/` are left there; reference documents at `design/` root are information, not a finding). In a fresh Haiku session `/design-directory cleanup` showed the list and stopped for a yes, and `/cleanup-design conformance` printed the check and wrote nothing.
+
+Not verified: a real sweep on a real project (none was run; the first one is Derek's to start), and anything on Titan26.
 
 ## Increment 2 (2026-11-13): the standard tree lives here
 
@@ -35,7 +48,7 @@ priority: high
 
 Verified by the script in scratch repos: an empty repo (ten pieces created, then `research` placed both README lines, `backlog-scan` reports four standard directories, `research` declared, nothing uncategorized); a copy of plumage's `design/` (nothing added); two older-layout repos; a non-git directory (refused, nothing written). A second run changed nothing in each. In a fresh Haiku session, bare `/design-directory` in an empty repo created the tree and filled the DESIGN.md title and one-liner from the README. Not run: /groot-project itself, whose other phases create a GitHub repo and write `~/.shrc`; its Phase 2 path to the script was checked to resolve from both the plugin link and the old per-skill link.
 
-Still owed from D1, with increment 3: the edit to groot-claude-coord `design-corpus/DESIGN.md` pointing at these files, and the test that `backlog-scan`'s standard list matches them. Both wait until the check no longer reads that document.
+The two D1 debts left open here (the groot-claude-coord edit and the `backlog-scan` test) were paid in increment 3.
 
 ## The rename (2026-11-13)
 
@@ -185,9 +198,22 @@ Derek, 2026-11-13 09:59: "go on all four, with one note:  I am thinking it might
 
 **Decided 2026-11-13:** option 1, by default (Claude, as builder; reversible: three lines in two files, `aea45c2`).
 
+### D10. Where a nested file is archived · decided 2026-11-13
+
+**Question:** A marked file in a subfolder, `notes/queue/x.md`: does it go to `notes/z.archived/queue/x.md` or `notes/queue/z.archived/x.md`? The lifecycle story's wording allows both.
+
+**Options:**
+
+1. **One `z.archived/` per top-level directory** — `notes/z.archived/queue/x.md`; the sub-path is kept below it.
+2. **One per folder** — `notes/queue/z.archived/x.md`; a set-aside folder appears in every subfolder that ever finishes a file.
+
+**Recommended:** option 1, because Derek's stated worry about the nested shape was an extra folder in every directory, and option 2 multiplies exactly that.
+
+**Decided 2026-11-13:** option 1, by default (Claude, as builder; reversible before the first real sweep, one line in the script).
+
 ## The ask, as captured
 
-Related (found at triage): `groot-project-conformance-sweep.md` (drafts, 2026-06-20 — the same 'check the project against the standard' idea); [design-directory-lifecycle-in-skills](design-directory-lifecycle-in-skills.md) and [notes-tracker](notes-tracker.md) both change what this skill would absorb.
+Related (found at triage): `groot-project-conformance-sweep.md` (drafts, 2026-06-20 — the same 'check the project against the standard' idea); [design-directory-lifecycle-in-skills](../drafts/design-directory-lifecycle-in-skills.md) and [notes-tracker](../drafts/notes-tracker.md) both change what this skill would absorb.
 
 Asked 2026-11-11 06:27 (via design/ASKS.md):
 
@@ -197,6 +223,6 @@ high — Build a design-setup skill (Derek, 2026-11-10, from grootPM): one skill
 
 2026-11-11 — Derek's answer, relayed 2026-11-11 from the grootPM session at his "go" (to the /pm triage question on ordering): design-setup goes first and absorbs the design-directory lifecycle story's /groot-project and /cleanup-design changes, so those are not written twice.
 
-**What moves into design-setup** (from [design-directory-lifecycle-in-skills](design-directory-lifecycle-in-skills.md)):
+**What moves into design-setup** (from [design-directory-lifecycle-in-skills](../drafts/design-directory-lifecycle-in-skills.md)):
 - /cleanup-design's archive sweep: move files marked `status: done` into `<dir>/z.archived/` in bulk, repoint links in live files, per-item mark proposals only on computed signals (a plan whose story is in `done/`), rename an existing `archived/` to `z.archived/` and recognise both, drop the Orient note that plans fold into stories.
 - /groot-project's notes, plans and helping-hands README templates gaining the retire paragraph (these become design-setup's template files).
