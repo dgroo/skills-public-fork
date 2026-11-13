@@ -93,6 +93,7 @@ A subagent prompt should give the subagent enough context to make good calls wit
 - **What's being accomplished.** The actual goal in one or two sentences. Not "search for X" — "find where X is set so we can decide whether to refactor Y, which depends on X's lifecycle."
 - **What's been ruled out / decided already.** If the parent already considered and rejected approach A, say so. Otherwise the subagent will independently rediscover A and propose it.
 - **Constraints from the current conversation.** Style conventions, taste calls, scope boundaries the parent has been honoring. ("Don't propose changes to `legacy/` — that subtree is frozen.")
+- **For a build or fix brief, the observed failure and its symptom text, not the hypothesis.** "The search returns no hits and the index file is missing", not "stale index": a brief that names a guess gets a fix for the guess.
 - **Result shape expectations.** "Return a list of file paths with one-line summaries" vs "return a markdown plan doc" vs "return yes/no with citation". The subagent will optimize toward whatever shape it thinks fits; pin it down.
 - **Tool constraints if relevant.** "Read-only, don't edit anything." "WebFetch is denied in this session, don't try." "Stay out of `node_modules/`."
 
