@@ -5,12 +5,12 @@ priority: high
 
 # design-directory — one skill that owns a project's design/ directory
 
-*Authored by Claude Fable 5.2 with Derek · Last updated 2026-11-13 10:10.*
+*Authored by Claude Fable 5.2 with Derek · Last updated 2026-11-13 10:20.*
 
 ## Executive summary
 
 **What:** One skill, `/design-directory` (first built as `/design-setup`), that sets up, checks and cleans up a project's design/ and adds templated subdirectories to it.  
-**Where it stands:** increment 1 of 3 built and renamed (2026-11-13): `research`, `check` and `cleanup` work; increments 2 and 3 are being built on Derek's go.  
+**Where it stands:** built through increment 2 of 3 (2026-11-13): setup, `research`, `check` and `cleanup` work; increment 3 (the sweep and a native check) is being built on Derek's go.  
 **Needs you:** nothing.
 
 ## Decisions
@@ -23,6 +23,19 @@ priority: high
 - D6 · decided 2026-11-11 (by default) · the README trust line reads "the entries above it"; Empathy's "(trial, 2026-11-10)" is dropped → [D6](#d6-wording-of-the-two-readme-lines--decided-2026-11-11)
 - D7 · decided 2026-11-13 · the skill is renamed `design-directory`, with no alias; bare does setup, `cleanup` opens /cleanup-design → [D7](#d7-the-name-and-the-verbs--decided-2026-11-13)
 - D8 · decided 2026-11-13 (by default) · once the sweep exists, `cleanup` runs the sweep and then the /cleanup-design audit → [D8](#d8-what-cleanup-runs-once-the-sweep-exists--decided-2026-11-13)
+- D9 · decided 2026-11-13 (by default) · the helping-hands README and the story template also name "the project's owner", not Derek → [D9](#d9-the-other-templates-that-name-derek--decided-2026-11-13)
+
+## Increment 2 (2026-11-13): the standard tree lives here
+
+- The six design templates and the `DESIGN.md` skeleton that were embedded in /groot-project's SKILL.md are files under `skills/design-directory/templates/standard/files/`, laid out as they land in `design/` (`ea9b193`). They are the embedded blocks unescaped; the one repair is the stories README's frontmatter fence, mangled in the embedded copy and correct in deployed projects. /groot-project's SKILL.md went from 1,089 lines to 811.
+- `design-directory.py setup` creates what is missing and nothing else. It never overwrites; a `.gitkeep` goes only into a directory it creates; a project whose `stories/` has the older tier names gets nothing added under `stories/`; outside a git repository it refuses unless given `--project`. `standard` is not accepted as an optional template.
+- Bare `/design-directory` runs setup. /groot-project Phase 2 runs the same script and keeps its misplaced-file migration.
+- The notes, plans and helping-hands READMEs each gained the retire paragraph from the lifecycle story (`a0c460b`): mark done where it sits, a sweep moves marked files to `z.archived/` later, nothing unmarked moves.
+- D4 applied to Do Research, and D9 to two more templates (`aea45c2`).
+
+Verified by the script in scratch repos: an empty repo (ten pieces created, then `research` placed both README lines, `backlog-scan` reports four standard directories, `research` declared, nothing uncategorized); a copy of plumage's `design/` (nothing added); two older-layout repos; a non-git directory (refused, nothing written). A second run changed nothing in each. In a fresh Haiku session, bare `/design-directory` in an empty repo created the tree and filled the DESIGN.md title and one-liner from the README. Not run: /groot-project itself, whose other phases create a GitHub repo and write `~/.shrc`; its Phase 2 path to the script was checked to resolve from both the plugin link and the old per-skill link.
+
+Still owed from D1, with increment 3: the edit to groot-claude-coord `design-corpus/DESIGN.md` pointing at these files, and the test that `backlog-scan`'s standard list matches them. Both wait until the check no longer reads that document.
 
 ## The rename (2026-11-13)
 
@@ -158,6 +171,19 @@ Derek, 2026-11-13 09:59: "go on all four, with one note:  I am thinking it might
 **Recommended:** option 1, because Derek reaches for one word, "cleanup", and the sweep is the mechanical half of it. Rejected: 2 because it puts back a second thing to remember.
 
 **Decided 2026-11-13:** option 1, by default (Claude, as builder; reversible: one routing line).
+
+### D9. The other templates that name Derek · decided 2026-11-13
+
+**Question:** D4 covered Do Research; the helping-hands README ("Tasks that need Derek's hands") and the story template (the `with Derek` stamp, `(Derek: "…")` in the decision comment) name him too. Same treatment?
+
+**Options:**
+
+1. **Neutralise them** — "the project owner's hands", `with <owner>`, `(<owner>: "…")`. Derek's own new projects get the placeholder, which a session fills with his name. The `derek(<source>)` mark syntax stays: tools match on it.
+2. **Leave them** — a Pod set up by someone else gets files naming Derek.
+
+**Recommended:** option 1, for D4's reason: the skill's audience includes someone who is not Derek.
+
+**Decided 2026-11-13:** option 1, by default (Claude, as builder; reversible: three lines in two files, `aea45c2`).
 
 ## The ask, as captured
 
