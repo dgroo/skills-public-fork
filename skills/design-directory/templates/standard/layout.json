@@ -8,6 +8,10 @@
   },
   "meta_files_note": "Each lives in design/ and is created by the skill that first writes it, so a missing one is not a finding. One at the repo root is the older location.",
   "other_design_root_files": ["HUMAN-REVIEW.md"],
+  "tool_owned_dirs": {
+    "vfcomments": "comment threads on design documents, written by the VF Comments Obsidian plugin and the agents that follow its rule"
+  },
+  "tool_owned_dirs_note": "Directories a tool creates in design/ wherever it is used. A project does not declare them and the check does not judge them.",
   "stories_dir": "stories",
   "story_tiers": ["drafts", "ready", "done"],
   "legacy_story_tiers": ["llm_generated", "user_updated", "z.done"],

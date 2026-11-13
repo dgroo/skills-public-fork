@@ -921,6 +921,8 @@ def cmd_check(root):
         )
         rule = " (%s is not on this machine, so the fleet's optional list was not consulted)" % READER_COMMAND
     for name in undeclared:
+        if name in LAYOUT["tool_owned_dirs"]:
+            continue
         deliberate.append(
             "design/%s/ is not a standard directory and design/README.md does not name it%s. Name it there with its reason, fold it into notes/ or plans/, or set it aside."
             % (name, rule)
