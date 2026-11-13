@@ -23,8 +23,8 @@ Adapted from a friend's `/meta-feedback` skill (itself a colleague's end-of-sess
 | --- | --- |
 | `/meta-feedback` | Run the lookback now; present proposals; apply the ones Derek picks. |
 | `/meta-feedback file` | Run the lookback; write a central report; ask nothing. **What `/wrapup` calls** — a hurried wrap never has to evaluate anything, but major findings get a one-line flag. Zero findings → writes nothing. |
-| `/meta-feedback review` | Collate every open report into `design/meta-feedback/REVIEW.md`: one heading per proposal, a stated recommendation on each, tick-boxes per item and per section. Asks nothing in the terminal; Derek reviews in Obsidian. `/sup` suggests this whenever reports are pending and newer than the page. |
-| `/meta-feedback apply` | Read `REVIEW.md`: act on every ticked box and `derek:` comment, log each to the ledger, drop the item from the page, delete each report once nothing in it is open. |
+| `/meta-feedback review` | Collate every open report into `design/meta-feedback/META-FEEDBACK-REVIEW.md`: one heading per proposal, a stated recommendation on each, tick-boxes per item and per section. Asks nothing in the terminal; Derek reviews in Obsidian. `/sup` suggests this whenever reports are pending and newer than the page. |
+| `/meta-feedback apply` | Read `META-FEEDBACK-REVIEW.md`: act on every ticked box and `derek:` comment, log each to the ledger, drop the item from the page, delete each report once nothing in it is open. |
 | `/meta-feedback help` | Print usage (see Help section). |
 
 ## Signal rules
@@ -86,13 +86,13 @@ Every non-skip outcome appends one line to the ledger: `<date> · <project> · <
 All reports go to **one central place** so a project Derek stops working on can't strand them: `design/meta-feedback/` in the remote-coding capture repo (the repo named in global CLAUDE.md's "Cross-project capture" rule). It's live-synced across hosts, and `/sup` checks it from any project.
 
 - **Report:** `design/meta-feedback/<YYYY-MM-DD>-<project>-<slug>.md` (slug = the session topic, kebab-case, 2–4 words). The design-sync watcher owns commits under `design/` there — don't hand-craft a `docs(design)` commit.
-- **Review page:** `design/meta-feedback/REVIEW.md`, the one page Derek answers (format below); same watcher-owned commits.
+- **Review page:** `design/meta-feedback/META-FEEDBACK-REVIEW.md`, the one page Derek answers (format below); same watcher-owned commits.
 - **Ledger:** `design/meta-feedback/LEDGER.md` — one line per disposed proposal, newest first. The recurrence and declined checks (rules 5, 6, 8) grep it; cross-project recurrence is the promote-to-global signal.
 - Keep report content to _process_. Don't copy project data, credentials, or customer content into a report — it lands in a different repo than the session's.
 
 ## Review page
 
-`design/meta-feedback/REVIEW.md`, beside the reports. Modelled on the dashboard project's `design/NEEDS-DEREK.md` page: Derek reads and answers it in Obsidian, so everything he can act on is a heading (it lands in the Outline) with tick-boxes under it, and his comments are `derek:` HTML comments per the global inline-review-marks convention.
+`design/meta-feedback/META-FEEDBACK-REVIEW.md`, beside the reports. Modelled on the dashboard project's `design/NEEDS-DEREK.md` page: Derek reads and answers it in Obsidian, so everything he can act on is a heading (it lands in the Outline) with tick-boxes under it, and his comments are `derek:` HTML comments per the global inline-review-marks convention.
 
 - **Header:** H1, provenance stamp, a "How to answer" paragraph (tick an item, tick a section, or comment; what `apply` does with each), then the collation date and report count.
 - **Sections** (`## A. <one-line theme>`): proposals clustered by the entry or mechanism they touch, so a rule three reports want changed is one rewrite, not three items. Each opens with the source-report links (relative) and the target file, then `- [ ] approve every recommendation in this section`.
@@ -153,7 +153,7 @@ Verbs:
   file              Run the lookback; write a report to the capture repo's
                     design/meta-feedback/. Asks nothing; flags major findings
                     in one line. What /wrapup calls. Zero findings -> nothing.
-  review            Collate open reports into design/meta-feedback/REVIEW.md:
+  review            Collate open reports into design/meta-feedback/META-FEEDBACK-REVIEW.md:
                     a heading per proposal with a stated recommendation and
                     tick-boxes per item and per section, for review in
                     Obsidian. Asks nothing in the terminal.
