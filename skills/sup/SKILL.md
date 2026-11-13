@@ -294,6 +294,7 @@ Add these lines to the sitrep report, right after Next steps. **Placement caveat
   - TODO: prune the done-log — small, self-contained ( 2 )
   ```
 - **Human-review:** Only when `backlog-scan`'s `HUMAN-REVIEW (open)` count is >0 _and_ something survives the confidence filter (see Rules). Render as a **gentle gate**, never do-now pressure and never as the Pick — e.g. `👀 N item(s) waiting for your eyes (non-blocking) — want the list, or skip?`. Omit entirely when 0 or when nothing survives.
+- **For you:** Run `backlog-scan --for-you` and render one line from its three counts, e.g. `📬 For you: 6 waiting on you · 4 new · 9 changed (last 3 days)`, then up to three of the waiting items, each with its reason and a link to the document. These are Derek's to read or decide, never Pick candidates. Omit the line when all three counts are zero; when the output says the new-and-changed scan failed, say that instead of showing zeros. (Trial from 2026-11-13: the ranking is being tuned from Derek's reading of it; design in the remote-coding repo, `design/stories/ready/vf-design-obsidian-plugin.md`.)
 
 If nothing's queued anywhere, render: `**Backlog:** Nothing obvious queued — what would you like to work on?` and skip the Picks list.
 
