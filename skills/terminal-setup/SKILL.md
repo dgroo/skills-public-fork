@@ -163,8 +163,8 @@ The chpwd + precmd plumbing lives in `~/.shrc` (block labeled "Claude terminal s
    ${CLAUDE_SKILL_DIR}/terminal-setup.py <project> --color <N> --alias <alias>
    ```
 
-   Or with `--no-alias` to skip the alias. The script will:
-   - Write `[terminal].background` (and `alias`) to `./.groot-project.toml`. If a legacy `[iterm]` block exists, it's removed in the same pass.
+   Or with `--no-alias` to skip adding a shell alias. `--no-alias` touches only `~/.shrc`: an alias already recorded in `[terminal].alias` is kept. The script will:
+   - Write `[terminal].background` (and `alias`, when `--alias` is given; otherwise the recorded alias is kept) to `./.groot-project.toml`. If a legacy `[iterm]` block exists, it's removed in the same pass.
    - Pick the right alias body. If `~/.shrc` (or `~/.zshrc`) contains `alias code='cd ~/code'` AND the target is a direct child of `~/code/`, it uses the `'code;cd <project>'` shorthand. Otherwise falls back to `'cd ~/<rel>'` for paths under `$HOME`, or `'cd <abs>'`.
    - Insert the alias after `alias code='cd ~/code'` when present (clusters with existing nav aliases); otherwise appends at end of file. Idempotent.
    - Warn (not overwrite) if a different alias with the same name already exists.
@@ -214,7 +214,7 @@ Other top-level sections are preserved verbatim by the write helper. Unknown key
 Helper flags on `terminal-setup.py`:
 
 - `--groot-toml-read [DIR]` — print `[terminal]` (or translated `[iterm]`) as `KEY=VALUE` lines. Default cwd; empty output if file/section absent; exit 1 on malformed TOML.
-- `--groot-toml-write [DIR] --hex #RRGGBB [--alias NAME] [--groot-toml-write-name]` — standalone (does NOT run the picker); merges into existing file, removes legacy `[iterm]`, preserves other sections, normalizes color to uppercase.
+- `--groot-toml-write [DIR] --hex #RRGGBB [--alias NAME] [--groot-toml-write-name]` — standalone (does NOT run the picker); merges into existing file, keeps a recorded `alias` unless `--alias` names a new one, removes legacy `[iterm]`, preserves other sections, normalizes color to uppercase.
 - `--migrate-toml [DIR-or-FILE]` — standalone migration of `[iterm]` → `[terminal]`; prints `migrated <path>` / `already-current <path>` / `no-file <path>`.
 
 ## Help

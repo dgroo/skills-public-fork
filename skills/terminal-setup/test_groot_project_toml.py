@@ -345,6 +345,44 @@ def test_write_rejects_invalid_name(tmp_path: Path) -> None:
         )
 
 
+# --- CLI: --groot-toml-write keeps a recorded alias -------------------------
+
+
+def test_cli_write_keeps_recorded_alias_until_a_new_one_is_given(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Round trip through the CLI: the writer takes full intended state, so the
+    --groot-toml-write path must seed the recorded alias before writing."""
+    path = tmp_path / ".groot-project.toml"
+    path.write_text('[terminal]\nbackground = "#112233"\nalias = "x"\n')
+
+    # Recolor without --alias: the recorded alias survives.
+    assert (
+        terminal_setup.main(["--groot-toml-write", str(tmp_path), "--hex", "#445566"])
+        == 0
+    )
+    assert read_groot_project_terminal(path) == {"background": "#445566", "alias": "x"}
+
+    # --no-alias is shell-only: it doesn't erase the recorded alias either.
+    assert (
+        terminal_setup.main(
+            ["--groot-toml-write", str(tmp_path), "--hex", "#445566", "--no-alias"]
+        )
+        == 0
+    )
+    assert read_groot_project_terminal(path) == {"background": "#445566", "alias": "x"}
+
+    # A new --alias replaces it.
+    assert (
+        terminal_setup.main(
+            ["--groot-toml-write", str(tmp_path), "--hex", "#445566", "--alias", "y"]
+        )
+        == 0
+    )
+    assert read_groot_project_terminal(path) == {"background": "#445566", "alias": "y"}
+    capsys.readouterr()
+
+
 # --- migrate_groot_project_toml --------------------------------------------
 
 

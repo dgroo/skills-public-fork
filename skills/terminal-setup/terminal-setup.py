@@ -39,7 +39,10 @@ except ImportError:  # pre-3.11 python: never degrade silently
     try:
         import tomli as tomllib  # type: ignore[no-redef]
     except ImportError:
-        print(f"{Path(sys.argv[0]).name}: python {sys.version.split()[0]} has no tomllib; cannot read .groot-project.toml", file=sys.stderr)
+        print(
+            f"{Path(sys.argv[0]).name}: python {sys.version.split()[0]} has no tomllib; cannot read .groot-project.toml",
+            file=sys.stderr,
+        )
         sys.exit(2)
 
 DEFAULT_PALETTE_SIZE = 14
@@ -1157,7 +1160,12 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         help="Add `alias NAME='cd <cwd>'` to ~/.shrc (or ~/.zshrc as fallback). Idempotent.",
     )
     parser.add_argument(
-        "--no-alias", action="store_true", help="Skip the alias step entirely."
+        "--no-alias",
+        action="store_true",
+        help=(
+            "Don't add a shell alias to ~/.shrc. Shell-only: an alias already "
+            "recorded in [terminal].alias is kept."
+        ),
     )
     parser.add_argument(
         "--force-alias",
@@ -1196,7 +1204,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         metavar="DIR",
         help=(
             "Write [terminal] to <DIR>/.groot-project.toml (default cwd) using "
-            "--hex (required), --alias (optional), and the positional name as "
+            "--hex (required), --alias (optional; without it a recorded alias "
+            "is kept), and the positional name as "
             "the terminal.name field if explicitly passed. Removes any legacy "
             "[iterm] block. Standalone — does not run the picker. Exits 0."
         ),
@@ -1275,7 +1284,16 @@ def run(args: argparse.Namespace) -> int:
             )
         # Validate via the existing hex parser; store the canonical form.
         hex_to_rgb(args.hex_color)
+        toml_path = Path(args.groot_toml_write) / GROOT_PROJECT_TOML_NAME
+        # The writer takes the full intended state, so seed the recorded alias
+        # first: a run without --alias must keep it, not silently drop it.
+        try:
+            recorded_terminal = read_groot_project_terminal(toml_path) or {}
+        except GrootProjectTomlError:
+            recorded_terminal = {}
         terminal: dict = {"background": args.hex_color}
+        if "alias" in recorded_terminal:
+            terminal["alias"] = recorded_terminal["alias"]
         if args.alias:
             validate_alias_name(args.alias)
             terminal["alias"] = args.alias
@@ -1285,7 +1303,6 @@ def run(args: argparse.Namespace) -> int:
                     "--groot-toml-write-name requires the positional name argument."
                 )
             terminal["name"] = args.name
-        toml_path = Path(args.groot_toml_write) / GROOT_PROJECT_TOML_NAME
         status = write_groot_project_terminal(toml_path, terminal)
         print(f"{status} {toml_path}")
         return 0
