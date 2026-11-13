@@ -28,3 +28,9 @@ Filed entries surface as a one-liner only: `Filed: <title> — see design/helpin
 ## Just-in-time, not session-start
 
 When picking up work, check whether any open helping-hands item is referenced as a blocker by the current task, its parent story, or its plan. If so, name the specific blocker before pressing on. Do not auto-scan the directory at session start.
+
+## When an item is done
+
+Set `status: done` (or `dropped`) and `resolved: <date>` in the frontmatter, and add one line under the H1: `> **Resolved <date>.** <what was done or decided>`.
+
+A resolved item stays here until a cleanup sweep moves it into `z.archived/`, which is read only when asked. Nothing unmarked is ever moved, and there is no `done/` directory to move it to by hand.
