@@ -4,6 +4,16 @@ Latest entries first. Record significant decisions, architecture changes, and no
 
 ---
 
+## 2026-11-13 — `/design-directory`: rename, the standard tree, the sweep
+
+Derek said go on all four open decisions and asked for the skill to be named for the directory, because he could never find `/cleanup-design` among the design-named skills. So `/design-setup` became `/design-directory` two days after it shipped, with `cleanup` as a door to the audit, and the remaining two increments were built the same morning.
+
+The decision that shaped the rest was the layout's source. Three places described the standard `design/` (the templates embedded in `/groot-project`, groot-claude-coord's DESIGN.md that conformance read at run time, and `backlog-scan`'s lists), and the one chosen is the only one that can create a file and that travels to a machine without Derek's other repos: a tree of plain files under `templates/standard/files/`, with a small `layout.json` for what a tree cannot say. `/groot-project` now calls the script instead of carrying 280 lines of escaped Markdown, and the DESIGN.md in groot-claude-coord says the files win where it disagrees. The reader stays normative for how a corpus is judged; a `selfcheck` that sets the tree up in a scratch directory and asks `backlog-scan` what it sees is what keeps the two from drifting, and it runs in the pre-commit hook.
+
+The line between the two skills came out as: where a file belongs is `/design-directory`'s, what a file says is `/cleanup-design`'s. That put the `z.archived/` sweep here. It is the first thing in this skill that moves files a project already has, so it is deliberately narrow: it moves only what a session has already marked done, never writes a marker itself, never overwrites, and shows the same plan it then executes. Running it read-only against one of the larger real projects before committing was worth more than the scratch cases: it would have re-filed nine helping-hands already sitting in an older `done/` directory, and the check called six reference documents at `design/` root misplaced. Both were the "manufactured conformance churn" the old conformance mode warned about, and both were softened before the commit.
+
+One thing to know later: the first real sweep on a real project has not been run. The nested shape (one `z.archived/` per top-level directory, sub-paths kept below it) was taken by default and is cheap to change until then.
+
 ## 2026-11-11 — `/design-setup` first increment, and the skills index
 
 Two items Derek had said go on that morning sat recorded and unassigned until he asked why he could not use `design-setup` yet. Both were built in one session spawned by the grootPM session.
