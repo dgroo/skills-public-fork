@@ -1,7 +1,7 @@
 ---
 name: relay-setup
 description: Initialize a project for the Cross-Host Relay — the cross-host Claude Code handoff protocol that lets two CCs on different machines pass work to each other via git commits, without a human relaying messages by hand. Creates `design/relay/STATE.md`, `design/relay/handoffs/`, `design/relay/config.toml`, and the `.gitignore` entries needed. Run once per project that participates in the relay. Idempotent (refuses to clobber if already initialized). Use when asked to "set up the relay", "initialize relay", "enable cross-host handoff", or `/relay-setup`.
-argument-hint: [--hosts host1,host2] [--branch BRANCH] [--initial-active HOST]
+argument-hint: "[--hosts host1,host2] [--branch BRANCH] [--initial-active HOST]"
 summary: "Initializes design/relay/ so two hosts can hand work between Claude sessions through git."
 group: project
 ---

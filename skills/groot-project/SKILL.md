@@ -1,7 +1,7 @@
 ---
 name: groot-project
-description: Bootstrap a project the Derek way — git, design/ subtree (incl. stories/ with readiness-by-directory: drafts/ ready/ done/), CLAUDE.md skeleton with a shared-memory conventions block, Makefile, terminal background color (via /terminal-setup), themed spinner verbs, GitHub remote + mirror on both fleet hosts by default. Coexists with /project-setup and gstack; detects collisions and never clobbers. Re-runnable.
-argument-hint: [status|--auto|--public]
+description: "Bootstrap a project the Derek way — git, design/ subtree (incl. stories/ with readiness-by-directory: drafts/ ready/ done/), CLAUDE.md skeleton with a shared-memory conventions block, Makefile, terminal background color (via /terminal-setup), themed spinner verbs, GitHub remote + mirror on both fleet hosts by default. Coexists with /project-setup and gstack; detects collisions and never clobbers. Re-runnable."
+argument-hint: "[status|--auto|--public]"
 summary: "Bootstraps a project's git, design/, CLAUDE.md, Makefile, terminal color and remotes; safe to re-run."
 group: project
 ---
