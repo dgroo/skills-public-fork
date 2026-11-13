@@ -3,29 +3,30 @@ author: user
 priority: high
 ---
 
-# design-setup — one skill that owns a project's design/ directory
+# design-directory — one skill that owns a project's design/ directory
 
-*Authored by Claude Fable 5.2 with Derek · Last updated 2026-11-11 13:55.*
+*Authored by Claude Fable 5.2 with Derek · Last updated 2026-11-13 10:10.*
 
 ## Executive summary
 
-**What:** One skill, `/design-setup`, that checks a project's design/ against the standard and adds templated subdirectories to it.  
-**Where it stands:** built through increment 1 of 3 (2026-11-11): `research` and `check` work; the absorptions are open.  
-**Needs you:**
-
-- **Decide** D1: which copy of the layout is the source; recommended, the skill's template files.
-- **Decide** D2: move /groot-project's six design templates into this skill as increment 2; recommended yes.
-- **Decide** D3: build the archive sweep here and make conformance native as increment 3; recommended yes.
-- **Decide** D4: make the Do Research template say "the project's owner" where it says Derek; recommended yes.
+**What:** One skill, `/design-directory` (first built as `/design-setup`), that sets up, checks and cleans up a project's design/ and adds templated subdirectories to it.  
+**Where it stands:** increment 1 of 3 built and renamed (2026-11-13): `research`, `check` and `cleanup` work; increments 2 and 3 are being built on Derek's go.  
+**Needs you:** nothing.
 
 ## Decisions
 
-- D1 · open · the skill's template files become the source of the layout (recommended) → [D1](#d1-which-copy-of-the-layout-is-the-source--open)
-- D2 · open · /groot-project's design-subtree phase moves here as increment 2 (recommended) → [D2](#d2-absorb-groot-projects-design-subtree-phase--open)
-- D3 · open · the archive sweep is built here and conformance becomes native, as increment 3 (recommended) → [D3](#d3-the-archive-sweep-and-conformance-move-here--open)
-- D4 · open · neutralise the three "Derek" mentions and the stamp in the skill's Do Research copy (recommended) → [D4](#d4-the-do-research-template-names-derek--open)
+- D1 · decided 2026-11-13 · the skill's template files are the source of the layout → [D1](#d1-which-copy-of-the-layout-is-the-source--decided-2026-11-13)
+- D2 · decided 2026-11-13 · all six /groot-project design templates move here in one increment → [D2](#d2-absorb-groot-projects-design-subtree-phase--decided-2026-11-13)
+- D3 · decided 2026-11-13 · the archive sweep is built here and conformance becomes this skill's own → [D3](#d3-the-archive-sweep-and-conformance-move-here--decided-2026-11-13)
+- D4 · decided 2026-11-13 · the skill's Do Research copy says "the project's owner" and drops the stamp → [D4](#d4-the-do-research-template-names-derek--decided-2026-11-13)
 - D5 · decided 2026-11-11 (by default) · a template is a directory of plain files and a Python script places it → [D5](#d5-shape-of-a-template--decided-2026-11-11)
 - D6 · decided 2026-11-11 (by default) · the README trust line reads "the entries above it"; Empathy's "(trial, 2026-11-10)" is dropped → [D6](#d6-wording-of-the-two-readme-lines--decided-2026-11-11)
+- D7 · decided 2026-11-13 · the skill is renamed `design-directory`, with no alias; bare does setup, `cleanup` opens /cleanup-design → [D7](#d7-the-name-and-the-verbs--decided-2026-11-13)
+- D8 · decided 2026-11-13 (by default) · once the sweep exists, `cleanup` runs the sweep and then the /cleanup-design audit → [D8](#d8-what-cleanup-runs-once-the-sweep-exists--decided-2026-11-13)
+
+## The rename (2026-11-13)
+
+`skills/design-setup/` became `skills/design-directory/` (`b2b4315`), the script `design-directory.py`. `/design-directory cleanup [args]` invokes /cleanup-design and passes the arguments on. Bare `/design-directory` is still `check` until increment 2 gives it standard templates to set up from (by default, Claude as builder: a setup verb with nothing to set up would only report). Verified in a fresh Haiku session on Rocinante26 in a scratch repo: the picker lists it as `/vfs:design-directory (design-directory)`; typing bare `/design-directory help`, `research` and `cleanup help` each ran; a second `research` run by the script left `git status` empty. The names below this section that say `design-setup` are the record of increment 1 as it was built.
 
 ## What is built (increment 1, 2026-11-11)
 
@@ -42,7 +43,7 @@ Not in this increment, by instruction: D1, D2, D3.
 
 ## Decision records
 
-### D1. Which copy of the layout is the source · open
+### D1. Which copy of the layout is the source · decided 2026-11-13
 
 **Question:** Three places describe the standard design/ layout today; which one do the other two read from?
 
@@ -56,7 +57,9 @@ Derek, in the ask: "Decide in the story which copy of the layout stays the sourc
 
 **Recommended:** option 1, because it is the only copy that travels with the skill to someone who is not Derek, and it is the copy that actually creates the files. Rejected: 2 because conformance already skips itself when groot-claude-coord is absent; 3 because a list of names cannot produce a README.
 
-### D2. Absorb /groot-project's design-subtree phase · open
+**Decided 2026-11-13:** option 1. Derek: "go on all four, with one note:  I am thinking it might be easier for me if we had a "/design-directory" skill instead of "/design-setup" that by default does setup, but also allows for "/design-directory cleanup" (calls cleanup-design, which I can never remember or find in the long list of design named skills), and "/design-directory research" which would create our research directory, etc."
+
+### D2. Absorb /groot-project's design-subtree phase · decided 2026-11-13
 
 **Question:** Should the six design templates embedded in /groot-project's SKILL.md move into this skill's `templates/`, with /groot-project calling `/design-setup` for that phase?
 
@@ -69,7 +72,9 @@ Derek, in the ask: "It absorbs /groot-project's design-subtree phase (groot-proj
 
 **Recommended:** option 1, as increment 2 and only after D1, because the templates are the layout and moving them piecemeal keeps the third copy this skill exists to remove. Rejected: 2 because the half-moved state is the drift Derek named.
 
-### D3. The archive sweep and conformance move here · open
+**Decided 2026-11-13:** option 1. Derek: "go on all four".
+
+### D3. The archive sweep and conformance move here · decided 2026-11-13
 
 **Question:** Is the `z.archived/` sweep built in this skill, and does the conformance check become this skill's own instead of a call to /cleanup-design?
 
@@ -83,7 +88,9 @@ Derek's answer relayed 2026-11-11: design-setup "absorbs the design-directory li
 
 **Recommended:** option 1, as increment 3 after D1 and D2, because where a file belongs is a question about the directory and what a file says is a question about the corpus, and that is the line between the two skills. Rejected: 2 because `check` would still depend on groot-claude-coord; 3 because it writes the sweep twice.
 
-### D4. The Do Research template names Derek · open
+**Decided 2026-11-13:** option 1. Derek: "go on all four". What `cleanup` then runs is D8.
+
+### D4. The Do Research template names Derek · decided 2026-11-13
 
 **Question:** The template was copied from Empathy unchanged, as instructed; should the skill's copy be made owner-neutral?
 
@@ -95,6 +102,8 @@ It is not fully project-neutral. It names Derek three times ("propose it to Dere
 2. **Leave it** — byte-identical to Empathy's; a Pod set up by someone else gets a file telling sessions to propose research to Derek.
 
 **Recommended:** option 1, because the skill's stated audience is someone who is not Derek. Rejected: 2 because the first non-Derek use would need a hand edit the skill says not to make on the way in.
+
+**Decided 2026-11-13:** option 1. Derek: "go on all four".
 
 ### D5. Shape of a template · decided 2026-11-11
 
@@ -121,6 +130,34 @@ It is not fully project-neutral. It names Derek three times ("propose it to Dere
 **Recommended:** option 1, because the item is inserted after `plans/` in whatever list the project has.
 
 **Decided 2026-11-11:** option 1, by default (Claude, as builder; reversible: the lines are two one-line files).
+
+### D7. The name and the verbs · decided 2026-11-13
+
+**Question:** What is the skill called, and what do its bare form and `cleanup` do?
+
+Derek, 2026-11-13 09:59: "go on all four, with one note:  I am thinking it might be easier for me if we had a "/design-directory" skill instead of "/design-setup" that by default does setup, but also allows for "/design-directory cleanup" (calls cleanup-design, which I can never remember or find in the long list of design named skills), and "/design-directory research" which would create our research directory, etc."
+
+**Options:**
+
+1. **Rename to `design-directory`, no alias** — bare sets up (adds what the standard has and the project lacks, never overwriting, and says what is off); `check` stays the read-only form; `cleanup` opens /cleanup-design; `research` and later templates are verbs of the same shape.
+2. **Keep `design-setup` and add `design-directory` beside it** — a second design-named entry in the list, which is the complaint.
+
+**Recommended:** option 1, because his reason is finding it in "the long list of design named skills".
+
+**Decided 2026-11-13:** option 1. The name is Derek's; the reading of the verbs (a rename and not a second skill, bare as setup, `cleanup` as a door and not a copy, "etc." as further templates) is the grootPM session's, relayed with his words.
+
+### D8. What `cleanup` runs once the sweep exists · decided 2026-11-13
+
+**Question:** After D3 moves the archive sweep here, does `/design-directory cleanup` run the sweep as well as the /cleanup-design audit?
+
+**Options:**
+
+1. **Sweep, then audit** — `cleanup` first moves what is already marked done into `z.archived/` (computed, shown before it moves), then opens the /cleanup-design audit of what the documents say; `sweep` alone stays available.
+2. **Audit only** — `cleanup` is exactly /cleanup-design; the sweep is a separate verb to remember.
+
+**Recommended:** option 1, because Derek reaches for one word, "cleanup", and the sweep is the mechanical half of it. Rejected: 2 because it puts back a second thing to remember.
+
+**Decided 2026-11-13:** option 1, by default (Claude, as builder; reversible: one routing line).
 
 ## The ask, as captured
 
