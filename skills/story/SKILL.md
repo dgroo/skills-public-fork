@@ -116,4 +116,4 @@ See SKILL.md for full reference.
 - **`/ponder`** — the developer of these stubs: explore, think in options, write the real story. `/story` is deliberately the un-`/ponder`: capture without thinking.
 - **`/todo`** — concrete bugs/tasks with priorities; different lane.
 - **`/pm <text>`** — the door when the size is not obvious or the work may already be on file: it checks existing stories by content, files in this stub format when the ask is new and story-sized, and puts it on the ask queue.
-- **`/groot-project`** — owns the `design/stories/` convention (readiness-by-directory, `STORY_TEMPLATE.md`) this skill files into.
+- **`/design-directory`** — owns the `design/stories/` convention (readiness-by-directory, `STORY_TEMPLATE.md`) this skill files into.

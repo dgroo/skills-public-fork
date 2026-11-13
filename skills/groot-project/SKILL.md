@@ -61,7 +61,7 @@ Each phase has one of three modes: **auto-default-Y** (skill announces and proce
 | #   | Phase                           | Mode                        | What it does                                                                                                        |
 | --- | ------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | 1   | Git init                        | auto-default-Y              | `git init` if not a repo. Skip otherwise.                                                                           |
-| 2   | `design/` subtree               | auto-default-Y              | Create missing pieces of the canonical subtree.                                                                     |
+| 2   | `design/` subtree               | auto-default-Y              | Run `/design-directory`'s setup script: creates the missing pieces of the standard subtree.                         |
 | 3   | Project docs skeleton           | auto-default-Y              | Generate `CLAUDE.md`, `DIARY.md`, and `TODO.md` if missing.                                                         |
 | 3B  | Project goals block             | always-asks                 | Fill or retrofit the CLAUDE.md `## Project goals` block — four-question interview, draft-first on existing projects. |
 | 4   | Office-hours import             | auto-default-Y              | If a design doc exists, layer its content into DESIGN.md and CLAUDE.md.                                             |
@@ -83,27 +83,15 @@ If `git rev-parse --is-inside-work-tree` fails, run `git init`. Print one line: 
 
 ### Phase 2: `design/` subtree
 
-Create the canonical subtree, leaving any existing pieces alone:
+Run the `design-directory` skill's setup script from the project root and print its report:
 
-```
-design/
-├── README.md                  # trust-hierarchy index (see "design/README.md template" below)
-├── DESIGN.md                  # skeleton (or seeded from office-hours doc in phase 4)
-├── helping-hands/
-│   └── README.md              # the helping-hands convention doc (see "Helping-hands template" below)
-├── plans/
-│   └── README.md              # dated implementation plans: YYYY-MM-DD-<slug>.md
-├── stories/
-│   ├── README.md              # readiness-by-directory convention (see "Stories README" template below)
-│   ├── STORY_TEMPLATE.md      # the standard story format (see "STORY_TEMPLATE" template below)
-│   ├── drafts/.gitkeep        # explicitly partial / not-yet-ready stories (any author)
-│   ├── ready/.gitkeep         # safe to implement from (default landing zone)
-│   └── done/.gitkeep          # archive
-└── notes/
-    └── README.md              # informal materials index (see "notes/README.md template" below)
+```bash
+python3 ${CLAUDE_SKILL_DIR}/../design-directory/design-directory.py setup
 ```
 
-For each subdir or file: skip if it exists, create if it doesn't. Never overwrite.
+It creates whatever the standard `design/` has and the project lacks (`README.md`, the `DESIGN.md` skeleton, `stories/` with its README, `STORY_TEMPLATE.md` and the `drafts/`, `ready/`, `done/` tiers, and `helping-hands/`, `plans/` and `notes/` each with a README), never overwrites, and is safe to re-run. The standard tree is that skill's `templates/standard/files/`, one file per piece; this skill holds no copy of it. To change what a new project's `design/` contains, change those files.
+
+When the script has just created `design/DESIGN.md`, fill the skeleton's `<Project name>` and one-line description from what the pre-flight learned; Phase 4 replaces the skeleton when an office-hours doc is imported.
 
 **Migrate misplaced files at `design/` root.** After ensuring the canonical subtree, scan `design/` for files at its root other than `README.md` and `DESIGN.md`. Classify each one and present a single batched prompt:
 
@@ -129,235 +117,6 @@ Migrate with `git mv` (preserves history)?
 - **p**: walk one file at a time — confirm target subdir (with the classifier's suggestion as default) or skip.
 
 This step is **default behavior** — no aggressive flag required. It only touches files _inside_ `design/`. Broader moves (top-level `docs/` → `design/`, renaming non-canonical sibling dirs) still require aggressive-mode opt-in (see top of file). `--auto` mode runs the classifier but, since the prompt would otherwise block, defaults to **n** (leave in place) and surfaces the list under Drift — never auto-moves without user input.
-
-**Canonical source for stories/ docs:** the embedded templates below are the single source of truth. If you want to evolve the stories convention, edit it here in `skills/groot-project/SKILL.md` and re-run `make install` — that's what propagates the change to every new project, on any machine.
-
-**Stories README:**
-
-```markdown
-# Stories
-
-Feature specifications. **Readiness** is encoded by directory; **authorship** lives in frontmatter.
-
-## Directory structure
-
-\`\`\`
-stories/
-├── STORY_TEMPLATE.md # the format
-├── drafts/ # explicitly partial / not-yet-ready (any author)
-├── ready/ # implementation-ready (default landing zone)
-└── done/ # archived after implementation
-\`\`\`
-
-## Where does a new story go?
-
-- **Default: `ready/`.** A new story should be written to a quality bar of "implementable as-is". If it isn't, it shouldn't exist yet — flesh it out before filing.
-- **Exception: `drafts/`.** Use only when the story is explicitly partial — e.g., the user dropped a sentence and asked the LLM to expand it; or the LLM is blocked on input it can't get.
-- **`done/`.** Move here when the feature ships.
-
-LLM-authored stories in `ready/` are _still_ "review carefully" by convention — the author field tells the next reader what kind of review to expect (see below). `ready/` is not a stamp of correctness, just a quality threshold.
-
-## Frontmatter
-
-## \`\`\`yaml
-
-author: claude # claude | user | both
-priority: medium # high | medium | low
-
----
-
-\`\`\`
-
-**No `status:` field** — the directory is the status. **No `created:` / `updated:` dates** — LLMs hallucinate dates, and absolute date is the wrong question anyway. What matters is _drift relative to the codebase_, which is computed from git mtime against recent code activity (see drift check below).
-
-## How an LLM should pick up a story
-
-In order:
-
-1. **Drift check first.** Get the story's last commit time:
-   \`\`\`bash
-   git log -1 --format=%cI -- <story-file>
-   \`\`\`
-   Compare to recent code activity on the modules the story touches. If meaningful code changes have landed since the story's last update, treat the story as stale: re-read against current code state and surface gaps before implementing. Drift can happen in hours with active development, not just weeks.
-
-2. **Authorship check (frontmatter `author`):**
-   - `claude` → "Probably thorough but may not match current code state. Vet against the modules it touches; expect gaps the original author didn't see."
-   - `user` → "Intention likely correct but spec likely incomplete. Fill in details and flag your assumptions before implementing."
-   - `both` → already iterated; treat as ready, still apply drift check.
-
-3. **Implement from `ready/`.** Do not implement from `drafts/` without first promoting the story to `ready/` (which may involve a conversation with the user).
-
-## Epics
-
-For bodies of work too large for one story but coherent enough not to fragment, use an epic file:
-
-- Lives at `stories/<dir>/<slug>-epic.md` (suffix `-epic.md`).
-- Has a `## Stories` section with a checklist of child story files.
-- Each child story adds a top line: `**Epic:** [<slug>-epic.md](../<dir>/<slug>-epic.md)`.
-- Epic is "done" when every child story is in `done/`.
-
-No new tooling, no folder, no metadata schema. The `-epic.md` suffix and the cross-link are the entire convention.
-
-## When to write a story
-
-- A feature needs design work before coding
-- Multiple implementation approaches to compare
-- UI/UX decisions to capture
-- Complex technical requirements
-
-**Don't** write a story for: simple bug fixes, routine changes, one-liner features.
-
-**Important:** the LLM should ASK before writing a brand-new story unless explicitly invited.
-```
-
-**STORY_TEMPLATE.md:**
-
-```markdown
----
-author: claude # claude | user | both
-priority: medium # high | medium | low
----
-
-# Story Title
-
-_Authored by <model> with Derek · Last updated <YYYY-MM-DD HH:MM>._
-
-## Executive summary
-
-**What:** One sentence — what this story decides or does.  
-**Where it stands:** One line — open / decided <date> / built through increment N of M.  
-**Needs you:** nothing — or one bullet per open decision or `derek(<source>)` mark, each starting **Decide**, **Look** or **Do** and naming its heading.
-
-## Decisions (yours first; the analysis is below)
-
-- **D1 · open** — the question, and the recommendation. [record](#d1)
-
-## Problem
-
-What problem does this solve? What's the current pain point or gap?
-
-## Proposed Solution
-
-High-level description of the proposed approach. One paragraph.
-
-## Design Notes
-
-Technical considerations, schema sketches, ASCII diagrams, implementation details, alternatives considered.
-
-## Acceptance Criteria
-
-- [ ] Criterion 1
-- [ ] Criterion 2
-
-## Decision records
-
-### D1. <Title> · open
-
-**Question:** One sentence a reader without the context can follow.
-
-**Options:**
-
-1. **<Label>** — what it is; what it costs.
-2. **<Label>** — what it is; what it costs.
-
-**Recommended:** option 1, because <one sentence>. Rejected: 2 because <why>.
-
-<!-- On decision: append "**Decided <date>:** option N (Derek: "…") · any deviation and why", flip the heading to "· decided <date>", rewrite nothing above. Shape: pm/exec-summary.md § Decision records. -->
-
-## Related
-
-- `../DESIGN.md` — relevant section
-- Other stories: `<slug>.md`
-- External reference: paths into `../notes/` or URLs
-```
-
-**notes/README.md template:**
-
-```markdown
-# Notes
-
-Informal materials. **Not authoritative for project design** — see `../DESIGN.md` for that.
-
-## Conventions
-
-- **Snapshots**: prefix the filename with the date (e.g., `2026-05-07-name.md`). Treat as frozen-in-time.
-- **Living vision drafts**: keep the original filename; location signals non-canonical status.
-- **External reference**: keep the original filename; document the source at the top of the file.
-
-If a piece of thinking here graduates into a real decision, capture it in `../DESIGN.md` or in a story under `../stories/`. If a note is contradicted by `DESIGN.md`, `DESIGN.md` wins.
-```
-
-**plans/README.md template:**
-
-```markdown
-# Plans
-
-Dated implementation plans. One file per plan: `YYYY-MM-DD-<slug>.md`.
-
-A plan is a concrete blueprint for a piece of work: scope, steps, decision points, fallbacks. Distinct from stories (which are _what and why_) and notes (which are exploratory).
-
-The most recent dated plan for any given concern is the one to trust.
-```
-
-**design/README.md template** (the trust-hierarchy index for the whole subtree):
-
-```markdown
-# Design
-
-Design artifacts for this project. The structure separates **living/authoritative** docs from **snapshots and notes** so future sessions know which to trust.
-
-## What's here
-
-\`\`\`
-design/
-├── README.md # this file
-├── DESIGN.md # ← canonical, living. Source of truth for project design.
-├── stories/ # ← living. Feature specs, trust-tiered.
-├── plans/ # ← living. Dated implementation plans.
-├── helping-hands/ # ← living. Open asks for actions only the user can take.
-└── notes/ # ← informal, may be stale. Snapshots, vision braindumps, external reference.
-\`\`\`
-
-## Trust hierarchy
-
-When in doubt, trust this order:
-
-1. **`DESIGN.md`** — canonical project design. If something here disagrees with anything else in this directory, this wins.
-2. **`stories/ready/`** — feature specs at implementation-ready quality. Apply drift + authorship checks (see `stories/README.md`) before treating as a spec.
-3. **`stories/drafts/`** — explicitly partial stories. Reference only; do not implement from.
-4. **`plans/`** — implementation plans, dated. Trust the latest dated plan for any given concern.
-5. **`notes/`** — exploratory thinking and external reference. **Do not assume any note is current.**
-
-Authorship of any individual story lives in its frontmatter, not its directory.
-
-## Helping-hands
-
-`helping-hands/` is a parallel track: tasks needing the user's hands, eyes, account credentials, or physical access. Surfaced just-in-time when a story or plan cites one. See `helping-hands/README.md`.
-```
-
-The DESIGN.md skeleton (used when no office-hours doc exists):
-
-```markdown
-# <Project name>
-
-<one-line description>
-
-## Problem
-
-<what are we solving?>
-
-## Approach
-
-<how, at a high level?>
-
-## Constraints
-
-<what bounds the design?>
-
-## Open questions
-
-- <thing we haven't decided>
-```
 
 ### Phase 3: Project docs skeleton
 
@@ -922,7 +681,7 @@ End-of-run summary calls out what `--auto` skipped: _"Re-run without `--auto` to
 
 ## `status` mode
 
-`/groot-project status` is a read-only audit. Walk the same detection logic as Pre-flight, format as a checklist:
+`/groot-project status` is a read-only audit. Walk the same detection logic as Pre-flight (for the `design/` line, the setup script's `--dry-run` lists what is missing), format as a checklist:
 
 ```
 Project audit for myproject:
@@ -959,43 +718,6 @@ When the user invokes with aggressive/restructure language (_"be aggressive"_, _
 - Offer to consolidate scattered design-ish files from across the repo into `design/notes/`.
 
 **Always confirm each structural move before acting**, and use git operations (`git mv`) so history is preserved. Never silently restructure files. Aggressive mode is opt-in by user phrasing — never the default.
-
-## Helping-hands template
-
-The embedded template below is the single source of truth for `design/helping-hands/README.md`. To evolve the convention, edit it here in `skills/groot-project/SKILL.md` and re-run `make install`.
-
-```markdown
-# Helping hands
-
-Tasks that need Derek's hands, eyes, account credentials, paid subscription, or physical access.
-
-## Format
-
-- One markdown file per item, date-prefixed: `YYYY-MM-DD-<slug>.md`
-- YAML frontmatter: `status` (open/in-progress/done/dropped), `created`, `priority`, `estimated_time`
-- Body structure, **in this exact order** — TL;DR and the concrete steps must be readable without scrolling past the title. Background context lives below the fold.
-  1. `# <Friendly title>` — phrased as a request, not a directive.
-  2. `**TL;DR:** <one sentence>` — the _why_, not the _what_. Like a code comment: explain the non-obvious reason this needs doing, and briefly why it needs the user's hands rather than something the LLM could close. The _what_ is enumerated in `## Do this`, just below — don't duplicate it here.
-  3. `## Do this` — numbered concrete steps, paste-ready, one action per step. Second from top, never buried.
-  4. `## Tell me when you're done` — what the user reports back (or what the LLM will detect) to unblock the next step.
-  5. `---` separator.
-  6. `## Background (optional reading)` containing:
-     - `### Why this matters`
-     - `### What I already did to make this easier`
-     - `### Related`
-
-  Snags, gotchas, future-state notes, and other detail are additional `###` sub-sections inside Background.
-
-- The "what I already did" section is non-decorative — if it would be empty, the entry should not have been created. Do that work first instead.
-
-## Surfacing in chat
-
-Filed entries surface as a one-liner only: `Filed: <title> — see design/helping-hands/`. Not a paragraph. Not a recap. The artifact is the source of truth.
-
-## Just-in-time, not session-start
-
-When picking up work, check whether any open helping-hands item is referenced as a blocker by the current task, its parent story, or its plan. If so, name the specific blocker before pressing on. Do not auto-scan the directory at session start.
-```
 
 ## Coexistence with `/project-setup` and gstack
 
@@ -1082,7 +804,7 @@ See SKILL.md for full reference.
 
 ## Reference
 
-- All canonical templates (stories/, STORY_TEMPLATE, helping-hands, notes/, plans/, design/README) live in this SKILL.md itself — no external dependencies, portable across machines.
+- The `design/` templates (design/README, DESIGN.md skeleton, stories/README, STORY_TEMPLATE, helping-hands, notes/, plans/) are files in the `design-directory` skill: `${CLAUDE_SKILL_DIR}/../design-directory/templates/standard/files/`. The CLAUDE.md, DIARY.md, TODO.md, Makefile and hook templates live in this SKILL.md.
 - terminal-setup: `${CLAUDE_SKILL_DIR}/../terminal-setup/terminal-setup.py`
 - `gh` CLI for GitHub remote: https://cli.github.com/
 - `/project-setup` skill (Joe Walnes upstream): retrofits 10 conventions to existing projects (independent of this skill)

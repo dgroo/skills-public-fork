@@ -99,7 +99,7 @@ Walk entries one at a time, oldest first. For each, present the entry and ask:
 **Elaborate** — the spark deserves more than a line. Offer to:
 
 - Expand it inline (a 2–4 line block under the original entry — still in the sparkfile).
-- Promote it to `design/stories/drafts/<slug>.md` using the project's story template if present (see `/groot-project`'s `STORY_TEMPLATE.md`). On promotion, mark the sparkfile entry with `→ stories/drafts/<slug>.md` and leave it in place (don't delete — the breadcrumb is useful).
+- Promote it to `design/stories/drafts/<slug>.md` using the project's story template if present (the standard one is `/design-directory`'s `STORY_TEMPLATE.md`). On promotion, mark the sparkfile entry with `→ stories/drafts/<slug>.md` and leave it in place (don't delete — the breadcrumb is useful).
 - Hand off to `/office-hours` for a real design conversation. (Suggest, don't auto-invoke.)
 
 **Delete** — remove the line outright. No archive, no soft-delete. The sparkfile is meant to lose entries; that's the point.
@@ -142,7 +142,7 @@ Sparkfile location (first hit wins):
 
 Bar: "would I lose this if I didn't write it down?"
 If concrete enough for a priority and fix → /todo.
-If design weight → design/stories/ (via /groot-project's STORY_TEMPLATE).
+If design weight → design/stories/ (via the project's STORY_TEMPLATE).
 
 See SKILL.md for full reference.
 ```

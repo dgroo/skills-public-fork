@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
-"""design-directory: add an optional, templated subdirectory to a project's design/.
+"""design-directory: set up a project's design/ to the standard, and add optional,
+templated subdirectories to it.
 
 Usage:
-  design-directory.py list                      # the templates this skill ships
+  design-directory.py setup [--dry-run] [--project <dir>]
+  design-directory.py list                      # the optional templates this skill ships
   design-directory.py add <template> [--dry-run] [--project <dir>]
+
+`setup` copies the standard tree (templates/standard/files/, laid out exactly as it
+lands under design/) into <project>/design/, creating only what is missing. Those
+files are the source of the standard layout: nothing else in this skill, and no
+other skill, restates it.
 
 `add` copies the template's files into <project>/design/<template>/ and names the
 directory in <project>/design/README.md (the directory tree and the trust order).
@@ -12,7 +19,8 @@ already names the directory is left alone, and a README whose shape it does not
 recognise is not guessed at (the lines are printed for a hand edit instead).
 
 Templates are found next to this script (resolved through symlinks), one directory
-each under templates/:
+each under templates/. `standard` is the layout and is placed by `setup` only; every
+other directory is an optional template:
 
   templates/<name>/about.txt              one line, shown by `list`
   templates/<name>/files/...              copied as is into design/<name>/
@@ -36,6 +44,18 @@ TEMPLATE_ABOUT = "about.txt"
 TEMPLATE_TREE_LINE = "readme-tree-line.txt"
 TEMPLATE_TRUST_LINE = "readme-trust-line.txt"
 
+# The standard tree. Not an `add` template: it lands in design/ itself.
+STANDARD_TEMPLATE = "standard"
+# A placeholder file that keeps an empty directory in git. Placed only in a
+# directory setup itself creates, never dropped into one that already exists.
+KEEP_FILE = ".gitkeep"
+# The stories tiers of the standard, and the older tier names. A project still on
+# the older names gets nothing added under stories/; moving to the standard tiers
+# is a migration for its owner to choose, and the check reports it.
+STORIES_DIR = "stories"
+STANDARD_STORY_TIERS = ("drafts", "ready", "done")
+LEGACY_STORY_TIERS = ("llm_generated", "user_updated", "z.done")
+
 DESIGN_DIR = "design"
 DESIGN_README = "README.md"
 
@@ -51,7 +71,10 @@ TRUST_INSERT_AFTER = ("plans/", "stories/drafts/", "stories/")
 TRUST_INSERT_BEFORE = "notes/"
 
 
-def project_root(explicit):
+def project_root(explicit, require_git=False):
+    """The project to act on: --project, else the git toplevel of the cwd, else the
+    cwd. With require_git, a cwd outside any git repo is refused (None): setup
+    writes a whole tree and must not land wherever the shell happens to be."""
     if explicit:
         return os.path.abspath(explicit)
     try:
@@ -65,6 +88,8 @@ def project_root(explicit):
             return top
     except (subprocess.CalledProcessError, FileNotFoundError):
         pass
+    if require_git:
+        return None
     return os.getcwd()
 
 
@@ -74,7 +99,8 @@ def template_names():
     return sorted(
         name
         for name in os.listdir(TEMPLATES_DIR)
-        if os.path.isdir(os.path.join(TEMPLATES_DIR, name, TEMPLATE_FILES_SUBDIR))
+        if name != STANDARD_TEMPLATE
+        and os.path.isdir(os.path.join(TEMPLATES_DIR, name, TEMPLATE_FILES_SUBDIR))
     )
 
 
@@ -219,8 +245,8 @@ def update_readme(name, root, dry_run, report):
     by_hand = []
     if not os.path.isfile(readme_path):
         report.append(
-            "not there      %s (not created: this skill does not write the layout)"
-            % shown
+            "not there      %s (run setup to create the standard one, then add %s again)"
+            % (shown, name)
         )
         by_hand = [
             ("directory tree", TREE_BRANCH + tree_line if tree_line else None),
@@ -274,7 +300,89 @@ def update_readme(name, root, dry_run, report):
             report.append("  (%s)  %s" % (where, line))
 
 
+def legacy_story_tiers(root):
+    stories = os.path.join(root, DESIGN_DIR, STORIES_DIR)
+    return [
+        tier for tier in LEGACY_STORY_TIERS if os.path.isdir(os.path.join(stories, tier))
+    ]
+
+
+def cmd_setup(root, dry_run):
+    """Copy what the standard tree has and the project lacks into design/."""
+    files_root = os.path.join(TEMPLATES_DIR, STANDARD_TEMPLATE, TEMPLATE_FILES_SUBDIR)
+    if not os.path.isdir(files_root):
+        print("The standard tree is missing from " + files_root, file=sys.stderr)
+        return 1
+    if root is None:
+        print(
+            "Not inside a git repository. Run setup from the project, or pass --project <dir>.",
+            file=sys.stderr,
+        )
+        return 2
+    legacy = legacy_story_tiers(root)
+    created, present, differing = [], 0, []
+    # Decided before anything is written, so a directory this run creates still
+    # counts as new when its .gitkeep comes up.
+    existing_dirs = set()
+    for rel in template_files(files_root):
+        directory = os.path.dirname(os.path.join(root, DESIGN_DIR, rel))
+        if os.path.isdir(directory):
+            existing_dirs.add(directory)
+    for rel in template_files(files_root):
+        source = os.path.join(files_root, rel)
+        target = os.path.join(root, DESIGN_DIR, rel)
+        if legacy and rel.startswith(STORIES_DIR + os.sep):
+            continue
+        if os.path.lexists(target):
+            present += 1
+            if os.path.basename(rel) != KEEP_FILE and not (
+                os.path.isfile(target) and filecmp.cmp(source, target, shallow=False)
+            ):
+                differing.append(rel)
+            continue
+        if os.path.basename(rel) == KEEP_FILE:
+            if os.path.dirname(target) in existing_dirs:
+                present += 1
+                continue
+        if not dry_run:
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            shutil.copyfile(source, target)
+        created.append(rel)
+    print(
+        "design-directory setup in %s%s"
+        % (root, "  (dry run, nothing written)" if dry_run else "")
+    )
+    for rel in created:
+        print("  created        %s" % os.path.join(DESIGN_DIR, rel))
+    if not created:
+        print("  nothing to add: every piece of the standard design/ is already there")
+    if present:
+        print("  already there  %d piece(s) of the standard, left alone" % present)
+    if differing:
+        print(
+            "  own wording    %s differ from the template, as a project's own files do; left alone"
+            % ", ".join(differing)
+        )
+    if legacy:
+        print(
+            "  older layout   %s has %s; nothing under it was added (the standard tiers are %s)"
+            % (
+                os.path.join(DESIGN_DIR, STORIES_DIR),
+                ", ".join(tier + "/" for tier in legacy),
+                ", ".join(tier + "/" for tier in STANDARD_STORY_TIERS),
+            )
+        )
+    return 0
+
+
 def cmd_add(name, root, dry_run):
+    if name == STANDARD_TEMPLATE:
+        print(
+            "'%s' is the standard layout, not an optional template. Use: setup"
+            % STANDARD_TEMPLATE,
+            file=sys.stderr,
+        )
+        return 2
     if name not in template_names():
         print(
             "No template named '%s'. Templates: %s"
@@ -301,10 +409,19 @@ def cmd_add(name, root, dry_run):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Add a templated subdirectory to a project's design/."
+        description="Set up a project's design/, or add a templated subdirectory to it."
     )
     sub = parser.add_subparsers(dest="command")
-    sub.add_parser("list", help="list the templates")
+    setup = sub.add_parser(
+        "setup", help="create what the standard design/ has and the project lacks"
+    )
+    setup.add_argument(
+        "--dry-run", action="store_true", help="report what would change, write nothing"
+    )
+    setup.add_argument(
+        "--project", help="project root (default: the git toplevel of the cwd)"
+    )
+    sub.add_parser("list", help="list the optional templates")
     add = sub.add_parser("add", help="create design/<template>/ from a template")
     add.add_argument("template")
     add.add_argument(
@@ -314,6 +431,8 @@ def main():
         "--project", help="project root (default: the git toplevel of the cwd)"
     )
     args = parser.parse_args()
+    if args.command == "setup":
+        return cmd_setup(project_root(args.project, require_git=True), args.dry_run)
     if args.command == "list":
         return cmd_list()
     if args.command == "add":
