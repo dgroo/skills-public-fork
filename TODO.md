@@ -7,6 +7,9 @@
 
 ## Open
 
+- [ ] **P2** (feature) `/groot-project`: emit the remaining templates from a script instead of having the model copy them out of SKILL.md — 2026-11-13
+  Handed off from the meta-feedback review (Derek's tick, with his note to verify against the design-directory work). Verified 2026-11-13: everything under `design/` is now copied by `design-directory.py setup`. Still written by hand from the skill text: `CLAUDE.md`, `DIARY.md`, `TODO.md`, the Makefile and the three git hooks. Hand-copying is how template defects got through (a garbled stories README template shipped to several projects before the move). Extend the script, or a sibling of it, to those files, never overwriting.
+
 - [ ] **P3** (docs) Write the upstream-merge recipe under "Upstream provenance" in `CLAUDE.md` — 2026-10-01
   The first merge in three months (2026-10-01, `b3911fc`) was done by hand: rename any local skill whose name upstream now uses (ours, not theirs — `go-team` calls upstream's `consolidate` by path), `git merge upstream/main`, resolve `README.md` / `TODO.md` / `DIARY.md` to the fork, keep upstream's `CLAUDE.md` additions but drop its commit-policy hunk (`/consolidate` before push), `make install` and read it for `COLLISION` lines. Source: meta-feedback 2026-10-01.
 - [x] **P3** (chore) Decide: stay a fork of joewalnes/skills, or restructure as a wrapper/overlay — 2026-06-09 · **decided 2026-10-01: stay a fork and merge** (Derek; merge `b3911fc` cost five conflicts, four of them repo docs). Unblocks the `upstream-*` → `fork-*` rename and the status-skill consolidation.
