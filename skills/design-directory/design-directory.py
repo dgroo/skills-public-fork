@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""design-setup: add an optional, templated subdirectory to a project's design/.
+"""design-directory: add an optional, templated subdirectory to a project's design/.
 
 Usage:
-  design-setup.py list                      # the templates this skill ships
-  design-setup.py add <template> [--dry-run] [--project <dir>]
+  design-directory.py list                      # the templates this skill ships
+  design-directory.py add <template> [--dry-run] [--project <dir>]
 
 `add` copies the template's files into <project>/design/<template>/ and names the
 directory in <project>/design/README.md (the directory tree and the trust order).
@@ -90,7 +90,7 @@ def cmd_list():
     if not names:
         print("No templates found under " + TEMPLATES_DIR)
         return 1
-    print("Templates (design-setup <name> creates design/<name>/):")
+    print("Templates (design-directory <name> creates design/<name>/):")
     for name in names:
         about = read_one_line(os.path.join(TEMPLATES_DIR, name, TEMPLATE_ABOUT)) or ""
         print("  %-12s %s" % (name, about))
@@ -291,7 +291,7 @@ def cmd_add(name, root, dry_run):
     copy_files(name, root, dry_run, report)
     update_readme(name, root, dry_run, report)
     print(
-        "design-setup %s in %s%s"
+        "design-directory %s in %s%s"
         % (name, root, "  (dry run, nothing written)" if dry_run else "")
     )
     for line in report:

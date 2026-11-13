@@ -79,7 +79,7 @@ One line per skill, grouped by job. `/skills-list mine brief` prints the same in
 | Skill | What it does |
 | --- | --- |
 | `cleanup-design` | Audits the design corpus for stale docs and drift, or checks it against the standard layout. |
-| `design-setup` | Checks a project's design/ against the standard and adds templated subdirectories (research/ with the Do Research file). |
+| `design-directory` | Checks a project's design/ against the standard, adds templated subdirectories, and is the door to cleanup-design. |
 | `docs` | Plans and writes user documentation in Diataxis structure, with a reader test before merge. |
 | `humanize-text` | Strips AI tells from prose as a proposed diff, calibrated to your own voice profile. |
 | `ponder` | Runs a design-thinking pass on a topic and writes a drafts story with named open decisions; builds nothing. |
