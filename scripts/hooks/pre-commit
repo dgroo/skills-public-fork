@@ -8,6 +8,9 @@
 #   3. Skills index: every skill has summary: and group:, and README § Skills is
 #      current. Runs only when the commit touches what the index is built from, so
 #      a design/ or diary commit is never blocked by it.
+#   4. design-directory selfcheck: the reader (backlog-scan) still sorts the skill's
+#      standard design/ tree as standard. Runs only when that skill is staged, and
+#      reports "skipped" on a machine without the reader.
 set -euo pipefail
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
@@ -17,4 +20,8 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 
 if git diff --cached --name-only | grep -qE '^(skills/|README\.md$|scripts/skills-index)'; then
     python3 "$REPO_ROOT/scripts/skills-index.py" check
+fi
+
+if git diff --cached --name-only | grep -qE '^skills/design-directory/'; then
+    python3 "$REPO_ROOT/skills/design-directory/design-directory.py" selfcheck
 fi

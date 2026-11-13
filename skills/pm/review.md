@@ -30,11 +30,11 @@ Discover the design layout (same as `/cleanup-design`'s Orient): `design/stories
 
 ### 2. Hygiene — delegate to /cleanup-design
 
-**Run `/cleanup-design` first, don't reimplement it.** It owns the mechanical layer: drift (a decision one place the docs elsewhere haven't caught), dead cross-references, notes that should be `deprecated/`, and stories whose acceptance criteria are _obviously_ satisfied (move-to-done). Let it do its Scan → Triage → Present → Execute flow and land those findings.
+**Run `/cleanup-design` first, don't reimplement it.** It owns the mechanical layer: drift (a decision one place the docs elsewhere haven't caught), dead cross-references, finished notes and plans that carry no done marker, and stories whose acceptance criteria are _obviously_ satisfied (move-to-done). Let it do its Scan → Triage → Present → Execute flow and land those findings. Before it, run `/design-directory sweep`, which moves files already marked done into `z.archived/` so the audit reads only live ones.
 
 **Then the task file's own hygiene, which cleanup-design does not touch.** In `design/TODO.md` (root `TODO.md` where a project still has it), move every `[x]` and `[-]` line out of `## Open` into `## Done` (newest first) and prune `## Done` to its last 20 lines — git keeps the rest. Then stamp the pass: the header carries one comment line, `<!-- pm-pass: 2026-10-23 · 2026-09-30 · 2026-09-02 -->`, newest first, kept to the last three dates; add today's. That line is the only record a pass leaves, and §3's staleness rule reads it. (Work-model contract D8, grootPM `design/stories/ready/work-model-contract.md`.)
 
-You want a **clean corpus before you reorder it** — reprioritizing around stale/done entries is wasted work. If cleanup-design surfaces a big conformance drift (meta-files on the legacy root layout, etc.), note it but don't get pulled into a migration mid-PM-pass unless Derek opts in; that's cleanup-design's conformance mode, a separate errand.
+You want a **clean corpus before you reorder it** — reprioritizing around stale/done entries is wasted work. If cleanup-design's layout glance surfaces a big drift from the standard (meta-files on the legacy root layout, etc.), note it but don't get pulled into a migration mid-PM-pass unless Derek opts in; that's `/design-directory check`, a separate errand.
 
 ### 3. Accuracy review — the judgment cleanup-design won't make
 

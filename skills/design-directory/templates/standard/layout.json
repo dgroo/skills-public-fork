@@ -1,0 +1,24 @@
+{
+  "about": "The parts of the standard design/ layout that a tree of files cannot say. files/ beside this is the tree itself; design-directory.py reads both and holds no layout of its own.",
+  "meta_files": {
+    "TODO.md": "tasks",
+    "ASKS.md": "the owner's asks, in their order",
+    "NEXT.md": "session handoff",
+    "REVISIT.md": "date- or event-gated tasks"
+  },
+  "meta_files_note": "Each lives in design/ and is created by the skill that first writes it, so a missing one is not a finding. One at the repo root is the older location.",
+  "other_design_root_files": ["HUMAN-REVIEW.md"],
+  "stories_dir": "stories",
+  "story_tiers": ["drafts", "ready", "done"],
+  "legacy_story_tiers": ["llm_generated", "user_updated", "z.done"],
+  "set_aside_dir": "z.archived",
+  "set_aside_legacy_dir": "archived",
+  "set_aside_segment_suffixes": ["archived", "deprecated"],
+  "swept_statuses": ["done"],
+  "swept_statuses_by_dir": {
+    "helping-hands": ["done", "dropped"]
+  },
+  "never_swept_dirs": ["stories"],
+  "plans_dir": "plans",
+  "legacy_done_dirs": ["helping-hands/done"]
+}

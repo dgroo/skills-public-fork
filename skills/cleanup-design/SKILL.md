@@ -1,7 +1,8 @@
 ---
 name: cleanup-design
-description: Use when asked to clean up, audit, or refresh the project's design corpus ("clean up design", "what's stale", "should anything move to done", "audit the design docs", "any drift between recent decisions and docs", "post-decision sweep"), OR to check a project against the canonical design-corpus model / catch a drifted project up on conventions ("does this match our standard layout", "conform this project", "/cleanup-design conformance"). For maintaining design-doc invariants in projects that use `design/` (or equivalent) with stories, helping-hands, notes, and canonical design docs.
-summary: "Audits the design corpus for stale docs and drift, or checks it against the standard layout."
+description: Audit a project's design docs for stale content and drift from recent decisions. Use after decisions land.
+when_to_use: 'Use for "clean up design", "what is stale", "should anything move to done", "audit the design docs", "any drift between recent decisions and docs", "post-decision sweep". For the layout of design/ itself ("does this match our standard layout", "conform this project"), and for moving finished files to z.archived/, use /design-directory.'
+summary: "Audits what a project's design docs say for stale content and drift; design-directory owns the layout."
 group: design
 ---
 
@@ -9,10 +10,11 @@ group: design
 
 Audits and refreshes a project's design corpus — `stories/`, `helping-hands/`, `notes/`, and canonical design docs (`DESIGN.md` or similar). Catches drift that accumulates when decisions are made in one place but the docs elsewhere haven't been updated yet.
 
-## Two modes
+## What this is, and what it is not
 
-- **Drift audit (default)** — the phases below. Catches drift _within_ the project: a decision made in one place that the docs elsewhere haven't caught up to. Run with bare `/cleanup-design`.
-- **Canonical conformance** (`/cleanup-design conformance`) — diffs the project's _structure_ against the federation's canonical design-corpus model, catching drift _from the standard itself_: meta-files in the wrong place, an outdated stories layout, a convention the project predates. This is the self-repair pass for "I'm back in a project I haven't touched in weeks — catch it up on our conventions." See [Canonical conformance mode](#canonical-conformance-mode).
+This skill audits what the documents **say**: a decision made in one place that the docs elsewhere have not caught up with, a dead reference, a story whose summary went stale. Run it with bare `/cleanup-design`.
+
+Where files **belong** is `/design-directory`'s: the standard layout, the check against it, and the sweep that moves finished files into `z.archived/`. `/cleanup-design conformance` is kept as a way in to that check (see [Conformance](#conformance)).
 
 ## When to use vs. skip
 
@@ -28,13 +30,14 @@ Discover the project's design layout. Typical:
 
 - **Stories** at `design/stories/` with sub-categories: `drafts/`, `ready/`, `done/` (newer convention) or `llm_generated/`, `user_updated/`, `z.done/` (older).
 - **Helping-hands** at `design/helping-hands/` (its README usually carries the project's conventions for status/closing).
-- **Notes** at `design/notes/` (and `design/notes/deprecated/` if present).
+- **Notes** at `design/notes/`, **plans** at `design/plans/`.
+- **Set-aside directories**: any `z.archived/`, `archived/` or `deprecated/` inside those. Finished files live there; note that they exist and do not open them.
 - **Canonical docs**: `design/DESIGN.md`, `design/README.md`, `design/NEXT.md` if present.
 - **Project README** + **CLAUDE.md** for conventions.
 
 If the project uses a different layout (`docs/architecture/`, `docs/specs/`, etc.), adapt accordingly. If unclear, ask via `AskUserQuestion` rather than guess.
 
-**Cheap canonical-drift glance (so the base skill figures it out — no subcommand needed).** While discovering the layout, also note obvious structural drift from the canonical model: meta-files (`TODO.md` / `NEXT.md` / `REVISIT.md` / `DIARY.md`) at the **repo root** instead of `design/`, a `plans/` dir the canon folds into `stories/`, an older stories layout. If you spot any, **surface it as a finding and offer the full [Canonical conformance mode](#canonical-conformance-mode)** ("this project's meta-files are on the legacy root layout — want me to run the conformance pass and walk a migration?"). The user gets the conformance behavior from a bare `/cleanup-design`; `/cleanup-design conformance` just skips straight to it without the drift-audit. Keep this glance cheap — a directory listing, not a deep diff; the conformance mode does the real work only if the user opts in.
+**Layout glance.** Run `python3 ${CLAUDE_SKILL_DIR}/../design-directory/design-directory.py check` (read-only) and, if it reports anything, relay its report as one finding with the pointer "`/design-directory` handles these". Do not act on layout findings in this audit, and do not diff the layout by hand.
 
 ### 2. Scan
 
@@ -54,13 +57,12 @@ Run focused checks per artifact category.
 - Read frontmatter (`status`).
 - If `status: done` and a Decision section exists, fine.
 - If `status: open` but a Decision section or "resolved" mention exists elsewhere, flag.
-- Closed items stay in place per the helping-hands convention; don't propose archiving unless the project's README says otherwise.
+- Closed items stay in place until `/design-directory sweep` moves them; do not move them here.
 
 **Notes**:
 
-- Check for `deprecated: true` frontmatter on files inside `deprecated/`.
-- Check that files in `notes/` (not `notes/deprecated/`) don't have `deprecated: true`.
-- Dead-link check: find `notes/<foo>` paths in any artifact that point at files now under `deprecated/`.
+- Dead-link check: find `notes/<foo>` paths in any live artifact that no longer resolve, including ones whose target now sits in a set-aside directory (the sweep repoints links when it moves a file; one it missed is a finding).
+- A live note that a later document has plainly absorbed or answered, with no done marker: a `mark-done` finding, on strong signal only. The marker is described in the project's `notes/README.md`.
 
 **Canonical design docs** (DESIGN.md or equivalent):
 
@@ -80,7 +82,7 @@ Group findings into buckets with suggested dispositions:
 - **`move-to-done`** — story whose acceptance criteria appear satisfied (only on strong signal)
 - **`mark-resolved`** — helping-hand has decision elsewhere but status still open
 - **`update-reference`** — cross-reference path is stale (file moved/deprecated)
-- **`archive`** — note that should move to `deprecated/`
+- **`mark-done`** — a note or plan that is finished but carries no done marker. Propose the marker (`status: done`, `done:`, `superseded_by:`, the banner line); never move the file. Files already marked are not findings here: `/design-directory sweep` moves them
 - **`refresh-summary`** — the story's `## Executive summary` block is missing or stale; the pass in `${CLAUDE_SKILL_DIR}/../pm/exec-summary.md` § The pass rewrites it
 - **`leave`** — flagged but no action; mention only if explicitly listed
 
@@ -99,7 +101,7 @@ On approval:
 - Edit prose changes.
 - Run the Executive-summary pass (`${CLAUDE_SKILL_DIR}/../pm/exec-summary.md` § The pass: a fresh Sonnet reader per story, spawned together; read back; `backlog-scan` confirms `ok`) on each approved `refresh-summary` story and on any live story another bucket edited — last, so the block is each story's final write.
 - Move files (with `git mv` if in a git repo; otherwise Write+verify+delete).
-- Update frontmatter (status changes, deprecation flags).
+- Update frontmatter (status changes, done markers).
 - Strip dead references or update to new paths.
 
 Never auto-act on items the user hasn't approved.
@@ -115,23 +117,15 @@ The most useful finding type is _drift_: a recently-made decision whose spec has
 
 This is what catches "we made decision X in a helping-hand but DESIGN.md still says ~X."
 
-## Canonical conformance mode
+## Conformance
 
-**Goal:** answer "does this project match our _current_ canonical design-corpus model, and what would bring it into line?" — the self-repair pass for a project that has drifted from the evolving standard.
+`/cleanup-design conformance` runs the layout check that `/design-directory check` runs, and nothing else:
 
-**Single source of truth — read it, don't hardcode.** The canonical model lives in `~/code/groot-claude-coord/design/design-corpus/DESIGN.md` (the federation design-corpus spec: the meta-file lane table, per-project-variation rules, and the §8 migration steps + "consumers to update" list). **Read that file at run time and diff against it — never bake a copy of the layout into this skill**, or the two drift (the exact failure this skill exists to prevent). If `~/code/groot-claude-coord/` is absent (different org/host), say so and skip conformance — there's no canon to diff against.
+```bash
+python3 ${CLAUDE_SKILL_DIR}/../design-directory/design-directory.py check
+```
 
-**Steps:**
-
-1. **Load the canon.** Read the design-corpus `DESIGN.md`. Extract the meta-file lane table (which file lives where — `design/TODO.md`, `design/NEXT.md`, …), the stories layout, and §8 (migration steps + the consumers-to-update list).
-2. **Inventory the project.** Where are this project's `TODO.md` / `NEXT.md` / `REVISIT.md` / `DIARY.md` (root vs `design/`)? What's the `stories/` shape (`drafts/ready/done` vs flat+frontmatter vs older)? Is there a `plans/` that canon folds into `stories/`? Any missing canonical surface (`HUMAN-REVIEW.md`, per-host diary shards)?
-3. **Diff → findings.** One finding per divergence: _what canon says · what the project has · the fix · safe-or-deliberate._
-4. **Classify safe vs. deliberate — this is the load-bearing judgment.**
-   - **Safe** (apply on approval): additive, no consumer-path risk — create a missing `HUMAN-REVIEW.md`, backfill frontmatter, fix a stale cross-reference.
-   - **Deliberate** (flag with a migration plan, never one-click): **moving root meta-files into `design/` is the canonical example** — §8 calls it out as breaking path-hardcoding consumers. Before proposing such a move, **walk §8's consumers-to-update list and verify each actually tolerates the new path** — do not assume. As of 2026-06-18 the core consumers are `design/`-preferred with a root fallback (`backlog-scan` for `TODO`/`REVISIT`/`NEXT`, `revisit-due.py`, `/revisit`), so the meta-file move is now safe — but **always re-verify** rather than trusting this note. **The one consumer that is _not_ `design/`-aware is `/todo`** (an upstream joewalnes skill — can't be taught `design/` without fork-induced pull conflicts); it discovers a tracker via root `TODO.md`/`docs/` _or a pointer in `CLAUDE.md`_. So when you migrate `TODO.md` → `design/TODO.md`, **also add/update a tracker pointer in the project's `CLAUDE.md`** (e.g. "task tracker: `design/TODO.md`") so `/todo`'s CLAUDE.md-discovery step still finds it. Use `git mv` for the moves, and only after the consumer check passes.
-5. **Present + execute** as in the default mode (per-item or bulk; never auto-act on the deliberate class without an explicit go).
-
-**Don't manufacture conformance churn.** A project deliberately on an older-but-working layout is not a bug. Surface the drift, note that it works today (cite _why_ — e.g. "backlog-scan reads root `TODO.md`"), and let the user choose. Most of the value here is _visibility_, not forced uniformity — and a canon/tooling contradiction surfaced is itself a useful finding (route it to the user, since fixing it means changing the canon or the tooling, not the project).
+Print its report as is and stop. The standard it checks against is that skill's template files, which work on any machine. Its report separates what setup would add and what the sweep would move from the **deliberate** class (a meta-file at the repo root, the older story tiers, an undeclared directory): each of those works as it is, so report it, say why it works today, and let the owner choose. Do not manufacture conformance churn, and do not apply a deliberate change as part of an audit.
 
 ## Common mistakes
 
@@ -139,7 +133,8 @@ This is what catches "we made decision X in a helping-hand but DESIGN.md still s
 - **Treating drafts as drift candidates.** `drafts/` are inherently unsettled; don't propose archiving or moving them without strong signal.
 - **Over-scanning a clean corpus.** Re-running on a clean corpus should report "clean" quickly, not produce noise.
 - **Conflating recency with importance.** A 90-day-old story may still be live; don't propose archiving by date alone.
-- **Reading deprecated files.** If the project has a `deprecated/` directory or a CLAUDE.md rule about it, respect it. Surface the existence of deprecated files but don't load their contents.
+- **Reading set-aside files.** Anything under `z.archived/`, `archived/` or `deprecated/` is finished work kept for reference. Surface that such files exist but do not load their contents without being asked.
+- **Moving files to tidy up.** This audit proposes edits and markers. Moving finished files is `/design-directory sweep`, and it moves only what is already marked.
 
 ## Quick reference
 
@@ -150,7 +145,7 @@ This is what catches "we made decision X in a helping-hand but DESIGN.md still s
 | mark-resolved    | Update status + decision section | yes (per item or bulk) |
 | update-reference | Edit stale path                  | bulk-approve ok        |
 | refresh-summary  | Rewrite the block via the pass   | bulk-approve ok        |
-| archive          | Move to deprecated/ + flag       | yes (per item)         |
+| mark-done        | Write the done marker; no move   | yes (per item)         |
 | leave            | nothing                          | n/a                    |
 
 ## Help
@@ -162,18 +157,12 @@ cleanup-design — Audit and refresh a project's design corpus for drift.
 
 Usage: /cleanup-design [conformance]
 
-Two modes:
-  (default)     Drift audit — walks stories/, helping-hands/, notes/, and
-                canonical design docs; catches drift between recently-made
-                decisions and the docs that should reflect them.
-  conformance   Diffs the project's STRUCTURE against the canonical
-                design-corpus model in groot-claude-coord (read at run time,
-                not hardcoded). Catches meta-files in the wrong place, an
-                outdated stories layout, a convention the project predates.
-                The "catch a stale project up on our conventions" pass.
-                Classifies fixes safe (apply) vs. deliberate (migration plan,
-                verify §8 consumers first — e.g. backlog-scan reads root
-                TODO.md, so moving it to design/ needs the tooling taught).
+  (default)     Drift audit: walks stories/, helping-hands/, notes/, plans/ and
+                the canonical design docs, and catches drift between recently
+                made decisions and the docs that should reflect them.
+  conformance   Runs /design-directory's layout check and prints its report.
+                The layout, and moving finished files to z.archived/, belong
+                to /design-directory.
 
 Drift-audit phases (run in sequence):
   Orient            Discover project's design layout.
@@ -182,7 +171,7 @@ Drift-audit phases (run in sequence):
                     the strongest finding type.
   Triage            Group by bucket: update-section, move-to-done,
                     mark-resolved, update-reference, refresh-summary
-                    (a missing or stale Executive summary), archive, leave.
+                    (a missing or stale Executive summary), mark-done, leave.
   Present           Show staged list; per-item or bulk approval.
   Execute           Edit / mv / update frontmatter on approval only.
 
@@ -198,4 +187,5 @@ See SKILL.md for full reference.
 
 ## Related
 
+- `design-directory` — owns the layout of `design/`: setup, the check against the standard, and the sweep to `z.archived/`. `/design-directory cleanup` runs its sweep and then this audit.
 - `walkthrough` — sister skill for narrative production + iteration toward design integration; this one is for design-corpus maintenance.

@@ -10,7 +10,7 @@ HOOKS_DST := $(CURDIR)/.git/hooks
 
 SKILL_DIRS := $(wildcard $(SKILLS_DIR)/*)
 
-.PHONY: install uninstall unlink-legacy list install-hooks check-pii upstream-check upstream-skills readme-index readme-check
+.PHONY: install uninstall unlink-legacy list install-hooks check-pii upstream-check upstream-skills readme-index readme-check design-directory-check
 
 install: install-hooks
 	@mkdir -p "$(TARGET_DIR)"
@@ -129,3 +129,9 @@ list:
 			echo "  - $$name (not installed)"; \
 		fi; \
 	done
+
+# The standard design/ layout lives in skills/design-directory/templates/standard/.
+# This sets it up in a scratch directory and asks the reader (backlog-scan) what it
+# sees, so the two cannot drift apart unnoticed.
+design-directory-check:
+	@python3 "$(SKILLS_DIR)/design-directory/design-directory.py" selfcheck
